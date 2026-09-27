@@ -1,19 +1,27 @@
 # TwoPort website
 
-One static page: `index.html` (CSS and JS inline) plus `assets/`. Live at **https://twoport.app**, served by GitHub Pages from the public repo `whiterabbit-vibe/twoport-site` (this repo stays private). To publish: commit, then run `tools/deploy-website.sh`.
+Three static pages sharing `assets/site.css` and `assets/site.js`:
+
+- `index.html`: the landing page. One plain promise, the demo, Clipboard, Always connected, three setup steps, three reasons, pricing, the waitlist, six questions.
+- `compare.html`: TwoPort next to AirDrop/Quick Share and the other Android-to-Mac apps, and what they charge.
+- `requests.html`: the feature-request board (vote or suggest).
+
+Live at **https://twoport.app**, served by GitHub Pages from the public repo `whiterabbit-vibe/twoport-site` (this repo stays private). To publish: commit, then run `tools/deploy-website.sh`.
 
 ## Before it goes live
 
-- **Links.** Buttons with `href="#"` carry a `data-href` naming what goes there: `mac-download` (the notarized Mac build) and `checkout` (the Pro checkout; the India ₹999 price is sold only through Indian payment methods). Also set `Licensing.buyURL` in the Mac app to the checkout URL.
+- **Download and checkout.** The pages only collect the waitlist for now. At launch, add the Mac download and the Pro checkout (the India ₹999 price is sold only through Indian payment methods), and set `Licensing.buyURL` in the Mac app to the checkout URL.
 - **Social preview.** og: tags are in; `og:image` is the 512px app icon. A 1200×630 share image would look better.
 
 ## Design
 
-- v2 (2026-09-27): light by default, with a dark version. Two colours with a job each: blue `#2563EB` is the Mac side, green (`#0E8A4B` for text, `#22C55E` for fills) is the phone side, matching the app icon.
+- v6 (2026-09-27): rewritten after relatives couldn't tell what the app does from v5. **The home page answers one question: what does it do for me?** Plain words, one sentence per idea, no jargon, no competitor names. Detail lives on `compare.html` and `requests.html`, linked from the page and the footer. Keep it that way: add to the sub-pages, not the home page.
+- Light by default, with a dark version. Two colours with a job each: blue `#2563EB` is the Mac side, green (`#0E8A4B` for text, `#22C55E` for fills) is the phone side, matching the app icon.
 - Type: Geist and Geist Mono, from Google Fonts.
-- The demo stage is plain HTML/CSS: eight scenes ("moments") whose animations run only while the stage has `.play`. `show(i)` in the script restarts a scene; the tab order is the play order, `data-scene` picks the scene. Photos are drawn SVG symbols (`p1`–`p8`), not stock images.
-- Each moment is written as a real-life situation (title), how TwoPort handles it (description), a short label (`.short`, the chip on phones) and a Free/Pro badge. Don't describe the product as the phone "inside" the Mac: it reads as screen mirroring, which TwoPort doesn't do (the FAQ says so).
+- The demo stage is plain HTML/CSS: five scenes (Photos on your Mac, Phone to Mac, Mac to phone, Copy and paste, Back up photos) whose animations run only while the stage has `.play`. `show(i)` in `site.js` restarts a scene; the chip order is the play order, `data-scene` picks the scene and `data-caption` is the one line shown with it. It plays on its own until the visitor picks a chip, then stays on their choice. Photos are drawn SVG symbols (`p1`–`p8`), not stock images.
 - The Mac is a MacBook: lid with the notch in the menu bar, the keyboard deck drawn with a 3D `rotateX` (keys are a gradient grid, not elements), and the front lip. Silver in light mode, space black in dark (`--alu*`, `--key` tokens).
-- Sections sit on alternating bands so they read apart: grey (page) → white `band-surface` (Why TwoPort) → grey (details) → tinted `band-tint` (Pricing) → navy `band-deep` (Early access) → white (Requests) → grey (FAQ). Inside a white band, cards switch to the page grey.
-- Up to 900px wide the stage stacks: the Mac full width, the phone below on the right, the active moment's caption beside it with previous/next and swipe. Tables turn into one card per row up to 640px (cells labelled from the header by the script); the benchmark shows two rows until "Show all".
+- Up to 900px wide the stage stacks: the Mac full width, the phone below on the right, the caption beside it with previous/next and swipe; the chips become a sideways row. Tables turn into one card per row up to 640px (cells labelled from the header by the script); the benchmark shows two rows until "Show all".
+- Clipboard section: a 7s CSS loop (select a link on the phone → Copy → it crosses → ⌘V into a Mac email → top of the history). Always connected: one MacBook, three phones; the USB one gets a solid cable, the Wi-Fi ones flowing dotted lines (an SVG overlay, `.mm-links`, stretched with `preserveAspectRatio="none"` and `non-scaling-stroke`), and the Mac's TwoPort menu lists all three. Class names are global: the lines are `.wl`, not `.air` (that's the demo's Wi-Fi label, and its transform moved them).
+- Sections alternate bands so they read apart: grey page, white `band-surface`, tinted `band-tint` (Pricing), navy `band-deep` (Early access). Inside a white band, cards switch to the page grey.
+- Don't describe the product as the phone "inside" the Mac: it reads as screen mirroring, which TwoPort doesn't do (the FAQ says so).
 - Speeds are measured (USB ≈ 30 MB/s; home Wi-Fi 5.7–9.7 MB/s in PLAN.md's test logs). Don't add numbers that weren't measured.

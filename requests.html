@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TwoPort Requests</title>
+<meta name="description" content="Vote for the TwoPort features you want most, or suggest something new.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="canonical" href="https://twoport.app/requests.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://twoport.app/requests.html">
+<meta property="og:title" content="TwoPort feature requests">
+<meta property="og:description" content="Vote for the TwoPort features you want most, or suggest something new.">
+<meta property="og:image" content="https://twoport.app/assets/app-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="./"><img src="assets/app-icon.png" alt="" width="28" height="28">TwoPort</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="./#how">How it works</a>
+      <a href="./#pricing">Pricing</a>
+      <a href="./#faq">Questions</a>
+    </nav>
+    <a class="btn btn-primary" href="./#early-access">Get early access</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="page-hero">
+    <div class="wrap">
+      <a class="back" href="./">← TwoPort home</a>
+      <span class="kicker">Feature requests</span>
+      <h1>Tell us what to build next.</h1>
+      <p class="lede">Vote for what you want most, or suggest something new. The most-voted ideas get built first.</p>
+    </div>
+  </section>
+
+  <section id="requests" class="section band band-surface">
+    <div class="wrap requests">
+      <div class="head" style="margin:0">
+        <h2>Suggest an idea</h2>
+        <form id="fr" class="form" novalidate>
+          <label for="fr-title">Your idea</label>
+          <input id="fr-title" type="text" maxlength="120" required placeholder="Show battery level in the menu bar">
+          <label for="fr-details">Details <span class="opt">(optional)</span></label>
+          <textarea id="fr-details" maxlength="1000" rows="3" placeholder="What would you use it for?"></textarea>
+          <label for="fr-email">Email for updates <span class="opt">(optional, never shown)</span></label>
+          <input id="fr-email" type="email" autocomplete="email" placeholder="you@example.com">
+          <button class="btn btn-quiet" type="submit">Suggest it</button>
+          <p class="form-msg" id="fr-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <ol class="board" id="board" aria-label="Requested features, most votes first"></ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="./"><img src="assets/app-icon.png" alt="" width="24" height="24" style="width:24px;height:24px">TwoPort</a>
+    <nav aria-label="Footer"><a href="./#how">How it works</a><a href="./#pricing">Pricing</a><a href="compare.html">Compare apps</a><a href="requests.html">Feature requests</a><a href="./#faq">Questions</a></nav>
+    <span>© 2026 TwoPort</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
