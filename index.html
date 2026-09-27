@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TwoPort</title>
-<meta name="description" content="TwoPort puts your Android phone inside your Mac: browse its photos and files, drag them out, share both ways, and copy on one to paste on the other. Over your Wi-Fi or a USB cable, with no cloud and no account.">
+<meta name="description" content="TwoPort brings your Android phone's photos and files to your Mac: open them in a Mac window, drag them out, send files both ways, and copy on one to paste on the other. Over your Wi-Fi or a USB cable, with no cloud and no account.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="canonical" href="https://twoport.app/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://twoport.app/">
-<meta property="og:title" content="TwoPort: your Android phone, right inside your Mac">
+<meta property="og:title" content="TwoPort: your Android's photos and files, right on your Mac">
 <meta property="og:description" content="Browse your phone's photos and files from your Mac, share both ways, and copy on one to paste on the other. Wi-Fi or USB, no cloud, no account.">
 <meta property="og:image" content="https://twoport.app/assets/app-icon.png">
 <meta name="twitter:card" content="summary">
@@ -36,6 +36,8 @@
   --screen: #E9EEF5;
   --window: #FFFFFF;
   --chrome: #F3F5F8;
+  --deep: #0A1533;
+  --alu: #CDD1D7; --alu-light: #E4E7EB; --alu-dark: #A9AFB8; --alu-edge: #8E949E; --key: #23272E;
   --display: "Geist", -apple-system, "SF Pro Display", "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --wrap: 1160px;
@@ -49,6 +51,7 @@
     --line: #232A35; --mac: #6EA0FF; --mac-soft: rgba(110, 160, 255, 0.14); --phone: #45D98C; --phone-fill: #2FBF71;
     --phone-soft: rgba(69, 217, 140, 0.14); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 16px 40px -16px rgba(0,0,0,.7);
     --screen: #1A202A; --window: #161B23; --chrome: #1C222B;
+    --deep: #0D1832; --alu: #3A3F48; --alu-light: #4A505A; --alu-dark: #2A2E35; --alu-edge: #555C68; --key: #14171C;
     color-scheme: dark;
   }
 }
@@ -57,6 +60,7 @@
   --line: #232A35; --mac: #6EA0FF; --mac-soft: rgba(110, 160, 255, 0.14); --phone: #45D98C; --phone-fill: #2FBF71;
   --phone-soft: rgba(69, 217, 140, 0.14); --shadow: 0 1px 2px rgba(0,0,0,.4), 0 16px 40px -16px rgba(0,0,0,.7);
   --screen: #1A202A; --window: #161B23; --chrome: #1C222B;
+    --deep: #0D1832; --alu: #3A3F48; --alu-light: #4A505A; --alu-dark: #2A2E35; --alu-edge: #555C68; --key: #14171C;
   color-scheme: dark;
 }
 
@@ -74,7 +78,8 @@ p { margin: 0; }
 .lede { color: var(--muted); font-size: clamp(1.05rem, 1.35vw, 1.2rem); max-width: 36em; }
 .mac-word { color: var(--mac); }
 .phone-word { color: var(--phone); }
-.kicker { font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.kicker { display: inline-flex; align-items: center; gap: .6rem; font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.kicker::before { content: ""; width: 1.5rem; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--mac), var(--phone-fill)); }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; min-height: 46px; padding: 0 1.25rem; border-radius: 12px; font: inherit; font-weight: 600; font-size: .98rem; text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform .2s var(--ease), background-color .2s, border-color .2s; }
 .btn:active { transform: translateY(1px); }
@@ -107,7 +112,21 @@ p { margin: 0; }
 /* ---------- Demo stage ---------- */
 .stage-wrap { padding-block: clamp(1.2rem, 3vw, 2rem) clamp(3.5rem, 8vw, 6rem); }
 .stage { font-size: clamp(5px, 1.3cqi, 11px); display: grid; grid-template-columns: minmax(0, 1fr) 7em 17.5em; align-items: center; padding: 2.6em; border-radius: 28px; background: var(--sunk); border: 1px solid var(--line); position: relative; }
-.mac { aspect-ratio: 16 / 10.4; max-width: 100%; border-radius: 1.3em; padding: .9em; background: #0E1117; box-shadow: var(--shadow); }
+/* The Mac: a MacBook seen from the front and a little above — the lid with
+   its notch, then the keyboard deck in perspective and the front lip. */
+.mac { display: grid; justify-items: center; max-width: 100%; min-width: 0; }
+.lid { width: 100%; aspect-ratio: 16 / 10.4; border-radius: 1.5em 1.5em .5em .5em; padding: .75em .75em 1em; background: #0B0D12; box-shadow: 0 0 0 .14em var(--alu-edge), var(--shadow); position: relative; z-index: 2; }
+.notch { position: absolute; left: 50%; top: 0; width: 11%; height: 2.2em; transform: translateX(-50%); background: #0B0D12; border-radius: 0 0 .7em .7em; z-index: 8; }
+.notch::after { content: ""; position: absolute; left: 50%; top: .75em; width: .55em; height: .55em; margin-left: -.275em; border-radius: 50%; background: #1E2433; box-shadow: inset 0 0 0 .12em #2B3448; }
+.deck { width: 104%; height: 13em; margin-bottom: -5.6em; transform: perspective(95em) rotateX(55deg); transform-origin: 50% 0; border-radius: .2em .2em 1.6em 1.6em; background: linear-gradient(180deg, var(--alu-dark), var(--alu) 18%, var(--alu-light)); padding: 1.1em 8% 0; display: grid; grid-template-rows: 6.6em auto; justify-items: center; gap: .9em; box-shadow: inset 0 .5em .6em -.4em rgba(0,0,0,.35); }
+/* Keys drawn as a grid: dark caps separated by the deck's own colour. */
+.kb { width: 100%; border-radius: .35em; background:
+  repeating-linear-gradient(90deg, transparent 0 calc(100% / 15 - .28em), var(--alu) calc(100% / 15 - .28em) calc(100% / 15)),
+  repeating-linear-gradient(180deg, transparent 0 calc(100% / 5 - .3em), var(--alu) calc(100% / 5 - .3em) calc(100% / 5)),
+  var(--key); box-shadow: 0 0 0 .25em color-mix(in srgb, var(--alu-dark) 60%, transparent); }
+.pad { width: 38%; height: 4.2em; border-radius: .6em; background: linear-gradient(180deg, var(--alu-dark), color-mix(in srgb, var(--alu) 70%, var(--alu-dark))); box-shadow: inset 0 0 0 .1em color-mix(in srgb, var(--alu-dark) 80%, #000); }
+.lip { width: 110%; height: 1em; border-radius: 0 0 2.2em 2.2em / 0 0 1em 1em; background: linear-gradient(180deg, var(--alu-light), var(--alu-dark)); position: relative; box-shadow: 0 1.4em 2em -1.2em rgba(11,18,32,.45); }
+.lip::after { content: ""; position: absolute; left: 50%; top: 0; width: 13%; height: .4em; margin-left: -6.5%; border-radius: 0 0 .6em .6em; background: var(--alu-dark); }
 .screen { position: relative; height: 100%; border-radius: .6em; overflow: hidden; background: linear-gradient(160deg, var(--screen), color-mix(in srgb, var(--screen) 70%, var(--mac))); }
 .menubar { position: absolute; inset: 0 0 auto; height: 2.2em; display: flex; align-items: center; gap: 1.4em; padding: 0 1.2em; font-size: 1em; font-weight: 500; color: var(--ink); background: color-mix(in srgb, var(--window) 70%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); z-index: 6; }
 .menubar b { font-weight: 700; }
@@ -363,17 +382,44 @@ p { margin: 0; }
 .web-done { opacity: 0; text-align: center; color: var(--phone); font-weight: 700; font-size: 1.1em; animation-name: fadeUp; animation-duration: .4s; animation-delay: 4.2s; }
 .stage .allow { animation-fill-mode: both, forwards !important; }
 
-/* Capabilities, beside the stage: the main feature list, so it gets weight. */
-.demo { display: grid; grid-template-columns: minmax(17rem, 22rem) minmax(0, 1fr); gap: clamp(1.2rem, 3vw, 2.6rem); align-items: center; }
+/* Scene 8: copy on the phone, paste on the Mac */
+.mail { left: 5%; top: 13%; width: 54%; height: 66%; }
+.mail-body { padding: 1em 1.4em; display: grid; gap: .75em; font-size: 1.05em; align-content: start; }
+.mail-body .fld { color: var(--muted); padding-bottom: .55em; border-bottom: 1px solid var(--line); }
+.mail-body .fld b { color: var(--ink); font-weight: 500; }
+.pasted { display: inline-block; white-space: nowrap; overflow: hidden; vertical-align: bottom; max-width: 0; color: var(--mac); text-decoration: underline; animation-name: typeIn; animation-duration: .01s; animation-delay: 4.3s; }
+.caret { display: inline-block; width: .12em; height: 1.15em; margin-left: .1em; background: var(--mac); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.keys.k8 { left: 16%; top: 83%; animation-delay: 3.7s; }
+.notif.n8 { animation-delay: 2.8s; }
+.brw .web-body { gap: .5em; }
+.brw .brw-photo { height: 9em; border-radius: .8em; }
+.brw .lnk { color: var(--mac); text-decoration: underline; font-weight: 600; }
+.cmenu { position: absolute; left: 1em; right: 1em; top: 14em; padding: .5em; border-radius: 1em; background: var(--window); border: 1px solid var(--line); box-shadow: 0 1.2em 2.4em -1em rgba(11,18,32,.45); display: grid; gap: .1em; font-size: .95em; z-index: 4; opacity: 0; animation-name: pop, fadeOut; animation-duration: .3s, .25s; animation-delay: .6s, 1.8s; }
+.cmenu small { color: var(--faint); font-family: var(--mono); font-size: .8em; padding: .3em .6em .5em; border-bottom: 1px solid var(--line); margin-bottom: .2em; }
+.cmenu div { padding: .55em .6em; border-radius: .5em; position: relative; }
+.cmenu .cp { animation-name: selRowG; animation-duration: .2s; animation-delay: 1.3s; }
+@keyframes selRowG { to { background: var(--phone-soft); color: var(--phone); font-weight: 600; } }
+.cmenu .ring { left: 30%; top: 50%; animation-name: ring; animation-duration: .6s; animation-delay: 1.1s; }
+.cprev { position: absolute; left: 1em; bottom: 2em; display: inline-flex; gap: .5em; align-items: center; padding: .7em 1em; border-radius: 1em; background: var(--window); border: 1px solid var(--line); box-shadow: 0 1em 2em -.8em rgba(11,18,32,.4); font-weight: 600; font-size: .95em; z-index: 4; opacity: 0; animation-name: fadeUp, fadeOut; animation-duration: .35s, .3s; animation-delay: 2s, 4.6s; }
+.cprev svg { width: 1.3em; height: 1.3em; color: var(--phone); }
+.stage .cmenu, .stage .cprev { animation-fill-mode: both, forwards !important; }
+/* Dots on the link flow the way the data goes (default: Mac → phone). */
+.stage.tomac .wire::before { animation-direction: reverse; }
+
+/* Moments, beside the stage: the main feature list, so it gets weight. */
+.demo { display: grid; grid-template-columns: minmax(18rem, 24rem) minmax(0, 1fr); gap: clamp(1.2rem, 3vw, 2.6rem); align-items: center; }
 .side { display: grid; gap: 1rem; min-width: 0; }
 .stage-col { container-type: inline-size; display: grid; gap: 1rem; min-width: 0; }
-.tabs { display: grid; gap: .3rem; align-content: center; }
+.tabs { display: grid; gap: .2rem; align-content: center; }
 .tabs-title { display: grid; gap: .5rem; padding: 0 .9rem .3rem; }
-.tabs-title h2 { font-size: clamp(1.55rem, 2.4vw, 2rem); line-height: 1.1; }
-.tab { font: inherit; text-align: left; padding: .8rem .9rem .8rem 3.7rem; border-radius: 16px; border: 1px solid transparent; background: transparent; color: var(--muted); cursor: pointer; display: grid; gap: .2rem; position: relative; overflow: hidden; min-height: 3.4rem; align-content: center; transition: background-color .2s, border-color .2s; }
-.tab b { color: var(--ink); font-weight: 600; font-size: 1.1rem; letter-spacing: -.015em; display: flex; align-items: center; gap: .5rem; }
-.tab span { font-size: .9rem; line-height: 1.4; }
-.tier { font-style: normal; font-size: .68rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: .12rem .45rem; border-radius: 2rem; background: var(--phone-soft); color: var(--phone); }
+.tabs-title h2 { font-size: clamp(1.7rem, 2.6vw, 2.2rem); line-height: 1.08; }
+.tabs-title .intro { color: var(--ink); font-size: clamp(1.15rem, 1.6vw, 1.3rem); font-weight: 500; line-height: 1.35; letter-spacing: -.01em; text-wrap: balance; }
+.tab { font: inherit; text-align: left; padding: .7rem .9rem .7rem 3.7rem; border-radius: 16px; border: 1px solid transparent; background: transparent; color: var(--muted); cursor: pointer; display: grid; gap: .3rem; position: relative; overflow: hidden; min-height: 3.2rem; align-content: center; transition: background-color .2s, border-color .2s; }
+.tab b { color: var(--ink); font-weight: 600; font-size: 1rem; line-height: 1.3; letter-spacing: -.01em; display: block; text-wrap: pretty; }
+.tab span { font-size: .9rem; line-height: 1.45; }
+.tab .short { display: none; }
+.tier { display: inline-block; vertical-align: .12em; margin-left: .25rem; font-style: normal; font-size: .66rem; font-weight: 600; letter-spacing: .04em; line-height: 1.5; text-transform: uppercase; padding: 0 .45rem; border-radius: 2rem; background: var(--phone-soft); color: var(--phone); white-space: nowrap; }
 .tier.pro { background: var(--mac-soft); color: var(--mac); }
 .tab-ico { position: absolute; left: .8rem; top: 50%; margin-top: -1.1rem; width: 2.2rem; height: 2.2rem; border-radius: 11px; display: grid; place-items: center; background: var(--sunk); color: var(--muted); transition: background-color .2s, color .2s, transform .2s var(--ease); }
 .tab[aria-selected="true"] .tab-ico { top: .8rem; margin-top: 0; }
@@ -382,7 +428,7 @@ p { margin: 0; }
 .tab-ico.green { background: var(--phone-soft); color: var(--phone); }
 .tab:hover { background: color-mix(in srgb, var(--surface) 70%, transparent); }
 .tab:hover .tab-ico { transform: scale(1.06); }
-.tab[aria-selected="true"] { background: var(--surface); border-color: color-mix(in srgb, var(--mac) 35%, var(--line)); box-shadow: var(--shadow), 0 0 0 4px var(--mac-soft); }
+.tab[aria-selected="true"] { background: var(--surface); border-color: color-mix(in srgb, var(--mac) 35%, var(--line)); box-shadow: var(--shadow), 0 0 0 4px var(--mac-soft); padding-block: .85rem; }
 .tab[aria-selected="true"] .tab-ico.blue { background: var(--mac); color: #fff; }
 .tab[aria-selected="true"] .tab-ico.green { background: var(--phone-fill); color: #fff; }
 .tab:not([aria-selected="true"]) span { display: none; }
@@ -393,24 +439,65 @@ p { margin: 0; }
 .ways li { display: grid; grid-template-columns: auto 1fr; column-gap: .6rem; align-items: center; padding: .75rem .85rem; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: .84rem; line-height: 1.3; }
 .ways svg { grid-row: span 2; width: 1.25rem; height: 1.25rem; color: var(--mac); }
 .ways b { color: var(--ink); font-size: .95rem; }
+/* The caption beside the phone: only in the stacked (phone-size) layout,
+   where the moment list is a row of short chips. */
+.cap { display: none; }
+
 @media (max-width: 900px) {
   .demo { grid-template-columns: minmax(0, 1fr); }
   .tabs-title { padding: 0; }
-  .tabs { grid-auto-flow: column; grid-auto-columns: minmax(11.5rem, 1fr); overflow-x: auto; scrollbar-width: none; gap: .5rem; padding: 4px; }
-  .tab { padding: .7rem .8rem .7rem 3.2rem; }
-  .tab-ico, .tab[aria-selected="true"] .tab-ico { left: .7rem; top: 50%; margin-top: -.9rem; width: 1.8rem; height: 1.8rem; }
-  .tab b { font-size: .98rem; flex-wrap: wrap; gap: .3rem; }
-  .tab span { display: none; }
-  .tab .prog { top: auto; bottom: 0; width: 0; height: 3px; }
-  @keyframes progress { from { width: 0; } to { width: 100%; } }
+  .tabs { grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; scrollbar-width: none; gap: .4rem; padding: 4px; margin: -4px;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent); }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs.end { -webkit-mask-image: none; mask-image: none; }
+  .tab, .tab[aria-selected="true"] { padding: .55rem .95rem .55rem 2.75rem; min-height: 2.75rem; border-radius: 2rem; border-color: var(--line); background: var(--surface); box-shadow: none; }
+  .tab[aria-selected="true"] { border-color: var(--ink); background: var(--ink); }
+  .tab[aria-selected="true"] .short { color: var(--bg); }
+  .tab-ico, .tab[aria-selected="true"] .tab-ico { left: .45rem; top: 50%; margin-top: -.9rem; width: 1.8rem; height: 1.8rem; border-radius: 50%; }
+  .tab-ico svg { width: 1rem; height: 1rem; }
+  .tab b, .tab span, .tab[aria-selected="true"] span { display: none; }
+  .tab .short { display: block; font-size: .92rem; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .tab .prog { top: auto; bottom: 0; left: 1.2rem; width: 0; height: 2px; border-radius: 2px; background: var(--phone-fill); }
+  @keyframes progress { from { width: 0; } to { width: calc(100% - 2.4rem); } }
   .ways { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 760px) {
-  .stage { grid-template-columns: minmax(0, 1fr) 4.5em 12em; padding: 1.4em; border-radius: 18px; }
+
+  /* Stacked stage: the Mac full width on top, the phone below it on the
+     right, the moment's caption beside the phone. */
+  .stage-col { justify-self: center; width: min(100%, 36rem); }
+  .stage { font-size: clamp(5px, 2.05cqi, 11px); grid-template-columns: minmax(0, 1fr) 17.5em; grid-template-areas: "mac mac" "cap wire" "cap phone"; grid-template-rows: auto 5.5em auto; column-gap: 1.8em; padding: 1.4em; align-items: stretch; border-radius: 20px; touch-action: pan-y; }
+  .mac { grid-area: mac; }
+  /* Perspective widens the deck toward the viewer: keep it inside the stage. */
+  .lid { width: 88%; } .deck { width: 86%; } .lip { width: 98%; }
+  .wire { grid-area: wire; justify-items: center; align-items: stretch; }
+  .phone { grid-area: phone; }
+  .wire::before { width: .5em; height: auto; background: linear-gradient(180deg, var(--mac), var(--phone-fill));
+    -webkit-mask: radial-gradient(circle, #000 42%, transparent 46%) 50% 0 / 100% 1.1em repeat-y;
+    mask: radial-gradient(circle, #000 42%, transparent 46%) 50% 0 / 100% 1.1em repeat-y;
+    animation-name: airflowV; }
+  @keyframes airflowV { to { -webkit-mask-position: 50% 1.1em; mask-position: 50% 1.1em; } }
+  .stage.cable .wire::before { width: .7em; height: auto; }
+  .air { left: auto; right: calc(50% + 1.2em); top: 50%; transform: translateY(-50%); }
+  .packet { display: none; }
+  .cap { grid-area: cap; display: grid; align-content: center; gap: .55rem; font-size: 1rem; min-width: 0; }
+  .cap .tier { justify-self: start; margin: 0; }
+  .cap b { font-size: 1.05rem; font-weight: 600; line-height: 1.25; letter-spacing: -.015em; color: var(--ink); text-wrap: pretty; }
+  .cap p { color: var(--muted); font-size: .88rem; line-height: 1.45; }
+  .cap-nav { display: flex; align-items: center; gap: .5rem; margin-top: .35rem; }
+  .cap-btn { width: 2.5rem; height: 2.5rem; flex: none; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0; }
+  .cap-btn svg { width: 1.1rem; height: 1.1rem; }
+  .cap-count { font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 2.6rem; text-align: center; }
 }
 
 /* Sections */
 .section { padding-block: clamp(4rem, 9vw, 7rem); }
+section[id] { scroll-margin-top: 62px; }
+/* Bands: each section sits on its own ground so the page reads as distinct
+   chapters. Inside a white band, cards drop to the page grey (and back). */
+.band-surface { background: var(--surface); border-block: 1px solid var(--line); }
+.band-surface > .wrap { --surface: var(--bg); }
+.band-tint { background: linear-gradient(180deg, color-mix(in srgb, var(--mac) 8%, var(--bg)), color-mix(in srgb, var(--phone-fill) 6%, var(--bg))); border-block: 1px solid color-mix(in srgb, var(--mac) 16%, var(--line)); }
+.band-deep { background: radial-gradient(55% 90% at 8% 0%, color-mix(in srgb, var(--mac) 55%, transparent), transparent 70%), radial-gradient(45% 80% at 95% 100%, color-mix(in srgb, var(--phone-fill) 38%, transparent), transparent 70%), var(--deep); }
+.band-deep .early { border-color: transparent; box-shadow: 0 2.5rem 5rem -2rem rgba(0, 0, 0, .55); }
 .head { display: grid; gap: 1rem; max-width: 44rem; margin-bottom: clamp(2rem, 5vw, 3.2rem); }
 
 /* Comparison */
@@ -429,10 +516,30 @@ td.us { background: color-mix(in srgb, var(--mac-soft) 45%, transparent); font-w
 .bench { margin-top: clamp(2.4rem, 5vw, 3.6rem); display: grid; gap: 1rem; }
 .bench-head { display: grid; gap: .4rem; max-width: 40rem; }
 .bench-head h3 { font-size: 1.4rem; }
+.bench .more { display: none; }
 .muted { color: var(--muted); }
 .bench-table { min-width: 960px; font-size: .9rem; }
 .bench-table tbody th { font-weight: 600; width: 13rem; }
 .bench-table th, .bench-table td { padding: .85rem .9rem; }
+
+/* On phones every table becomes a stack of cards, one per row, each cell
+   labelled with its column (labels come from the header, set by the script). */
+@media (max-width: 640px) {
+  .compare-scroll { overflow: visible; border: 0; border-radius: 0; background: transparent; }
+  .compare-scroll table, .compare-scroll tbody { display: grid; gap: .7rem; min-width: 0; font-size: .95rem; }
+  .compare-scroll thead { display: none; }
+  .compare-scroll tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .compare-scroll td, .compare-scroll tbody th { display: grid; align-content: start; gap: .15rem; padding: .6rem 1rem .7rem; border: 0; width: auto; font-size: .9rem; }
+  .compare-scroll tr > :first-child, .compare-scroll td.us { grid-column: 1 / -1; }
+  .compare-scroll tr > :first-child { background: var(--sunk); font-weight: 600; font-size: .98rem; color: var(--ink); padding-block: .8rem; }
+  .compare-scroll td.us { border-bottom: 1px solid var(--line); font-size: .95rem; }
+  .compare-scroll td[data-label]::before { content: attr(data-label); color: var(--faint); font-size: .74rem; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+  .compare-scroll td.us::before { color: var(--mac); }
+  .bench .more { display: inline-flex; justify-self: start; }
+  .bench.folded tbody tr:nth-child(n+3) { display: none; }
+  .bench:not(.folded) .more { display: none; }
+  .price-table .us-row td:first-child { color: var(--mac); }
+}
 
 /* Bento */
 .bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; }
@@ -447,7 +554,26 @@ td.us { background: color-mix(in srgb, var(--mac-soft) 45%, transparent); font-w
 .qs { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; align-items: center; }
 .qr { width: 104px; aspect-ratio: 1; padding: 8px; border-radius: 14px; background: #fff; border: 1px solid var(--line); max-width: 100%; }
 .qr canvas { width: 100%; height: 100%; image-rendering: pixelated; display: block; }
-@media (max-width: 900px) { .c-wide, .c-mid, .c-narrow { grid-column: span 6; } }
+.cell h3 .tier { margin-left: .35rem; }
+.find { display: grid; gap: .55rem; margin-top: .3rem; padding: .9rem; border-radius: 14px; background: var(--sunk); font-size: .9rem; }
+.find svg { width: 1.05rem; height: 1.05rem; flex: none; }
+.find-field { display: flex; gap: .5rem; align-items: center; padding: .5rem .75rem; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); }
+.find-field svg { color: var(--muted); }
+.find-pills { display: flex; flex-wrap: wrap; gap: .35rem; }
+.find-pills span { padding: .2rem .65rem; border-radius: 2rem; background: var(--surface); border: 1px solid var(--line); color: var(--muted); font-size: .82rem; }
+.find-pills .on { background: var(--mac); border-color: var(--mac); color: #fff; }
+.find-row { display: flex; gap: .55rem; align-items: center; padding: .15rem .25rem; font-family: var(--mono); font-size: .82rem; min-width: 0; }
+.find-row small { margin-left: auto; color: var(--faint); font-family: var(--display); }
+@media (max-width: 900px) { .c-mid, .c-narrow { grid-column: span 3; } .c-wide { grid-column: span 6; } }
+@media (max-width: 600px) {
+  .c-wide, .c-mid, .c-narrow { grid-column: span 6; }
+  /* Icon beside the title, so nine cards don't become a long scroll. */
+  .cell { grid-template-columns: 2.4rem minmax(0, 1fr); column-gap: .9rem; row-gap: .35rem; padding: 1.1rem 1.2rem 1.2rem; }
+  .cell > * { grid-column: 2; }
+  .cell > .ico { grid-column: 1; grid-row: 1 / span 2; }
+  .cell > h3 { align-self: center; }
+  .cell > .find { grid-column: 1 / -1; }
+}
 
 /* Pricing */
 .plans { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 1rem; align-items: stretch; }
@@ -564,6 +690,10 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
     <symbol id="to-mac" viewBox="0 0 24 24"><rect x="15" y="4" width="6" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="2" y="6" width="10" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M1 17h12M14 9.5h-1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M18 20.5h-7M13 18.5l-2 2 2 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="to-phone" viewBox="0 0 24 24"><rect x="2" y="6" width="10" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M1 17h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><rect x="15" y="4" width="6" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M11 20.5h7M16 18.5l2 2-2 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="bolt" viewBox="0 0 24 24"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="play" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 9.2v5.6l4.6-2.8z" fill="currentColor"/></symbol>
+    <symbol id="bell" viewBox="0 0 24 24"><path d="M6 16.5V11a6 6 0 0112 0v5.5l1.5 1.5h-15zM10 20.5h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="resume" viewBox="0 0 24 24"><path d="M19 12a7 7 0 11-2.1-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M17.5 3.5V7.2h-3.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="pause" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 9v6M14 9v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
     <!-- Photo stand-ins: flat drawn scenes, no stock imagery. -->
     <symbol id="p1" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#F6B26B"/><rect width="100" height="55" fill="#FBD38D"/><circle cx="70" cy="42" r="12" fill="#FFF3D6"/><path d="M0 70 L30 45 L55 68 L75 52 L100 72 V100 H0Z" fill="#C0564B"/><path d="M0 85 L40 66 L100 88 V100 H0Z" fill="#7A2E3B"/></symbol>
@@ -594,9 +724,9 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 <main id="top">
   <section class="hero">
     <div class="wrap hero-top">
-      <h1>Your <span class="phone-word">Android phone</span>, right inside your <span class="mac-word">Mac</span>.</h1>
+      <h1>Your <span class="phone-word">Android's</span> photos and files, right on your <span class="mac-word">Mac</span>.</h1>
       <div class="hero-side">
-        <p class="lede">Browse its photos and files from a Mac window, drag them out, share either way in a second, and copy on one to paste on the other. Over your own Wi-Fi or a USB cable. No cloud, no account.</p>
+        <p class="lede">Open your phone's camera roll and folders in a Mac window and drag out what you need. Send files either way in a second, and copy on one to paste on the other. Over your own Wi-Fi or a USB cable. No cloud, no account.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="#early-access">Get early access</a>
           <a class="btn btn-quiet" href="#pricing">Founders pay $9, once</a>
@@ -609,21 +739,24 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
   <section id="demo" class="stage-wrap" aria-label="TwoPort in action">
     <div class="wrap demo">
       <div class="side">
-      <div class="tabs-title"><span class="kicker">What it does</span><h2>Seven ways it saves you a cable.</h2></div>
+      <div class="tabs-title"><span class="kicker">What it does</span><p class="intro">Everyday moments with a phone and a Mac, and how TwoPort handles each one. Pick one to watch.</p></div>
       <div class="tabs" role="tablist" aria-label="What TwoPort does">
-        <button class="tab" role="tab" aria-selected="true" data-scene="1"><i class="tab-ico blue"><svg><use href="#grid4"/></svg></i><b>Browse your phone <em class="tier pro">Pro</em></b><span>Open its photos and folders in a Mac window and drag them out.</span><i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="6"><i class="tab-ico green"><svg><use href="#img"/></svg></i><b>Import Photos <em class="tier pro">Pro</em></b><span>Only what's new, filed by month, with the original dates.</span><i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="2"><i class="tab-ico green"><svg><use href="#to-mac"/></svg></i><b>Share to your Mac <em class="tier">Free</em></b><span>Share › TwoPort on the phone. It lands in Downloads.</span><i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="3"><i class="tab-ico blue"><svg><use href="#to-phone"/></svg></i><b>Send to your phone <em class="tier">Free</em></b><span>Finder's Share menu, then pick your phone.</span><i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="4"><i class="tab-ico blue"><svg><use href="#clip"/></svg></i><b>One clipboard <em class="tier">Free</em></b><span>Copy on the Mac, paste on the phone. Photos and history with Pro.</span><i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="7"><i class="tab-ico green"><svg><use href="#qr"/></svg></i><b>Quick Send, any phone <em class="tier">Free</em></b><span>A friend's phone or an iPhone: scan the code, send from its browser.</span><i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="5"><i class="tab-ico blue"><svg><use href="#bolt"/></svg></i><b>Cable when you want speed <em class="tier pro">Pro</em></b><span>Plug in and it's about 4× faster. Unplug and it carries on over Wi-Fi.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="true" data-scene="1"><i class="tab-ico blue"><svg><use href="#grid4"/></svg></i><small class="short">Browse</small><b>Get three photos off your phone, not three hundred <em class="tier pro">Pro</em></b><span>Your phone's camera roll opens in a Mac window, over Wi-Fi. Pick the ones you want and drag them into any folder.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="6"><i class="tab-ico green"><svg><use href="#img"/></svg></i><small class="short">Import</small><b>Back up the whole holiday in one click <em class="tier pro">Pro</em></b><span>Only the photos and videos your Mac doesn't have yet, filed by month with their original dates.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="2"><i class="tab-ico green"><svg><use href="#to-mac"/></svg></i><small class="short">Share to Mac</small><b>Get a photo from any app onto your Mac <em class="tier">Free</em></b><span>Tap Share, then TwoPort, in your gallery, WhatsApp or anywhere else. It lands in Downloads and your Mac tells you.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="3"><i class="tab-ico blue"><svg><use href="#to-phone"/></svg></i><small class="short">Send to phone</small><b>Put your boarding pass on your phone <em class="tier">Free</em></b><span>Right-click the file, Share, TwoPort. It's on your phone a second later, ready at the gate.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="4"><i class="tab-ico blue"><svg><use href="#clip"/></svg></i><small class="short">Copy to phone</small><b>Copy an address on your Mac, paste it on your phone <em class="tier">Free</em></b><span>Copy as you always do. Your phone already has it: long-press, Paste. Nothing to send.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="8"><i class="tab-ico green"><svg><use href="#clip"/></svg></i><small class="short">Copy to Mac</small><b>Copy a link on your phone, paste it on your Mac <em class="tier">Free</em></b><span>Turn it on once, and what you copy on the phone is on your Mac a moment later. Paste with ⌘V.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="7"><i class="tab-ico green"><svg><use href="#qr"/></svg></i><small class="short">Quick Send</small><b>Take photos from a friend's iPhone <em class="tier">Free</em></b><span>They scan the code on your Mac and send from their browser. No app, no account, and you allow each phone.</span><i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="5"><i class="tab-ico blue"><svg><use href="#bolt"/></svg></i><small class="short">Cable</small><b>Move a long video in a hurry <em class="tier pro">Pro</em></b><span>Plug in the cable you charge with and it's about 4× faster. Pull it out halfway and the copy carries on over Wi-Fi.</span><i class="prog"></i></button>
       </div>
       </div>
       <div class="stage-col">
       <div class="stage" id="stage">
         <div class="mac" aria-hidden="true">
+          <div class="lid">
           <div class="screen">
+            <i class="notch"></i>
             <div class="menubar"><b>Finder</b><span>File</span><span>Edit</span><span>View</span><div class="right"><img src="assets/app-icon.png" alt=""><span>Sun 9:41</span></div></div>
 
             <div class="scene s1 on">
@@ -742,7 +875,24 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
               </div>
               <div class="notif n7 a"><img src="assets/app-icon.png" alt=""><div><b>From Riya's phone</b><span>3 photos are in Downloads. Click to show.</span></div><time>now</time></div>
             </div>
+
+            <div class="scene s8">
+              <div class="win mail">
+                <div class="win-bar"><div class="lights"><i></i><i></i><i></i></div>New Message</div>
+                <div class="mail-body">
+                  <div class="fld">To: <b>Riya</b></div>
+                  <div class="fld">Subject: <b>Saturday</b></div>
+                  <p>Booked us a table here:</p>
+                  <p><span class="pasted a">trattoria-rossi.in/book</span><span class="caret"></span></p>
+                </div>
+              </div>
+              <div class="keys k8 a"><kbd>⌘</kbd><kbd>V</kbd></div>
+              <div class="notif n8 a"><img src="assets/app-icon.png" alt=""><div><b>Copied from Galaxy S24</b><span>trattoria-rossi.in/book — paste with ⌘V</span></div><time>now</time></div>
+            </div>
           </div>
+          </div>
+          <div class="deck"><i class="kb"></i><i class="pad"></i></div>
+          <div class="lip"></div>
         </div>
 
         <div class="wire" aria-hidden="true">
@@ -825,6 +975,36 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
                 </div>
               </div>
             </div>
+
+            <div class="pscene p8">
+              <div class="web brw">
+                <div class="url">trattoria-rossi.in</div>
+                <div class="web-body">
+                  <svg class="ph brw-photo"><use href="#p5"/></svg>
+                  <b>Trattoria Rossi</b>
+                  <span>Wood-fired pizza, Bandra West. Open till 11.</span>
+                  <span class="lnk">Book a table</span>
+                </div>
+              </div>
+              <div class="cmenu a">
+                <small>trattoria-rossi.in/book</small>
+                <div>Open in new tab</div>
+                <div class="cp a">Copy link address<em class="ring green a"></em></div>
+                <div>Share link</div>
+              </div>
+              <div class="cprev a"><svg><use href="#clip"/></svg>Copied</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cap">
+          <em class="tier" id="cap-tier"></em>
+          <b id="cap-title"></b>
+          <p id="cap-desc"></p>
+          <div class="cap-nav">
+            <button class="cap-btn" type="button" data-step="-1" aria-label="Previous moment"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <span class="cap-count" id="cap-count"></span>
+            <button class="cap-btn" type="button" data-step="1" aria-label="Next moment"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>
         </div>
       </div>
@@ -839,11 +1019,11 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
     </div>
   </section>
 
-  <section id="compare" class="section" style="padding-top:0">
+  <section id="compare" class="section band band-surface">
     <div class="wrap">
       <div class="head">
         <span class="kicker">Why TwoPort</span>
-        <h2>AirDrop sends a file. TwoPort puts the whole phone on your Mac.</h2>
+        <h2>AirDrop sends one file. TwoPort opens every file on your phone.</h2>
         <p class="lede">Newer Pixel and Galaxy phones can now AirDrop to a Mac through Quick Share. That's great for one photo. For everything else, here's the difference.</p>
       </div>
       <div class="compare-scroll">
@@ -860,7 +1040,7 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
         </table>
       </div>
 
-      <div class="bench">
+      <div class="bench folded" id="bench">
         <div class="bench-head">
           <h3>Next to the other Android-to-Mac apps</h3>
           <p class="muted">Each does part of the job well. TwoPort is the one that does all of it, on a Mac, without an account.</p>
@@ -879,20 +1059,26 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
             </tbody>
           </table>
         </div>
+        <button class="btn btn-quiet more" type="button" id="bench-more">Show all 7 comparisons</button>
         <p class="fine">From each app's own website, September 2026. "Not listed" means we couldn't find it there. If something here is out of date, tell us through Feature requests and we'll fix it.</p>
       </div>
     </div>
   </section>
 
-  <section class="section" style="padding-top:0">
+  <section id="details" class="section">
     <div class="wrap">
-      <div class="head"><span class="kicker">And the details</span><h2>Built for how you actually use two devices.</h2></div>
+      <div class="head"><span class="kicker">Also in TwoPort</span><h2>Built for how you actually use two devices.</h2></div>
       <div class="bento">
         <article class="cell c-wide">
-          <span class="ico green"><svg><use href="#img"/></svg></span>
-          <h3>Import Photos, filed by month</h3>
-          <p>One click brings over new photos and videos with their original dates. Each phone gets its own folder. Stop halfway and it picks up where it left off.</p>
-          <div class="tree">TwoPort Imports/<br>&nbsp;&nbsp;Galaxy S24/<br>&nbsp;&nbsp;&nbsp;&nbsp;2026-08/ <span class="m">412 items</span><br>&nbsp;&nbsp;&nbsp;&nbsp;2026-09/ <span class="n">+38 new</span></div>
+          <span class="ico blue"><svg><use href="#search"/></svg></span>
+          <h3>Search the whole phone <em class="tier pro">Pro</em></h3>
+          <p>Type part of a name and TwoPort looks across the whole phone, not one folder at a time. Or ask for every video on it.</p>
+          <div class="find" aria-hidden="true">
+            <div class="find-field"><svg><use href="#search"/></svg>invoice</div>
+            <div class="find-pills"><span>All</span><span>Photos</span><span>Videos</span><span class="on">Documents</span><span>Apps</span></div>
+            <div class="find-row"><svg><use href="#pdf"/></svg>Invoice_September.pdf<small>Download</small></div>
+            <div class="find-row"><svg><use href="#pdf"/></svg>Flat invoice 2026.pdf<small>Documents</small></div>
+          </div>
         </article>
         <article class="cell c-narrow">
           <span class="ico blue"><svg><use href="#lock"/></svg></span>
@@ -900,37 +1086,45 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
           <p>Phone and Mac talk directly, encrypted, each checking the other's identity. No server, no account. It works with the internet off.</p>
         </article>
         <article class="cell c-mid">
-          <div class="qs">
-            <div class="qr"><canvas id="qr-code" width="25" height="25"></canvas></div>
-            <div style="display:grid;gap:.5rem"><span class="ico blue"><svg><use href="#qr"/></svg></span><h3>Quick Send, for phones without the app</h3></div>
-          </div>
-          <p>A friend's phone, or an iPhone. Scan the code on your Mac and a page opens in its browser to send photos or text across. You allow each phone.</p>
+          <span class="ico green"><svg><use href="#play"/></svg></span>
+          <h3>Watch videos straight away <em class="tier pro">Pro</em></h3>
+          <p>Videos on the phone start playing on the Mac at once, without copying them first. Handy for a long clip you only need to check.</p>
         </article>
         <article class="cell c-mid">
           <span class="ico green"><svg><use href="#stack"/></svg></span>
           <h3>Several phones, one Mac</h3>
-          <p>Your phone and your work phone, or the family's. Switch in the menu bar. Shares from any of them arrive on their own.</p>
+          <p>Your phone and your work phone, or the family's. Switch in the menu bar. Shares from any of them arrive on their own, and what you copy on the Mac reaches all of them.</p>
         </article>
         <article class="cell c-narrow">
           <span class="ico blue"><svg><use href="#clip"/></svg></span>
-          <h3>Clipboard history</h3>
+          <h3>Clipboard history <em class="tier pro">Pro</em></h3>
           <p>Everything that crossed, one click to copy again. Passwords from password managers never cross.</p>
+        </article>
+        <article class="cell c-narrow">
+          <span class="ico green"><svg><use href="#to-mac"/></svg></span>
+          <h3>A Send clipboard tile <em class="tier">Free</em></h3>
+          <p>Rather choose what crosses? Add the tile to your phone's Quick Settings and send what you copied with one tap.</p>
         </article>
         <article class="cell c-narrow">
           <span class="ico green"><svg><use href="#pause"/></svg></span>
           <h3>Pause or turn off</h3>
           <p>Pause from the menu bar, or turn it off on the phone: nothing over Wi-Fi, nothing over the cable.</p>
         </article>
-        <article class="cell c-narrow">
-          <span class="ico blue"><svg><use href="#bolt"/></svg></span>
-          <h3>Instant video</h3>
-          <p>Videos on the phone start playing on the Mac straight away, without copying them first.</p>
+        <article class="cell c-mid">
+          <span class="ico blue"><svg><use href="#resume"/></svg></span>
+          <h3>Picks up where it stopped</h3>
+          <p>Stop an import halfway and the next one carries on from there. Nothing is copied twice, and each phone gets its own folder.</p>
+        </article>
+        <article class="cell c-mid">
+          <span class="ico blue"><svg><use href="#bell"/></svg></span>
+          <h3>Tells you when something lands</h3>
+          <p>A notification on the Mac or the phone for every file that arrives. Click it and the file is right there.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section id="pricing" class="section" style="padding-top:0">
+  <section id="pricing" class="section band band-tint">
     <div class="wrap">
       <div class="head"><span class="kicker">Pricing</span><h2>Pay once. Keep it.</h2><p class="lede">No subscription. The free version stays free, and every download starts with 14 days of Pro.</p></div>
       <div class="plans">
@@ -1008,7 +1202,7 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
     </div>
   </section>
 
-  <section id="early-access" class="section" style="padding-top:0">
+  <section id="early-access" class="section band band-deep">
     <div class="wrap">
       <div class="early">
         <div class="head" style="margin:0">
@@ -1030,7 +1224,7 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
     </div>
   </section>
 
-  <section id="requests" class="section" style="padding-top:0">
+  <section id="requests" class="section band band-surface">
     <div class="wrap requests">
       <div class="head" style="margin:0">
         <span class="kicker">Feature requests</span>
@@ -1051,11 +1245,13 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
     </div>
   </section>
 
-  <section id="faq" class="section" style="padding-top:0">
+  <section id="faq" class="section">
     <div class="wrap faq">
       <div class="head" style="margin:0"><span class="kicker">Questions</span><h2>Good to know.</h2></div>
       <div class="faq-list">
         <details open><summary>Is it a subscription?</summary><p>No. Pro is a one-time purchase that covers every 1.x version on up to three of your Macs. If there's ever a 2.0, upgrading will be optional and discounted, and 1.x keeps working.</p></details>
+        <details><summary>Does it mirror my phone's screen or run Android apps on the Mac?</summary><p>No. TwoPort moves things between the two: photos, videos, files and whatever you copy. Your phone's own screen and apps stay on the phone. That's also why it's quick and light, even over Wi-Fi.</p></details>
+        <details><summary>Does copying on the phone reach the Mac on its own?</summary><p>Yes, once you turn it on in the phone app (Android asks you to allow it in Accessibility settings, which is how an app can notice a copy). Prefer to choose each time? Use the Send clipboard tile in Quick Settings instead. Copying on the Mac reaches your phones without any setup.</p></details>
         <details><summary>What happens when the 14 days end?</summary><p>TwoPort keeps working as the Free version: sharing both ways, Quick Send and text on the clipboard. Browsing, Import Photos, the cable speed-up and photos on the clipboard need Pro.</p></details>
         <details><summary>Does it need the internet?</summary><p>No. Phone and Mac talk to each other over the same Wi-Fi network or a USB cable. Nothing goes through a server, and your licence is checked on your Mac.</p></details>
         <details><summary>Which phones and Macs?</summary><p>Android 8 or later and macOS 14 Sonoma or later. We test on Samsung Galaxy phones, from a Galaxy A50 to a Z Fold7.</p></details>
@@ -1069,7 +1265,7 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 
   <section class="wrap">
     <div class="closing">
-      <h2>Put your <span class="phone-word">phone</span> on your <span class="mac-word">Mac</span>.</h2>
+      <h2>From your <span class="phone-word">phone</span> to your <span class="mac-word">Mac</span>, and back.</h2>
       <div class="cta-row">
         <a class="btn btn-primary" href="#early-access">Get early access</a>
       </div>
@@ -1098,7 +1294,14 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
     3: { dir: 'toPhone', delay: 3.0, icon: '#pdf' },
     4: { dir: 'toPhone', delay: 1.8, icon: '#text' },
     6: { dir: 'toMac', delay: 1.2, icon: '#img' },
-    7: { dir: 'toMac', delay: 3.3, icon: '#img' }
+    7: { dir: 'toMac', delay: 3.3, icon: '#img' },
+    8: { dir: 'toMac', delay: 2.0, icon: '#text' }
+  };
+  // Which way the dots on the link flow: phone → Mac unless the Mac sends.
+  var toPhone = { 3: 1, 4: 1 };
+  var cap = {
+    tier: document.getElementById('cap-tier'), title: document.getElementById('cap-title'),
+    desc: document.getElementById('cap-desc'), count: document.getElementById('cap-count')
   };
   var N = tabs.length;
 
@@ -1111,7 +1314,8 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
   function show(i) {
     idx = i;
     var n = current = +tabs[i].dataset.scene;
-    stage.classList.remove('play', 'cable');
+    stage.classList.remove('play', 'cable', 'tomac');
+    if (!toPhone[n]) stage.classList.add('tomac');
     stage.querySelectorAll('.scene, .pscene').forEach(function (el) { el.classList.remove('on'); });
     stage.querySelector('.scene.s' + n).classList.add('on');
     stage.querySelector('.pscene.p' + n).classList.add('on');
@@ -1121,6 +1325,12 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
       t.tabIndex = on ? 0 : -1;
       t.querySelector('.prog').classList.remove('run');
     });
+    // The caption beside the phone in the stacked layout.
+    var b = tabs[i].querySelector('b'), tier = b.querySelector('.tier');
+    cap.tier.textContent = tier.textContent; cap.tier.className = tier.className;
+    cap.title.textContent = b.firstChild.textContent.trim();
+    cap.desc.textContent = tabs[i].querySelector('span').textContent;
+    cap.count.textContent = (i + 1) + ' of ' + N;
     var f = flights[n];
     packet.style.animation = f ? f.dir + ' 1.1s cubic-bezier(.22,.8,.24,1) ' + f.delay + 's' : 'none';
     if (f) packet.querySelector('use').setAttribute('href', f.icon);
@@ -1150,6 +1360,23 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
       tabs[next].focus(); show(next);
     });
   });
+
+  // Drop the fade on the chip row once it's scrolled to the end.
+  var row = tabs[0].parentNode;
+  var edge = function () { row.classList.toggle('end', row.scrollLeft + row.clientWidth >= row.scrollWidth - 4); };
+  row.addEventListener('scroll', edge, { passive: true }); addEventListener('resize', edge); edge();
+  document.querySelectorAll('.cap-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () { show((idx + +btn.dataset.step + N) % N); });
+  });
+  // Swipe the stage sideways for the next or previous moment.
+  var touch = null;
+  stage.addEventListener('touchstart', function (e) { touch = e.touches[0]; }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    if (!touch) return;
+    var t = e.changedTouches[0], dx = t.clientX - touch.clientX, dy = t.clientY - touch.clientY;
+    touch = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show((idx + (dx < 0 ? 1 : N - 1)) % N);
+  }, { passive: true });
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }, { threshold: 0.25 }).observe(stage);
@@ -1252,11 +1479,11 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
   });
 
   // Share links for the Free plan's "tell a friend" ask.
-  var SITE = 'https://twoport.app', PITCH = 'TwoPort puts your Android phone inside your Mac: browse it, share both ways, one clipboard. No cloud.';
+  var SITE = 'https://twoport.app', PITCH = 'TwoPort brings your Android phone\'s photos and files to your Mac: browse them, send both ways, one clipboard. No cloud.';
   var shareURL = {
     x: 'https://x.com/intent/post?text=' + encodeURIComponent(PITCH) + '&url=' + encodeURIComponent(SITE),
     wa: 'https://wa.me/?text=' + encodeURIComponent(PITCH + ' ' + SITE),
-    reddit: 'https://www.reddit.com/submit?url=' + encodeURIComponent(SITE) + '&title=' + encodeURIComponent('TwoPort: your Android phone inside your Mac'),
+    reddit: 'https://www.reddit.com/submit?url=' + encodeURIComponent(SITE) + '&title=' + encodeURIComponent('TwoPort: your Android\'s photos and files, right on your Mac'),
     fb: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE),
     li: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(SITE)
   };
@@ -1266,6 +1493,16 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
     el.addEventListener('click', function () {
       var done = function () { el.textContent = 'Copied'; setTimeout(function () { el.textContent = 'Copy link'; }, 1600); };
       if (navigator.clipboard) navigator.clipboard.writeText(SITE).then(done, function () {}); else done();
+    });
+  });
+
+  document.getElementById('bench-more').addEventListener('click', function () { document.getElementById('bench').classList.remove('folded'); });
+
+  // Label each table cell with its column, for the stacked phone layout.
+  document.querySelectorAll('.compare-scroll table').forEach(function (t) {
+    var heads = Array.prototype.map.call(t.querySelectorAll('thead th'), function (th) { return th.textContent.trim(); });
+    t.querySelectorAll('tbody tr').forEach(function (tr) {
+      Array.prototype.forEach.call(tr.children, function (c, k) { if (k && heads[k]) c.setAttribute('data-label', heads[k]); });
     });
   });
 
