@@ -1,11 +1,11 @@
 # TwoPort website
 
-One static page: `index.html` (CSS and JS inline) plus `assets/`. Deploy the folder to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages).
+One static page: `index.html` (CSS and JS inline) plus `assets/`. Live at **https://twoport.app**, served by GitHub Pages from the public repo `whiterabbit-vibe/twoport-site` (this repo stays private). To publish: commit, then run `tools/deploy-website.sh`.
 
 ## Before it goes live
 
 - **Links.** Buttons with `href="#"` carry a `data-href` naming what goes there: `mac-download` (the notarized Mac build) and `checkout` (the Pro checkout; the India ₹999 price is sold only through Indian payment methods). Also set `Licensing.buyURL` in the Mac app to the checkout URL.
-- **Domain and social preview.** Add `og:title`, `og:description` and `og:image` tags once there's a domain and a share image.
+- **Social preview.** og: tags are in; `og:image` is the 512px app icon. A 1200×630 share image would look better.
 
 ## Design
 
