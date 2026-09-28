@@ -760,3 +760,48 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 .plan .list b { font-weight: 600; }
 .plan .see-free { justify-self: start; font-size: .95rem; margin-top: -.3rem; }
 .fgrid[data-show="free"] .fgroup:not(:has(.fx[data-tier="free"])) .fgroup-head { opacity: .4; }
+
+/* Demo scene 1: the real TwoPort Browser's layout (toolbar, phone header with
+   the encryption badge and storage bar, Phones + Quick Access sidebar),
+   with a staged phone. */
+.b-tool { gap: .7em; }
+.b-tool b { font-weight: 700; font-size: .95em; }
+.b-search { margin-left: auto; display: flex; align-items: center; gap: .4em; height: 1.8em; padding: 0 .7em; min-width: 30%; border-radius: .5em; background: var(--window); border: 1px solid var(--line); color: var(--faint) !important; font-size: .8em; font-weight: 500; }
+.b-search svg { width: 1em; height: 1em; }
+.b-import { display: flex; align-items: center; gap: .35em; height: 1.8em; padding: 0 .75em; border-radius: 2em; background: var(--mac); color: #fff !important; font-size: .8em; font-weight: 600 !important; white-space: nowrap; }
+.b-import svg { width: 1.1em; height: 1.1em; }
+.b-dev { display: flex; justify-content: space-between; align-items: center; padding: .55em 1em .35em; font-size: .85em; }
+.b-dev > div:first-child { display: grid; gap: .1em; }
+.b-dev b { font-weight: 700; font-size: 1.05em; }
+.b-e2e { display: flex; align-items: center; gap: .3em; color: var(--phone); font-size: .82em; font-weight: 500; }
+.b-e2e svg { width: 1em; height: 1em; }
+.b-stats { display: flex; gap: .9em; color: var(--muted); font-size: .82em; }
+.b-stats span { display: flex; align-items: center; gap: .3em; }
+.b-stats svg { width: 1.1em; height: 1.1em; }
+.b-store { display: flex; gap: .15em; height: .35em; margin: 0 1em .5em; }
+.b-store i { border-radius: 1em; background: var(--mac); }
+.b-store i:nth-child(2) { background: var(--phone-fill); } .b-store i:nth-child(3) { background: #3FA36B; } .b-store i:nth-child(4) { background: color-mix(in srgb, var(--mac) 45%, var(--window)); } .b-store i:nth-child(5) { background: var(--muted); } .b-store i:nth-child(6) { background: var(--line); }
+.b-win .b-body { height: auto; position: absolute; left: 0; right: 0; top: 7.6em; bottom: 0; border-top: 1px solid var(--line); }
+.b-side small { display: block; padding: .5em .6em .15em; font-size: .78em; font-weight: 600; color: var(--faint); }
+.b-side .b-phone { display: flex; align-items: center; gap: .4em; padding: .35em .5em; color: var(--ink); font-weight: 600; font-size: .92em; }
+.b-phone svg { width: 1.2em; height: 1.2em; color: var(--mac); flex: none; }
+.b-phone span { display: grid; line-height: 1.15; }
+.b-phone em { font-style: normal; font-weight: 500; font-size: .85em; color: var(--muted); }
+.b-phone b { margin-left: auto; color: var(--mac); }
+.b-main { display: grid; grid-template-rows: auto 1fr; min-width: 0; }
+.b-crumb { display: flex; justify-content: space-between; align-items: center; padding: .6em 1em 0; font-size: .82em; color: var(--muted); }
+.b-crumb b { color: var(--ink); font-weight: 600; }
+.b-views { display: flex; gap: .25em; }
+.b-views i { width: 1.3em; height: 1.1em; border-radius: .25em; background: var(--line); }
+.b-views i.on { background: var(--mac); }
+.b-win .b-body { grid-template-columns: 26% 1fr; }
+.b-win .b-side { gap: 0; padding: .5em .5em; font-size: .88em; }
+.b-win .b-side div { padding: .28em .55em; }
+.b-win .b-side .b-phone { padding: .3em .45em; font-size: .9em; white-space: nowrap; }
+.b-win .b-bar { left: 29%; }
+.b-tool b, .b-import { white-space: nowrap; }
+@media (max-width: 640px) {
+  .b-search, .b-stats, .b-views, .b-side small, .b-side .b-phone { display: none; }
+  .b-import { margin-left: auto; }
+  .b-win .b-side { padding-top: .6em; }
+}
