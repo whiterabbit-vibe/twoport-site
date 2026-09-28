@@ -736,15 +736,14 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
   .fx[open]::details-content { height: auto; }
 }
 
-.fbase { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; margin-top: 1rem; }
+.fbase { margin-top: 1rem; }
+.fbase .list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem 2rem; }
+@media (max-width: 700px) { .fbase .list { grid-template-columns: minmax(0, 1fr); } }
 .fcard { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 1.2rem 1.3rem 1.4rem; display: grid; gap: 1rem; align-content: start; }
 .fcard h3 { display: flex; align-items: center; gap: .75rem; font-size: 1.04rem; }
 .fcard .ico { width: 2.2rem; height: 2.2rem; border-radius: 10px; }
 .fcard .ico svg { width: 1.15rem; height: 1.15rem; }
 .fcard .list li { font-size: .95rem; }
-.ico.grey { background: color-mix(in srgb, var(--muted) 13%, transparent); color: var(--muted); }
-.list.nots li { color: var(--muted); }
-.list.nots li::before { content: "–"; color: var(--faint); }
 
 @media (max-width: 1020px) { .fgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) {
