@@ -1,6 +1,7 @@
 // TwoPort website, shared by every page. Each part runs only when its
 // section is on the page.
 (function () {
+  document.documentElement.classList.add('js');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---- The demo: chips pick a moment, the stage plays it.
@@ -9,6 +10,8 @@
     var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
     var packet = document.getElementById('packet');
     var caption = document.getElementById('caption');
+    // The menu bar names the app in front, so TwoPort's own window never reads as Finder.
+    var menuApp = document.getElementById('menu-app');
     var cap = { title: document.getElementById('cap-title'), desc: document.getElementById('cap-desc'), count: document.getElementById('cap-count') };
     var DUR = 8000, N = tabs.length, idx = 0, current = 1, timer = null, visible = true;
     // Plays on its own until the visitor picks a moment, then stays put.
@@ -43,6 +46,7 @@
         t.tabIndex = on ? 0 : -1;
         t.querySelector('.prog').classList.remove('run');
       });
+      if (menuApp && tabs[i].dataset.app) menuApp.textContent = tabs[i].dataset.app;
       var text = tabs[i].dataset.caption;
       if (caption) caption.textContent = text;
       cap.title.textContent = tabs[i].textContent.trim();
@@ -100,6 +104,34 @@
       new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }, { threshold: 0.25 }).observe(stage);
     }
     show(0);
+  }
+
+  // ---- Everything TwoPort does: counts come from the list itself, "What's
+  // free" fades the Pro lines, and one button opens or closes every detail.
+  var fgrid = document.getElementById('fgrid');
+  if (fgrid) {
+    var fxs = Array.prototype.slice.call(fgrid.querySelectorAll('.fx'));
+    var counts = { all: fxs.length, free: fxs.filter(function (d) { return d.dataset.tier === 'free'; }).length };
+    document.querySelectorAll('[data-count]').forEach(function (el) { el.textContent = counts[el.dataset.count]; });
+    var segs = Array.prototype.slice.call(document.querySelectorAll('.seg-btn'));
+    var setShow = function (v) {
+      fgrid.dataset.show = v;
+      segs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.show === v ? 'true' : 'false'); });
+    };
+    segs.forEach(function (b) { b.addEventListener('click', function () { setShow(b.dataset.show); }); });
+    document.querySelectorAll('a[data-show]').forEach(function (a) { a.addEventListener('click', function () { setShow(a.dataset.show); }); });
+    var openAll = document.querySelector('.open-all');
+    var syncOpenAll = function () {
+      var all = fxs.every(function (d) { return d.open; });
+      openAll.textContent = all ? 'Close every detail' : 'Open every detail';
+      openAll.setAttribute('aria-pressed', all ? 'true' : 'false');
+    };
+    openAll.addEventListener('click', function () {
+      var open = !fxs.every(function (d) { return d.open; });
+      fxs.forEach(function (d) { d.open = open; });
+      syncOpenAll();
+    });
+    fxs.forEach(function (d) { d.addEventListener('toggle', syncOpenAll); });
   }
 
   // ---- Waitlist, free licences and feature requests (Supabase; the key
