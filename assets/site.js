@@ -4,24 +4,51 @@
   document.documentElement.classList.add('js');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- The crowned headline: the first word rotates and the crown hops onto
-  // each new one. .rot gets the shown word's width so the line glides.
+  // ---- The headline's verb picker: every verb is on screen, the chosen one
+  // on the headline's line with the crown, the rest above and below it
+  // (phones: above only). Each tick they all roll down one slot; the one that
+  // goes round fades out at one end and back in at the other.
   var rot = document.getElementById('rot');
   if (rot) {
-    var words = Array.prototype.slice.call(rot.querySelectorAll('b')), prep = document.getElementById('prep'), wi = 0, heroOn = true;
-    var fit = function () { rot.style.width = words[wi].offsetWidth + 'px'; };
+    var words = Array.prototype.slice.call(rot.querySelectorAll('b')), nW = words.length;
+    var prep = document.getElementById('prep'), wi = 0, heroOn = true;
+    var stacked = matchMedia('(max-width: 700px)');
+    // 0 is the chosen verb; the next one waits just above it.
+    var slot = function (i) {
+      var rel = (i - wi + nW) % nW;
+      return stacked.matches ? -rel : rel <= 2 ? -rel : nW - rel;
+    };
+    var crownTo = function () {
+      var w = words[wi].offsetWidth;
+      rot.style.setProperty('--cx', (stacked.matches ? (rot.clientWidth - w) / 2 : rot.clientWidth - w) + 'px');
+    };
+    var fit = function () {
+      rot.classList.add('snap');
+      words.forEach(function (w, i) { w.dataset.o = slot(i); });
+      rot.style.setProperty('--dw', Math.max.apply(null, words.map(function (w) { return w.offsetWidth; })) + 'px');
+      crownTo();
+      void rot.offsetWidth;
+      rot.classList.remove('snap');
+    };
     fit();
     if (document.fonts) document.fonts.ready.then(fit);
     addEventListener('resize', fit);
     var nextWord = function () {
-      var old = words[wi];
-      old.classList.remove('on'); old.classList.add('out');
-      setTimeout(function () { old.classList.remove('out'); }, 550);
-      wi = (wi + 1) % words.length;
-      words[wi].classList.add('on');
+      wi = (wi + 1) % nW;
+      words.forEach(function (w, i) {
+        var from = +w.dataset.o, to = slot(i);
+        if (to > from) { w.dataset.o = to; return; }
+        // Going round: out past the far end, then in from the near one.
+        w.dataset.o = from + 1;
+        setTimeout(function () {
+          w.classList.add('snap'); w.dataset.o = to - 1;
+          void w.offsetWidth;
+          w.classList.remove('snap'); w.dataset.o = to;
+        }, 480);
+      });
       // "Send" reads "to your Mac"; the others "on your Mac".
       prep.textContent = words[wi].dataset.prep || 'on';
-      fit();
+      crownTo();
       rot.classList.remove('hop'); void rot.offsetWidth; rot.classList.add('hop');
     };
     if (!reduced) {
@@ -55,9 +82,49 @@
     // Which way the dots on the link flow: phone → Mac unless the Mac sends.
     var toPhone = { 3: 1, 4: 1 };
 
+    // Phones and tablets: the moments play as you scroll (see site.css). The
+    // stage stays under the nav; a card per moment scrolls up below it, and
+    // the card that has crossed the middle of the space left plays. A bar of
+    // five under the stage says where you are.
+    var scrolly = matchMedia('(max-width: 900px)');
+    var stageCol = stage.parentNode, steps = document.createElement('div'), moments = document.createElement('ol');
+    steps.className = 'm-steps';
+    moments.className = 'moments';
+    var stepBar = steps.appendChild(document.createElement('div')), stepName = steps.appendChild(document.createElement('span'));
+    stepBar.className = 'm-bar';
+    stepName.className = 'm-name';
+    var mSegs = [], mCards = tabs.map(function (t, i) {
+      var name = t.textContent.trim();
+      var seg = stepBar.appendChild(document.createElement('button'));
+      seg.type = 'button';
+      seg.setAttribute('aria-label', name);
+      seg.appendChild(document.createElement('i'));
+      seg.addEventListener('click', function () { go(i); });
+      mSegs.push(seg);
+      var li = moments.appendChild(document.createElement('li'));
+      li.className = 'moment';
+      li.appendChild(t.querySelector('.tab-ico').cloneNode(true));
+      li.appendChild(document.createElement('span')).className = 'm-k';
+      li.lastChild.textContent = (i + 1) + ' of ' + N;
+      li.appendChild(document.createElement('h3')).textContent = name;
+      li.appendChild(document.createElement('p')).textContent = t.dataset.caption;
+      li.addEventListener('click', function () { go(i); });
+      return li;
+    });
+    stageCol.appendChild(steps);
+    stageCol.parentNode.appendChild(moments);
+    // Jump to a moment: on phones by scrolling its card into play.
+    var go = function (i) {
+      if (!scrolly.matches) { pick(i); return; }
+      var pinned = parseFloat(getComputedStyle(stageCol).top) + stageCol.offsetHeight;
+      scrollTo({ top: scrollY + mCards[i].getBoundingClientRect().top - pinned - 24, behavior: reduced ? 'auto' : 'smooth' });
+    };
+
     var schedule = function () {
       clearTimeout(timer);
       if (auto) timer = setTimeout(function () { if (visible) show((idx + 1) % N); else schedule(); }, DUR);
+      // Phones: the moment in view plays again while you stay on it.
+      else if (scrolly.matches && !reduced) timer = setTimeout(function () { if (visible) show(idx); else schedule(); }, DUR);
     };
 
     // i is the chip's position; n is the scene it plays.
@@ -81,6 +148,15 @@
       cap.title.textContent = tabs[i].textContent.trim();
       cap.desc.textContent = text;
       cap.count.textContent = (i + 1) + ' of ' + N;
+      mSegs.forEach(function (s, j) {
+        s.dataset.s = j < i ? 'past' : j === i ? 'on' : '';
+        if (j === i) s.setAttribute('aria-current', 'step'); else s.removeAttribute('aria-current');
+      });
+      stepBar.style.setProperty('--dur', DUR + 'ms');
+      stepName.innerHTML = '<em></em>';
+      stepName.firstChild.textContent = (i + 1) + ' of ' + N;
+      stepName.appendChild(document.createTextNode(tabs[i].textContent.trim()));
+      mCards.forEach(function (c, j) { c.classList.toggle('on', j === i); });
       var f = flights[n];
       packet.style.animation = f ? f.dir + ' 1.1s cubic-bezier(.22,.8,.24,1) ' + f.delay + 's' : 'none';
       if (f) packet.querySelector('use').setAttribute('href', f.icon);
@@ -117,7 +193,7 @@
     var edge = function () { row.classList.toggle('end', row.scrollLeft + row.clientWidth >= row.scrollWidth - 4); };
     row.addEventListener('scroll', edge, { passive: true }); addEventListener('resize', edge); edge();
     document.querySelectorAll('.cap-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () { pick((idx + +btn.dataset.step + N) % N); });
+      btn.addEventListener('click', function () { go((idx + +btn.dataset.step + N) % N); });
     });
     // Swipe the stage sideways for the next or previous moment.
     var touch = null;
@@ -126,8 +202,22 @@
       if (!touch) return;
       var t = e.changedTouches[0], dx = t.clientX - touch.clientX, dy = t.clientY - touch.clientY;
       touch = null;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) pick((idx + (dx < 0 ? 1 : N - 1)) % N);
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) go(Math.max(0, Math.min(N - 1, idx + (dx < 0 ? 1 : -1))));
     }, { passive: true });
+
+    var dTick = false;
+    var follow = function () {
+      if (dTick || !scrolly.matches) return;
+      dTick = true;
+      requestAnimationFrame(function () {
+        dTick = false;
+        var below = stageCol.getBoundingClientRect().bottom, line = below + (innerHeight - below) * .5, now = 0;
+        mCards.forEach(function (c, j) { if (c.getBoundingClientRect().top < line) now = j; });
+        if (now !== idx) show(now);
+      });
+    };
+    addEventListener('scroll', follow, { passive: true });
+    addEventListener('resize', follow);
 
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }, { threshold: 0.25 }).observe(stage);
@@ -257,7 +347,28 @@
       li.appendChild(a); gList.appendChild(li);
       return { el: c, id: c.id, num: num, name: a.lastChild.textContent, link: a };
     });
-    var setOpen = function (open) { gList.hidden = !open; gBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); };
+    // The first time the pill shows up, a note under it says what it is
+    // (once per visitor; the pill alone went unnoticed for ten minutes).
+    var tip = null, tipSeen = false;
+    try { tipSeen = !!localStorage.getItem('tp-guide-tip'); } catch (err) {}
+    var hideTip = function () {
+      if (!tip) return;
+      var t = tip; tip = null;
+      t.classList.add('bye');
+      setTimeout(function () { t.remove(); }, 300);
+    };
+    var showTip = function () {
+      if (tipSeen) return;
+      tipSeen = true;
+      try { localStorage.setItem('tp-guide-tip', '1'); } catch (err) {}
+      tip = document.createElement('p');
+      tip.className = 'guide-tip';
+      tip.textContent = 'This shows which part you\'re reading. ' + (matchMedia('(hover: none)').matches ? 'Tap' : 'Click') + ' it to jump to any part.';
+      tip.addEventListener('click', hideTip);
+      guide.appendChild(tip);
+      setTimeout(hideTip, 6000);
+    };
+    var setOpen = function (open) { gList.hidden = !open; gBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); if (open) hideTip(); };
     gBtn.addEventListener('click', function () { setOpen(gList.hidden); });
     gList.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
     document.addEventListener('click', function (e) { if (!guide.contains(e.target)) setOpen(false); });
@@ -275,15 +386,21 @@
           cur = now;
           guide.hidden = now < 0;
           navBar.classList.toggle('guided', now >= 0);
-          if (now < 0) setOpen(false);
+          if (now < 0) { setOpen(false); hideTip(); }
           else {
             gNum.textContent = parts[now].num; gName.textContent = parts[now].name;
             guide.classList.remove('swap'); void guide.offsetWidth; guide.classList.add('swap');
+            showTip();
           }
           parts.forEach(function (p, i) { if (i === now) p.link.setAttribute('aria-current', 'true'); else p.link.removeAttribute('aria-current'); });
           navLinks.forEach(function (a) {
             if (now >= 0 && a.getAttribute('href') === '#' + parts[now].id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
           });
+        }
+        // The ring round the number: how far through this part you are.
+        if (now >= 0) {
+          var box = parts[now].el.getBoundingClientRect();
+          guide.style.setProperty('--gp', Math.max(0, Math.min(1, (edge - box.top) / (box.height || 1))).toFixed(3));
         }
         var max = document.documentElement.scrollHeight - innerHeight;
         navLine.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
