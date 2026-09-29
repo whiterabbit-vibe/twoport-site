@@ -4,6 +4,34 @@
   document.documentElement.classList.add('js');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ---- The crowned headline: the first word rotates and the crown hops onto
+  // each new one. .rot gets the shown word's width so the line glides.
+  var rot = document.getElementById('rot');
+  if (rot) {
+    var words = Array.prototype.slice.call(rot.querySelectorAll('b')), prep = document.getElementById('prep'), wi = 0, heroOn = true;
+    var fit = function () { rot.style.width = words[wi].offsetWidth + 'px'; };
+    fit();
+    if (document.fonts) document.fonts.ready.then(fit);
+    addEventListener('resize', fit);
+    var nextWord = function () {
+      var old = words[wi];
+      old.classList.remove('on'); old.classList.add('out');
+      setTimeout(function () { old.classList.remove('out'); }, 550);
+      wi = (wi + 1) % words.length;
+      words[wi].classList.add('on');
+      // "Send" reads "to your Mac"; the others "on your Mac".
+      prep.textContent = words[wi].dataset.prep || 'on';
+      fit();
+      rot.classList.remove('hop'); void rot.offsetWidth; rot.classList.add('hop');
+    };
+    if (!reduced) {
+      if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { heroOn = en[0].isIntersecting; }).observe(rot);
+      setTimeout(function () {
+        setInterval(function () { if (heroOn && !document.hidden) nextWord(); }, 2300);
+      }, 700);
+    }
+  }
+
   // ---- The demo: chips pick a moment, the stage plays it.
   var stage = document.getElementById('stage');
   if (stage) {
@@ -15,7 +43,8 @@
     var cap = { title: document.getElementById('cap-title'), desc: document.getElementById('cap-desc'), count: document.getElementById('cap-count') };
     var DUR = 8000, N = tabs.length, idx = 0, current = 1, timer = null, visible = true;
     // Plays on its own until the visitor picks a moment, then stays put.
-    var auto = !reduced;
+    // Not on phones: there it waits for a swipe or the arrows.
+    var auto = !reduced && !matchMedia('(max-width: 900px)').matches;
     // The packet on the wire: which way, when, and what it carries.
     var flights = {
       2: { dir: 'toMac', delay: 2.6, icon: '#img' },
@@ -185,8 +214,10 @@
       draw(.999);
     } else {
       var ticking = false;
+      // On phones the steps are plain cards (see site.css), nothing to play.
+      var cards = matchMedia('(max-width: 700px)');
       var onScroll = function () {
-        if (ticking) return;
+        if (ticking || cards.matches) return;
         ticking = true;
         requestAnimationFrame(function () {
           ticking = false;

@@ -41,6 +41,11 @@
     <symbol id="backup" viewBox="0 0 24 24"><path d="M12 3.5v10M8 9.8l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 14.5v3.5A2 2 0 006 20h12a2 2 0 002-2v-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
     <symbol id="stack" viewBox="0 0 24 24"><rect x="3" y="7" width="12" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="9" y="3" width="12" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
     <symbol id="bolt" viewBox="0 0 24 24"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <!-- The hero's crown: gold, with a Mac-blue and a phone-green jewel joined by a blue-to-green gem. -->
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A3"/><stop offset=".5" stop-color="#FBBF24"/><stop offset="1" stop-color="#E08600"/></linearGradient>
+    <linearGradient id="gem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#22C55E"/></linearGradient>
+    <symbol id="crown" viewBox="0 0 48 36"><g stroke="#A86200" stroke-width="1.4" stroke-linejoin="round"><path d="M5.5 27L3.5 10.5l10.5 8L24 5.5l10 13 10.5-8-2 16.5z" fill="url(#gold)"/><rect x="4.5" y="25.5" width="39" height="8" rx="2.4" fill="url(#gold)"/><circle cx="3.5" cy="9.5" r="2.8" fill="url(#gold)"/><circle cx="24" cy="4.2" r="3.1" fill="url(#gold)"/><circle cx="44.5" cy="9.5" r="2.8" fill="url(#gold)"/></g><circle cx="13.5" cy="29.5" r="2.3" fill="#2563EB"/><path d="M24 26.1l3.4 3.4-3.4 3.4-3.4-3.4z" fill="url(#gem)"/><circle cx="34.5" cy="29.5" r="2.3" fill="#22C55E"/><path d="M9.5 21.5l-.9-6.2" stroke="#FFF6D6" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="glint" viewBox="-10 -10 20 20"><path d="M0-10C1-2 2-1 10 0 2 1 1 2 0 10-1 2-2 1-10 0-2-1-1-2 0-10z" fill="#FFD75E"/></symbol>
     <!-- Direction glyphs for the feature list: the Mac (blue) on the left, the phone (green) on the right, as on the demo stage. -->
     <symbol id="d-mac" viewBox="0 0 44 16"><rect x="1.5" y="2.5" width="13" height="9" rx="1.6" fill="none" style="stroke: var(--mac)" stroke-width="1.6"/><path d="M.5 14h15" style="stroke: var(--mac)" stroke-width="1.6" stroke-linecap="round"/><rect x="34.5" y="1.5" width="8" height="13" rx="2" fill="none" style="stroke: var(--phone-fill)" stroke-width="1.6"/></symbol>
     <symbol id="d-tomac" viewBox="0 0 44 16"><use href="#d-mac"/><path d="M31 8H19M22 5l-3 3 3 3" fill="none" style="stroke: var(--mac)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -75,7 +80,10 @@
 <main id="top">
   <section class="hero">
     <div class="wrap hero-in">
-      <h1>See your <span class="phone-word">Android phone's</span> photos and files on your <span class="mac-word">Mac</span>.</h1>
+      <h1 class="crowned">
+        <span class="sr-only">See, send, search, open and back up your Android phone's photos and files on your Mac.</span>
+        <span aria-hidden="true"><span class="l1"><span class="rot" id="rot"><span class="strut">&nbsp;</span><span class="crown"><svg><use href="#crown"/></svg><svg class="glint"><use href="#glint"/></svg></span><b class="on">See</b><b data-prep="to">Send</b><b>Search</b><b>Open</b><b>Back up</b></span> your</span><br class="br-m"> <span class="phone-word">Android phone's</span><br class="br-d"> photos and files <span class="mac-mark"><span id="prep">on</span> your Mac</span>.</span>
+      </h1>
       <p class="lede"><b class="hero-sub">Copy on one, paste on the other.</b> Over your own Wi-Fi, with no cloud and no account.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#early-access">Get early access, free</a>
@@ -285,15 +293,18 @@
     </div>
   </section>
 
-  <section id="story" class="story" aria-label="What TwoPort does, step by step">
+  <section id="story" class="story chapter ch-white" aria-label="What TwoPort does, step by step">
+    <div class="ch-tab" aria-hidden="true"><b>01</b>What it does</div>
     <div class="story-pin">
       <div class="wrap story-in">
+        <!-- Wide screens play these as a pinned scroll story; phones show them as plain cards (the icons and speed bars are only for the cards). -->
         <ol class="story-steps">
-          <li class="on"><span class="kicker">Made for Android and Mac</span><h2>The iPhone-and-Mac tricks, now with your <span class="phone-word">Android</span>.</h2><p class="lede">Pair once over your own Wi-Fi. No cloud, no account.</p></li>
-          <li><span class="kicker">Photos</span><h2>Your phone's photos, on your Mac in a second.</h2><p class="lede">Drag them out of TwoPort into any folder.</p></li>
-          <li><span class="kicker">Clipboard</span><h2>Copy on your Mac. Paste on your phone.</h2><p class="lede">And the other way round.</p></li>
-          <li><span class="kicker">Cable</span><h2>Plug in a cable, and it's about 4× faster.</h2><p class="lede">Unplug any time. It carries on over Wi-Fi.</p></li>
-          <li><span class="kicker">Always connected</span><h2>Several phones. One Mac. Always connected.</h2><p class="lede">Yours, a work phone, the family's.</p></li>
+          <li class="on"><span class="kicker">Made for Android and Mac</span><h2>The <span class="nw">iPhone-and-Mac</span> tricks, now with your <span class="phone-word">Android</span>.</h2><p class="lede">Pair once over your own Wi-Fi. No cloud, no account.</p></li>
+          <li><span class="st-ico ico green" aria-hidden="true"><svg><use href="#img"/></svg></span><span class="kicker">Photos</span><h2>Your phone's photos, on your Mac in a second.</h2><p class="lede">Drag them out of TwoPort into any folder.</p></li>
+          <li><span class="st-ico ico blue" aria-hidden="true"><svg><use href="#clip"/></svg></span><span class="kicker">Clipboard</span><h2>Copy on your Mac. Paste on your phone.</h2><p class="lede">And the other way round.</p></li>
+          <li><span class="st-ico ico green" aria-hidden="true"><svg><use href="#bolt"/></svg></span><span class="kicker">Cable</span><h2>Plug in a cable, and it's about 4× faster.</h2><p class="lede">Unplug any time. It carries on over Wi-Fi.</p>
+            <span class="st-speed"><span><em>Wi-Fi</em><i style="--w:26%"></i><b>8 MB/s</b></span><span><em>Cable</em><i style="--w:100%"></i><b>31 MB/s</b></span></span></li>
+          <li><span class="st-ico ico blue" aria-hidden="true"><svg><use href="#stack"/></svg></span><span class="kicker">Always connected</span><h2>Several phones. One Mac. Always connected.</h2><p class="lede">Yours, a work phone, the family's.</p></li>
         </ol>
         <div class="story-box">
           <div class="story-stage" aria-hidden="true">
@@ -342,10 +353,11 @@
     </div>
   </section>
 
-  <section id="try" class="section band band-deep">
+  <section id="try" class="section chapter ch-deep">
+    <div class="ch-tab" aria-hidden="true"><b>02</b>Try it</div>
     <div class="wrap">
       <div class="pg">
-        <div class="head center pg-head"><span class="kicker">Your turn</span><h2>Try it right here.</h2><p class="lede">Three things. About twenty seconds.</p></div>
+        <div class="head center pg-head"><h2>Try it right here.</h2><p class="lede">Three things. About twenty seconds.</p></div>
         <ol class="pg-tasks">
           <li data-task="photo"><span class="tick" aria-hidden="true"></span><span><b>Move a photo</b> from the phone to the Mac</span></li>
           <li data-task="clip"><span class="tick" aria-hidden="true"></span><span><b>Copy</b> the address on the phone, <b>paste</b> it on the Mac</span></li>
@@ -396,9 +408,10 @@
     </div>
   </section>
 
-  <section id="how" class="section">
+  <section id="how" class="section chapter ch-green">
+    <div class="ch-tab" aria-hidden="true"><b>03</b>How it works</div>
     <div class="wrap">
-      <div class="head center"><span class="kicker">How it works</span><h2>Set up once. Then it's just there.</h2></div>
+      <div class="head center"><h2>Set up once. Then it's just there.</h2></div>
       <ol class="steps">
         <li class="step"><div class="step-art" aria-hidden="true"><svg class="m"><use href="#laptop"/></svg><svg class="p"><use href="#phone"/></svg></div><h3><span class="num">1</span>Get the app on both</h3><p>Install TwoPort on your Mac and on your Android phone.</p></li>
         <li class="step"><div class="step-art" aria-hidden="true"><div class="qr"><canvas class="qr-draw" width="25" height="25"></canvas></div></div><h3><span class="num">2</span>Scan once to pair</h3><p>Open TwoPort on your phone and scan the code your Mac shows.</p></li>
@@ -407,9 +420,10 @@
     </div>
   </section>
 
-  <section id="features" class="section band band-surface">
+  <section id="features" class="section chapter ch-white">
+    <div class="ch-tab" aria-hidden="true"><b>04</b>Features</div>
     <div class="wrap">
-      <div class="head center"><span class="kicker">Everything TwoPort does</span><h2>All <span data-count="all">26</span> features, before you pay.</h2><p class="lede">Every download includes 14 days of Pro, so you can try all of them. Tap any line to see how it works.</p></div>
+      <div class="head center"><h2>All <span data-count="all">26</span> features, before you pay.</h2><p class="lede">Every download includes 14 days of Pro, so you can try all of them. Tap any line to see how it works.</p></div>
       <div class="ftools">
         <div class="seg" role="group" aria-label="Show features for">
           <button type="button" class="seg-btn" data-show="all" aria-pressed="true">Everything <span data-count="all">26</span></button>
@@ -483,9 +497,10 @@
     </div>
   </section>
 
-  <section id="pricing" class="section band band-tint">
+  <section id="pricing" class="section chapter ch-tint">
+    <div class="ch-tab" aria-hidden="true"><b>05</b>Pricing</div>
     <div class="wrap">
-      <div class="head center"><span class="kicker">Pricing</span><h2>Free to start. Pay once for more.</h2><p class="lede">No subscription. Every download includes 14 days of Pro.</p></div>
+      <div class="head center"><h2>Free to start. Pay once for more.</h2><p class="lede">No subscription. Every download includes 14 days of Pro.</p></div>
       <div class="plans">
         <article class="plan free">
           <h3>Free</h3>
@@ -533,11 +548,11 @@
     </div>
   </section>
 
-  <section id="early-access" class="section band band-deep">
+  <section id="early-access" class="section chapter ch-deep">
+    <div class="ch-tab" aria-hidden="true"><b>06</b>Early access</div>
     <div class="wrap">
       <div class="early">
         <div class="head" style="margin:0">
-          <span class="kicker">Early access</span>
           <h2>Be first on your Mac.</h2>
           <p class="lede">Get one email when TwoPort is out. Tick the box to hold the $9 founder price for Pro. You pay only at launch.</p>
         </div>
@@ -555,9 +570,10 @@
     </div>
   </section>
 
-  <section id="faq" class="section">
+  <section id="faq" class="section chapter ch-grey">
+    <div class="ch-tab" aria-hidden="true"><b>07</b>Questions</div>
     <div class="wrap faq">
-      <div class="head" style="margin:0"><span class="kicker">Questions</span><h2>Good to know.</h2></div>
+      <div class="head" style="margin:0"><h2>Good to know.</h2></div>
       <div class="faq-list">
         <details open><summary>Do I need a cable?</summary><p>No. Your phone and Mac just need to be on the same Wi-Fi. A USB cable is optional: it's faster, and it works where the Wi-Fi keeps devices apart, like some offices.</p></details>
         <details><summary>Does it show my phone's screen on the Mac?</summary><p>No. TwoPort moves things between the two: photos, videos, files and what you copy. Your phone's screen and apps stay on the phone.</p></details>
