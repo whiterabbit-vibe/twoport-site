@@ -805,22 +805,21 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
   .b-win .b-side { padding-top: .6em; }
 }
 
-/* ---------- Scroll story: the section pins and your scrolling plays it.
-   site.js turns scroll position into a few custom properties (--link,
-   --lift, --copy, --land1, --land2, --cable, --more) and ge1..ge4 classes;
-   the flying photo and text are placed from real element positions. ---------- */
-.story { position: relative; height: 520vh; }
-.story-pin { position: sticky; top: 62px; height: calc(100vh - 62px); height: calc(100svh - 62px); display: grid; align-items: center; overflow: hidden; }
-.story-in { display: grid; gap: clamp(1rem, 3.2vh, 2.2rem); justify-items: center; }
-.story-steps { list-style: none; margin: 0; padding: 0; display: grid; width: 100%; text-align: center; }
-.story-steps li { grid-area: 1 / 1; display: grid; gap: .7rem; justify-items: center; align-content: end; opacity: 0; transform: translateY(1rem); transition: opacity .45s var(--ease), transform .45s var(--ease); }
-.story-steps li.on { opacity: 1; transform: none; }
-.story-steps h2 { font-size: clamp(1.6rem, 3.5vw, 2.9rem); max-width: 17em; }
+/* ---------- Scroll story (v10): the steps scroll by like any text, and the
+   picture beside them stays put and plays the step in the middle of the
+   screen. Nothing pins the page (v8 did, and it looked stuck). site.js turns
+   scroll position into custom properties (--link, --lift, --copy, --land1,
+   --land2, --cab, --more) and ge1..ge4 classes; the flying photo and text are
+   placed from real element positions. ---------- */
+.story-in { display: grid; grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr); gap: clamp(2rem, 4vw, 4rem); padding-block: clamp(2rem, 5vw, 4rem); }
+.story-steps { list-style: none; margin: 0; padding: 0; display: grid; }
+.story-steps li { min-height: 62vh; min-height: 62svh; display: grid; gap: .8rem; align-content: center; justify-items: start; opacity: .25; transition: opacity .4s var(--ease); }
+.story-steps li.on { opacity: 1; }
+.story-steps h2 { font-size: clamp(1.6rem, 2.5vw, 2.3rem); max-width: 14em; }
+.story-steps li:first-child h2 { font-size: clamp(1.9rem, 3.2vw, 2.9rem); }
 .story-steps .lede { font-size: clamp(.98rem, 1.3vw, 1.15rem); }
-.story-box { container-type: inline-size; width: min(100%, 62rem, calc((100svh - 62px - 16rem) * 1.86)); }
-.story-dots { display: flex; gap: .45rem; }
-.story-dots i { width: .5rem; height: .5rem; border-radius: 1rem; background: var(--line); transition: width .35s var(--ease), background-color .35s; }
-.story-dots i.on { width: 1.8rem; background: linear-gradient(90deg, var(--mac), var(--phone-fill)); }
+.story-sticky { position: sticky; top: 62px; height: calc(100vh - 62px); height: calc(100svh - 62px); display: grid; align-items: center; }
+.story-box { container-type: inline-size; width: 100%; }
 
 .story-stage { position: relative; aspect-ratio: 16 / 8.6; font-size: 1.15cqi; color: var(--ink); }
 .st-mac { position: absolute; left: 0; top: 2%; width: 64%; }
@@ -843,7 +842,7 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 .st-notes-body .hl { padding: 0 .15em; border-radius: .2em; background: linear-gradient(color-mix(in srgb, var(--mac) 32%, transparent), color-mix(in srgb, var(--mac) 32%, transparent)) no-repeat 0 0 / calc(var(--copy, 0) * 100%) 100%; }
 .st-keys { display: flex; gap: .3em; opacity: 0; transform: scale(.85); transition: opacity .25s, transform .25s var(--ease); }
 .story.copied .st-keys { opacity: 1; transform: none; }
-.st-keys kbd, .pg-btn kbd { font-family: var(--display); font-weight: 600; min-width: 1.9em; padding: .15em .45em; text-align: center; border-radius: .35em; background: var(--window); border: 1px solid var(--line); box-shadow: 0 .15em 0 var(--line); }
+.st-keys kbd { font-family: var(--display); font-weight: 600; min-width: 1.9em; padding: .15em .45em; text-align: center; border-radius: .35em; background: var(--window); border: 1px solid var(--line); box-shadow: 0 .15em 0 var(--line); }
 .st-pop { position: absolute; right: 3%; top: 2.6em; width: 40%; padding: .7em; border-radius: .8em; background: var(--window); box-shadow: 0 1.2em 2.6em -1em rgba(11,18,32,.35); display: grid; gap: .3em; font-size: .85em; opacity: 0; transform: translateY(-.6em); transition: opacity .4s, transform .4s var(--ease); z-index: 5; }
 .story.ge4 .st-pop { opacity: 1; transform: none; }
 .st-pop-head { display: flex; align-items: center; gap: .5em; font-weight: 700; padding-bottom: .35em; border-bottom: 1px solid var(--line); }
@@ -890,108 +889,8 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 .st-fly { position: absolute; left: 0; top: 0; opacity: 0; pointer-events: none; z-index: 6; transform-origin: 0 0; will-change: transform, opacity; }
 .st-fly.f1 { width: 4em; height: 4em; border-radius: .5em; box-shadow: 0 .8em 1.6em rgba(0,0,0,.28); }
 .st-fly.f2 { padding: .4em .8em; border-radius: 2em; background: var(--mac); color: #fff; font-size: .85em; font-weight: 600; white-space: nowrap; box-shadow: 0 .6em 1.4em rgba(37,99,235,.35); }
-/* Without the script, or with reduced motion: no pinning, one still frame. */
-html:not(.js) .story, .story.static { height: auto; }
-html:not(.js) .story-pin, .story.static .story-pin { position: static; height: auto; padding-block: clamp(4rem, 9vw, 7rem); }
-html:not(.js) .story-dots, .story.static .story-dots { display: none; }
-@media (max-width: 700px) { .story { height: 460vh; } .story-box { width: min(100%, calc((100svh - 62px - 17rem) * 1.86)); } }
-
-/* ---------- Playground: "Try it right here" ---------- */
-.pg { background: var(--surface); border-radius: 28px; padding: clamp(1.3rem, 4vw, 3rem); box-shadow: 0 2.5rem 5rem -2rem rgba(0, 0, 0, .55); display: grid; gap: 1.4rem; }
-.pg .pg-head { margin-bottom: 0; }
-.pg-tasks { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
-.pg-tasks li { display: flex; align-items: center; gap: .6rem; padding: .5rem 1rem .5rem .55rem; border-radius: 2rem; border: 1px solid var(--line); background: var(--bg); font-size: .93rem; color: var(--muted); transition: background-color .3s, border-color .3s; }
-.pg-tasks b { color: var(--ink); font-weight: 600; }
-.tick { width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 1.5px dashed var(--faint); display: grid; place-items: center; flex: none; }
-.pg-tasks li.done { background: var(--phone-soft); border-color: transparent; color: var(--ink); animation: pop .45s var(--ease); }
-.pg-tasks li.done .tick { border: 0; background: var(--phone-fill); }
-.pg-tasks li.done .tick::after { content: "✓"; color: #fff; font-weight: 700; font-size: .8rem; }
-
-.pg-area { display: grid; grid-template-columns: minmax(0, 1.35fr) 9.5rem minmax(0, .62fr); gap: 1rem; align-items: center; }
-.win-like { background: var(--window); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
-.win-like > .win-bar { font-size: .9rem; }
-.pg-drop { position: relative; min-height: 14rem; margin: .8rem; padding: .8rem; border-radius: 12px; border: 2px dashed var(--line); transition: border-color .2s, background-color .2s; }
-.pg-drop.over { border-color: var(--mac); background: var(--mac-soft); }
-.pg-folder { display: flex; align-items: center; gap: .6rem; }
-.pg-folder .fold { font-size: .36rem; margin-top: .3rem; }
-.pg-folder small { margin-left: auto; color: var(--faint); font-size: .85rem; }
-.pg-files { list-style: none; margin: .7rem 0 0; padding: 0; display: grid; gap: .35rem; }
-.pg-files li { position: relative; overflow: hidden; display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; align-items: center; gap: .7rem; padding: .35rem .6rem .35rem .4rem; border-radius: 10px; background: var(--bg); font-family: var(--mono); font-size: .86rem; animation: pop .35s var(--ease); }
-.pg-files .ph { width: 2.2rem; height: 2.2rem; border-radius: .4rem; }
-.pg-files .st { font-family: var(--display); color: var(--muted); font-size: .8rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.pg-files .bar { position: absolute; left: 0; bottom: 0; height: 3px; width: var(--pct, 0%); background: linear-gradient(90deg, var(--mac), var(--phone-fill)); }
-.pg-files li.ok .st { color: var(--phone); font-weight: 600; }
-.pg-files li.flash { animation: flash .7s; }
-@keyframes flash { 40% { background: var(--mac-soft); } }
-.pg-empty { position: absolute; inset: 3rem 0 0; display: grid; place-items: center; color: var(--faint); pointer-events: none; }
-.pg-drop.has .pg-empty { display: none; }
-.pg-notes { border-top: 1px solid var(--line); padding: .8rem 1rem 1rem; display: grid; gap: .45rem; }
-.pg-notes-top { display: flex; align-items: center; justify-content: space-between; }
-.pg-btn { font: inherit; font-size: .85rem; font-weight: 600; display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .7rem .3rem .35rem; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
-.pg-btn kbd { font-size: .8rem; min-width: 1.5rem; padding: .05rem .3rem; }
-.pg-line { min-height: 1.6em; color: var(--muted); }
-#pg-pasted { color: var(--ink); font-weight: 600; }
-.pg-line .caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 2px; background: var(--mac); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
-.pg-notes.shake { animation: shake .4s; }
-@keyframes shake { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
-
-.pg-link { display: grid; justify-items: center; gap: .8rem; }
-.pg-conn { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .75rem; border-radius: 2rem; background: var(--mac-soft); color: var(--mac); font-size: .85rem; font-weight: 600; white-space: nowrap; }
-.pg-conn span { font-weight: 500; opacity: .85; }
-.pg-conn svg { width: 1rem; height: 1rem; }
-.pg-link .u, .pg-link .usb-i { display: none; }
-.pg-link.usb .w, .pg-link.usb .wifi-i { display: none; }
-.pg-link.usb .u { display: inline; } .pg-link.usb .usb-i { display: block; }
-.pg-link.usb .pg-conn { background: var(--phone-soft); color: var(--phone); }
-.pg-wire { position: relative; width: 100%; height: .55rem; background: linear-gradient(90deg, var(--mac), var(--phone-fill));
-  -webkit-mask: radial-gradient(circle, #000 42%, transparent 46%) 0 50% / 1.1em 100% repeat-x; mask: radial-gradient(circle, #000 42%, transparent 46%) 0 50% / 1.1em 100% repeat-x; animation: airflow 1s linear infinite; }
-.pg-link.usb .pg-wire { -webkit-mask: none; mask: none; height: 5px; border-radius: 3px; background: var(--cable); animation: none; }
-.pg-plug { font: inherit; font-size: .85rem; font-weight: 600; display: inline-flex; align-items: center; gap: .35rem; padding: .45rem .8rem; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; white-space: nowrap; }
-.pg-plug svg { width: 1.05rem; height: 1.05rem; }
-.pg-link.usb .pg-plug { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-
-.pg-phone { justify-self: center; width: min(100%, 17rem); border-radius: 2.4rem; padding: .55rem; background: #0E1117; box-shadow: var(--shadow); }
-.pg-pscreen { position: relative; border-radius: 1.9rem; background: var(--window); padding: 2.4rem .8rem 1rem; display: grid; gap: .6rem; }
-.pg-pscreen .pstatus { font-size: .78rem; }
-.pg-title { font-size: 1.15rem; }
-.pg-gal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .35rem; }
-.pg-photo { position: relative; padding: 0; border: 0; background: none; aspect-ratio: 1; border-radius: .5rem; cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; transition: transform .15s var(--ease), opacity .2s; }
-.pg-photo:hover { transform: scale(1.05); }
-.pg-photo .ph { border-radius: .5rem; pointer-events: none; }
-.pg-photo.dragging { opacity: .35; }
-.pg-photo.sent::after { content: "✓"; position: absolute; right: .25rem; bottom: .25rem; width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--mac); color: #fff; font-size: .68rem; font-weight: 700; display: grid; place-items: center; }
-.pg-chat { display: grid; gap: .4rem; justify-items: start; padding-top: .6rem; border-top: 1px solid var(--line); }
-.pg-chat small { color: var(--muted); font-weight: 600; font-size: .78rem; }
-.pg-bubble { background: var(--sunk); padding: .5rem .75rem; border-radius: 1rem 1rem 1rem .3rem; font-size: .9rem; font-weight: 500; transition: box-shadow .2s; }
-.pg-bubble.copied { box-shadow: 0 0 0 2px var(--phone-fill); }
-.pg-copy { font: inherit; font-size: .82rem; font-weight: 600; padding: .32rem .85rem; border-radius: 2rem; border: 0; background: var(--ink); color: var(--bg); cursor: pointer; }
-.pg-copy.done { background: var(--phone-fill); color: #fff; }
-.pg-ghost { position: fixed; left: 0; top: 0; width: 4.4rem; height: 4.4rem; border-radius: .6rem; overflow: hidden; pointer-events: none; z-index: 100; box-shadow: 0 1rem 2rem rgba(0,0,0,.3); }
-.pg-chipfly { position: fixed; left: 0; top: 0; z-index: 100; pointer-events: none; padding: .35rem .8rem; border-radius: 2rem; background: var(--mac); color: #fff; font-size: .85rem; font-weight: 600; white-space: nowrap; box-shadow: 0 .6rem 1.4rem rgba(37,99,235,.35); }
-.pg-hint { text-align: center; color: var(--muted); min-height: 1.5em; }
-.pg-done { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; padding: 1.2rem 1.4rem; border-radius: 18px; background: linear-gradient(120deg, var(--mac-soft), var(--phone-soft)); animation: pop .5s var(--ease); }
-.pg-done[hidden] { display: none; }
-.pg-done h3 { font-size: 1.35rem; }
-.pg-done p { color: var(--muted); max-width: 34em; }
-.confetti { position: fixed; width: .5rem; height: .8rem; border-radius: 2px; z-index: 120; pointer-events: none; }
-@media (max-width: 860px) {
-  .pg-area { grid-template-columns: minmax(0, 1fr); }
-  .pg-link { grid-template-columns: auto minmax(2rem, 1fr) auto; align-items: center; justify-items: stretch; }
-  .pg-drop { min-height: 10rem; }
-}
-.pg-files .bar { transition: opacity .4s .3s; } .pg-files li.ok .bar { opacity: 0; }
-.pg-files li > span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-/* Phones: a taller stage, the Mac across the top and the phone over its corner. */
-@media (max-width: 700px) {
-  .story-box { width: 100%; }
-  .story-stage { aspect-ratio: 16 / 13; font-size: 1.45cqi; }
-  .st-mac { width: 84%; top: 0; }
-  .st-phone { width: 31%; top: auto; bottom: 0; right: 0; }
-  .st-extra { width: 27%; top: auto; bottom: 3%; right: 1%; }
-  .st-wire, .st-cable { display: none; }
-  .st-chip { left: 3%; top: 72%; transform: none; }
-  .story-steps h2 { font-size: 1.55rem; }
-}
+/* Without the script, or with reduced motion: every step readable, one still frame. */
+html:not(.js) .story-steps li, .story.static .story-steps li { opacity: 1; }
 
 /* ---------- v9: the crowned headline. The first word rotates (See, Send,
    Search, Open, Back up) and wears a gold crown that hops onto each new
@@ -1054,18 +953,17 @@ html:not(.js) .rot b.on { position: static; }
 .ch-deep { --ch-bg: var(--deep); --ch-ink: #fff; --ch-sub: rgba(255, 255, 255, .72); --ch-line: rgba(255, 255, 255, .1);
   background: radial-gradient(50% 80% at 90% 0%, color-mix(in srgb, var(--mac) 55%, transparent), transparent 70%), radial-gradient(45% 80% at 6% 100%, color-mix(in srgb, var(--phone-fill) 38%, transparent), transparent 70%), var(--deep); }
 
-/* ---------- v9: phones. The scroll story doesn't pin: its steps become
-   plain cards. ---------- */
+/* ---------- Phones and tablets: the story's steps become plain cards (the
+   icons and speed bars only show here) and the picture is left out. ---------- */
 .st-ico, .st-speed { display: none; }
-@media (max-width: 700px) {
-  .story { height: auto; }
-  .story-pin { position: static; height: auto; overflow: visible; padding-block: 3.6rem 4.4rem; }
-  .story-box, .story-dots { display: none; }
-  .story-steps { gap: .75rem; }
-  .story-steps li { grid-area: auto; opacity: 1; transform: none; transition: none; }
-  .story-steps li:first-child { margin-bottom: 1.2rem; }
-  .story-steps li:first-child h2 { font-size: clamp(1.9rem, 8.2vw, 2.4rem); }
-  .story-steps li + li { grid-template-columns: 2.6rem minmax(0, 1fr); justify-items: start; align-content: start; column-gap: .95rem; row-gap: .3rem; padding: 1.1rem 1.15rem 1.2rem; border-radius: 20px; background: var(--bg); border: 1px solid var(--line); text-align: left; }
+@media (max-width: 900px) {
+  .story-in { display: block; padding-block: clamp(3.4rem, 8vw, 4.6rem); }
+  .story-side { display: none; }
+  .story-steps { gap: .75rem; max-width: 36rem; margin-inline: auto; }
+  .story-steps li { min-height: 0; opacity: 1; transition: none; }
+  .story-steps li:first-child { justify-items: center; text-align: center; margin-bottom: 1.2rem; }
+  .story-steps li:first-child h2 { font-size: clamp(1.9rem, 8.2vw, 2.6rem); max-width: 13em; }
+  .story-steps li + li { grid-template-columns: 2.6rem minmax(0, 1fr); align-content: start; column-gap: .95rem; row-gap: .3rem; padding: 1.1rem 1.15rem 1.2rem; border-radius: 20px; background: var(--bg); border: 1px solid var(--line); }
   .story-steps li + li > * { grid-column: 2; }
   .story-steps .st-ico { display: grid; grid-column: 1; grid-row: 1 / span 3; align-self: start; }
   .story-steps li + li .kicker { font-size: .72rem; }
@@ -1078,18 +976,52 @@ html:not(.js) .rot b.on { position: static; }
   .st-speed i { height: .5rem; width: var(--w); border-radius: 1rem; background: var(--mac); }
   .st-speed span + span i { background: var(--phone-fill); }
   .st-speed b { font-family: var(--mono); font-weight: 500; font-size: .78rem; text-align: right; }
-
-  /* Playground: smaller parts, so the phone and the Mac fit on one screen. */
-  .pg { padding: 1.3rem 1rem 1.4rem; gap: 1.1rem; border-radius: 22px; }
-  .pg-tasks { gap: .45rem; }
-  .pg-tasks li { font-size: .88rem; padding: .4rem .85rem .4rem .45rem; }
-  .pg-area { gap: .8rem; }
-  .pg-drop { min-height: 7.5rem; margin: .6rem; padding: .7rem; }
-  .pg-empty { inset: 2.4rem 0 0; }
-  .pg-notes { padding: .6rem .9rem .8rem; }
-  .pg-phone { width: min(100%, 15rem); }
-  /* Stacked, the wire joins nothing: the link and the plug share one row. */
-  .pg-link { display: flex; justify-content: space-between; gap: .5rem; }
-  .pg-wire { display: none; }
-  .pg-pscreen { padding: 2.1rem .7rem .8rem; gap: .5rem; }
 }
+
+/* ---------- The guide in the nav (v10): which numbered part you're in, a
+   list to jump to any part, and a line under the nav that fills as you
+   read. It replaces a mascot: it tells you where you are without moving. ---------- */
+.guide { position: relative; }
+.guide[hidden] { display: none; }
+.guide-btn { font: inherit; display: inline-flex; align-items: center; gap: .4rem; height: 36px; padding: 0 .5rem 0 .4rem; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: .9rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.guide-btn:hover { border-color: color-mix(in srgb, var(--line) 50%, var(--muted)); }
+.guide-btn svg { width: 1rem; height: 1rem; color: var(--muted); transition: transform .2s var(--ease); }
+.guide-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.guide-now { display: inline-flex; align-items: center; gap: .45rem; }
+.guide.swap .guide-now { animation: swapIn .3s var(--ease); }
+.guide-now b, .guide-list b { font-family: var(--mono); font-size: .72rem; font-weight: 500; padding: .1rem .42rem; border-radius: 1rem; background: var(--sunk); color: var(--muted); }
+.guide-list { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; min-width: 14rem; margin: 0; padding: .35rem; list-style: none; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.guide-list[hidden] { display: none; }
+.guide-list a { display: flex; align-items: center; gap: .65rem; padding: .6rem .6rem; border-radius: 9px; text-decoration: none; font-size: .95rem; font-weight: 500; }
+.guide-list a:hover { background: var(--sunk); }
+.guide-list a[aria-current] { background: var(--mac-soft); color: var(--mac); font-weight: 600; }
+.guide-list a[aria-current] b { background: var(--mac); color: var(--on-mac); }
+.nav-links a[aria-current] { color: var(--ink); text-decoration: underline 2px var(--mac); text-underline-offset: 7px; }
+.nav-line { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, var(--mac), var(--phone-fill)); pointer-events: none; }
+.nav .btn { white-space: nowrap; }
+.guide { min-width: 0; }
+.guide-btn { max-width: 100%; }
+.guide-now { min-width: 0; }
+.guide-now span { overflow: hidden; text-overflow: ellipsis; }
+/* Phones: the guide takes the brand's place once you scroll into the page
+   (the logo is back at the top), so the button stays on one line at 360px. */
+@media (max-width: 560px) {
+  .nav-in { gap: .6rem; }
+  .nav.guided .brand-name { display: none; }
+}
+@media (max-width: 420px) {
+  .nav.guided .brand { display: none; }
+}
+
+/* ---------- Forms (v10): after sending, the form steps aside for a clear
+   confirmation (tick, headline, what happens next, a link to go again). ---------- */
+.form[hidden] { display: none; }
+.form-done { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 1rem; align-items: start; align-self: start; padding: 1.3rem 1.3rem 1.4rem; border-radius: 18px; background: var(--phone-soft); border: 1px solid color-mix(in srgb, var(--phone-fill) 40%, transparent); animation: pop .45s var(--ease); outline: none; }
+.form-done > svg { width: 2.6rem; height: 2.6rem; color: var(--phone-fill); }
+.form-done h3 { font-size: 1.3rem; margin: .25rem 0 .45rem; }
+.form-done p { color: var(--ink); font-size: .98rem; line-height: 1.5; overflow-wrap: anywhere; }
+.form-done p + p { margin-top: .35rem; }
+.form-done b { font-weight: 600; }
+.form-done .again { display: inline-block; margin-top: .9rem; font: inherit; font-size: .92rem; font-weight: 600; background: none; border: 0; padding: 0; cursor: pointer; }
+.requests .form-done { margin-top: 1.4rem; }
+@media (prefers-reduced-motion: reduce) { .form-done, .guide.swap .guide-now { animation: none; } }

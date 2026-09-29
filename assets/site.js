@@ -163,15 +163,15 @@
     fxs.forEach(function (d) { d.addEventListener('toggle', syncOpenAll); });
   }
 
-  // ---- Scroll story: the section pins while you scroll through five steps.
-  // Scroll position becomes custom properties and ge1..ge4 classes; the
+  // ---- Scroll story: the steps scroll by like any text; the picture beside
+  // them plays the step in the middle of the screen. Scroll position becomes
+  // custom properties and ge1..ge4 classes; the
   // flying photo and text are placed from the real positions of where they
   // start and land, so they line up at any size.
   var story = document.getElementById('story');
   if (story) {
-    var pin = story.querySelector('.story-pin'), sStage = story.querySelector('.story-stage');
+    var sStage = story.querySelector('.story-stage');
     var heads = Array.prototype.slice.call(story.querySelectorAll('.story-steps li'));
-    var dots = Array.prototype.slice.call(story.querySelectorAll('.story-dots i'));
     var fly1 = sStage.querySelector('.st-fly.f1'), fly2 = sStage.querySelector('.st-fly.f2');
     var from1 = sStage.querySelector('.st-gal .lift'), to1 = sStage.querySelector('.st-row.new .th');
     var from2 = sStage.querySelector('.st-notes .hl'), to2 = sStage.querySelector('.st-input');
@@ -193,7 +193,6 @@
       story.dataset.p = p.toFixed(3);
       var step = Math.min(4, Math.floor(p * 5)), s = [0, 1, 2, 3, 4].map(function (i) { return seg(p, i / 5, (i + 1) / 5); });
       heads.forEach(function (h, i) { h.classList.toggle('on', i === step); });
-      dots.forEach(function (d, i) { d.classList.toggle('on', i === step); });
       for (var k = 1; k <= 4; k++) story.classList.toggle('ge' + k, step >= k);
       var link = seg(s[0], .15, .7), more = seg(s[4], .05, .6);
       setv('--link', link); setv('--chip', link * (1 - more));
@@ -214,16 +213,21 @@
       draw(.999);
     } else {
       var ticking = false;
-      // On phones the steps are plain cards (see site.css), nothing to play.
-      var cards = matchMedia('(max-width: 700px)');
+      // Phones and tablets show the steps as plain cards (see site.css): nothing to play.
+      var cards = matchMedia('(max-width: 900px)');
       var onScroll = function () {
         if (ticking || cards.matches) return;
         ticking = true;
         requestAnimationFrame(function () {
           ticking = false;
-          // 0 when the section reaches the pin line under the nav, 1 when it's about to scroll away.
-          var top = parseFloat(getComputedStyle(pin).top) || 0, range = story.offsetHeight - pin.offsetHeight;
-          draw(c01((top - story.getBoundingClientRect().top) / (range || 1)));
+          // The step whose text crosses the middle of the screen (below the
+          // nav) plays; how far through its text you are is how far it has got.
+          var mid = 62 + (innerHeight - 62) / 2, p = 0;
+          heads.forEach(function (h, i) {
+            var r = h.getBoundingClientRect();
+            if (mid >= r.top) p = (i + c01((mid - r.top) / (r.height || 1))) / heads.length;
+          });
+          draw(Math.min(p, .999));
         });
       };
       addEventListener('scroll', onScroll, { passive: true });
@@ -235,184 +239,59 @@
     }
   }
 
-  // ---- Playground: move photos, copy and paste, plug in the cable.
-  var pg = document.querySelector('.pg');
-  if (pg) {
-    var drop = document.getElementById('pg-drop'), files = document.getElementById('pg-files'), count = document.getElementById('pg-count');
-    var hint = document.getElementById('pg-hint'), link = document.getElementById('pg-link'), plug = document.getElementById('pg-plug');
-    var copyBtn = document.getElementById('pg-copy'), bubble = document.getElementById('pg-bubble'), pasteBtn = document.getElementById('pg-paste');
-    var pasted = document.getElementById('pg-pasted'), notes = pg.querySelector('.pg-notes'), done = document.getElementById('pg-done');
-    var coarse = matchMedia('(pointer: coarse)').matches;
-    var st = { usb: false, clip: false, sent: 0, tasks: {} };
-    var say = function (t) { hint.textContent = t; };
-    var initialHint = coarse ? 'Tap a photo on the phone to send it to the Mac.' : 'Drag a photo from the phone onto the Mac, or tap it.';
-    say(initialHint);
-
-    var confetti = function () {
-      if (reduced) return;
-      var r = done.getBoundingClientRect(), colors = ['#2563EB', '#22C55E', '#6EA0FF', '#45D98C', '#FEBC2E'];
-      for (var i = 0; i < 36; i++) {
-        var c = document.createElement('i');
-        c.className = 'confetti';
-        c.style.background = colors[i % colors.length];
-        c.style.left = (r.left + r.width / 2) + 'px'; c.style.top = (r.top + 20) + 'px';
-        document.body.appendChild(c);
-        var a = Math.random() * Math.PI * 2, d = 120 + Math.random() * 220;
-        c.animate([{ transform: 'translate(0,0) rotate(0)', opacity: 1 },
-          { transform: 'translate(' + Math.cos(a) * d + 'px,' + (Math.sin(a) * d - 140) + 'px) rotate(' + (Math.random() * 720) + 'deg)', opacity: 1, offset: .7 },
-          { transform: 'translate(' + Math.cos(a) * d * 1.1 + 'px,' + (Math.sin(a) * d + 60) + 'px) rotate(' + (Math.random() * 900) + 'deg)', opacity: 0 }],
-          { duration: 1400 + Math.random() * 600, easing: 'cubic-bezier(.2,.7,.3,1)' }).onfinish = (function (el) { return function () { el.remove(); }; })(c);
-      }
-    };
-    var complete = function (task, text) {
-      if (text) say(text);
-      if (st.tasks[task]) return;
-      st.tasks[task] = 1;
-      pg.querySelector('.pg-tasks [data-task="' + task + '"]').classList.add('done');
-      if (Object.keys(st.tasks).length === 3) {
-        setTimeout(function () { done.hidden = false; say('All three done.'); confetti(); }, 500);
-      }
-    };
-
-    // A photo lands on the Mac: a row with a progress bar, speed set by the cable.
-    var send = function (btn) {
-      var name = btn.dataset.name, mb = +btn.dataset.mb;
-      if (btn.classList.contains('sent')) {
-        var row = files.querySelector('[data-name="' + name + '"]');
-        if (row) { row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash'); }
-        say(name + ' is already on your Mac. Try another one.');
-        return;
-      }
-      btn.classList.add('sent');
-      drop.classList.add('has');
-      var li = document.createElement('li');
-      li.dataset.name = name;
-      li.innerHTML = '<svg class="ph"><use href="#' + btn.dataset.ph + '"/></svg><span></span><span class="st"></span><i class="bar"></i>';
-      li.children[1].textContent = name;
-      files.appendChild(li);
-      st.sent++;
-      count.textContent = st.sent + (st.sent === 1 ? ' photo' : ' photos');
-      var dur = reduced ? 1 : (st.usb ? 500 : 2000), t0 = performance.now(), label = li.querySelector('.st');
-      var tick = function (now) {
-        var f = Math.min(1, (now - t0) / dur);
-        li.style.setProperty('--pct', (f * 100) + '%');
-        label.textContent = f < 1 ? (mb * f).toFixed(1) + ' / ' + mb + ' MB' : mb + ' MB ✓';
-        if (f < 1) requestAnimationFrame(tick);
-        else {
-          li.classList.add('ok');
-          complete('photo', st.usb ? 'That was the cable: about 4× faster.' : (st.tasks.usb ? 'Sent.' : 'On your Mac. Now plug in the cable and send another one.'));
+  // ---- The guide in the nav: which numbered part of the page you're in, a
+  // list to jump to any part (phones have no other menu), and a line under
+  // the nav that fills as you read.
+  var guide = document.getElementById('guide');
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  if (guide && chapters.length) {
+    var navBar = document.querySelector('.nav'), gBtn = guide.querySelector('.guide-btn'), gList = document.getElementById('guide-list');
+    var gNum = guide.querySelector('.guide-now b'), gName = guide.querySelector('.guide-now span'), navLine = document.querySelector('.nav-line');
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+    var parts = chapters.map(function (c) {
+      var tab = c.querySelector('.ch-tab'), num = tab.querySelector('b').textContent;
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.href = '#' + c.id;
+      a.appendChild(document.createElement('b')).textContent = num;
+      a.appendChild(document.createElement('span')).textContent = tab.textContent.replace(num, '').trim();
+      li.appendChild(a); gList.appendChild(li);
+      return { el: c, id: c.id, num: num, name: a.lastChild.textContent, link: a };
+    });
+    var setOpen = function (open) { gList.hidden = !open; gBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); };
+    gBtn.addEventListener('click', function () { setOpen(gList.hidden); });
+    gList.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+    document.addEventListener('click', function (e) { if (!guide.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !gList.hidden) { setOpen(false); gBtn.focus(); } });
+    var cur = -2, gTick = false;
+    var track = function () {
+      if (gTick) return;
+      gTick = true;
+      requestAnimationFrame(function () {
+        gTick = false;
+        // The part whose folder has reached the top third of the screen.
+        var edge = 62 + (innerHeight - 62) / 3, now = -1;
+        parts.forEach(function (p, i) { if (p.el.getBoundingClientRect().top <= edge) now = i; });
+        if (now !== cur) {
+          cur = now;
+          guide.hidden = now < 0;
+          navBar.classList.toggle('guided', now >= 0);
+          if (now < 0) setOpen(false);
+          else {
+            gNum.textContent = parts[now].num; gName.textContent = parts[now].name;
+            guide.classList.remove('swap'); void guide.offsetWidth; guide.classList.add('swap');
+          }
+          parts.forEach(function (p, i) { if (i === now) p.link.setAttribute('aria-current', 'true'); else p.link.removeAttribute('aria-current'); });
+          navLinks.forEach(function (a) {
+            if (now >= 0 && a.getAttribute('href') === '#' + parts[now].id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+          });
         }
-      };
-      requestAnimationFrame(tick);
-    };
-    // Fly a copy of an element to a target, then call back.
-    var flyTo = function (el, cls, from, to, then) {
-      if (reduced) { then(); return; }
-      var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
-      el.className = cls;
-      document.body.appendChild(el);
-      var w = el.offsetWidth, h = el.offsetHeight;
-      var x0 = a.left + a.width / 2 - w / 2, y0 = a.top + a.height / 2 - h / 2, x1 = b.left + b.width / 2 - w / 2, y1 = b.top + b.height / 2 - h / 2;
-      el.animate([{ transform: 'translate(' + x0 + 'px,' + y0 + 'px) scale(1)' },
-        { transform: 'translate(' + ((x0 + x1) / 2) + 'px,' + (Math.min(y0, y1) - 60) + 'px) scale(1.05)', offset: .5 },
-        { transform: 'translate(' + x1 + 'px,' + y1 + 'px) scale(.6)', opacity: .2 }],
-        { duration: 650, easing: 'cubic-bezier(.3,.7,.3,1)' }).onfinish = function () { el.remove(); then(); };
-    };
-
-    var photos = Array.prototype.slice.call(pg.querySelectorAll('.pg-photo'));
-    var inDrop = function (x, y) { var r = drop.getBoundingClientRect(); return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; };
-    photos.forEach(function (btn) {
-      var down = null, ghost = null;
-      btn.addEventListener('pointerdown', function (e) {
-        if (e.button) return;
-        down = { x: e.clientX, y: e.clientY, id: e.pointerId };
-        btn.setPointerCapture(e.pointerId);
+        var max = document.documentElement.scrollHeight - innerHeight;
+        navLine.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
       });
-      btn.addEventListener('pointermove', function (e) {
-        if (!down) return;
-        if (!ghost && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) {
-          ghost = document.createElement('div');
-          ghost.className = 'pg-ghost';
-          ghost.innerHTML = '<svg class="ph"><use href="#' + btn.dataset.ph + '"/></svg>';
-          document.body.appendChild(ghost);
-          btn.classList.add('dragging');
-        }
-        if (ghost) {
-          ghost.style.transform = 'translate(' + (e.clientX - 35) + 'px,' + (e.clientY - 35) + 'px) rotate(-4deg)';
-          drop.classList.toggle('over', inDrop(e.clientX, e.clientY));
-        }
-      });
-      var end = function (e, cancelled) {
-        if (!down) return;
-        var wasDrag = !!ghost;
-        down = null;
-        btn.classList.remove('dragging');
-        drop.classList.remove('over');
-        if (!wasDrag) { if (!cancelled) flyTo(Object.assign(document.createElement('div'), { innerHTML: btn.innerHTML }), 'pg-ghost', btn, drop, function () { send(btn); }); return; }
-        var g = ghost; ghost = null;
-        if (!cancelled && inDrop(e.clientX, e.clientY)) {
-          g.animate([{ opacity: 1 }, { opacity: 0, transform: g.style.transform + ' scale(.5)' }], { duration: 200 }).onfinish = function () { g.remove(); };
-          send(btn);
-        } else {
-          var r = btn.getBoundingClientRect();
-          g.animate([{ transform: g.style.transform }, { transform: 'translate(' + r.left + 'px,' + r.top + 'px)', opacity: .3 }], { duration: 250 }).onfinish = function () { g.remove(); };
-          say('Drop it on the Mac window.');
-        }
-      };
-      btn.addEventListener('pointerup', function (e) { end(e, false); });
-      btn.addEventListener('pointercancel', function (e) { end(e, true); });
-      // Keyboard: Enter or Space sends it.
-      btn.addEventListener('click', function (e) { if (e.detail === 0) send(btn); });
-    });
-
-    copyBtn.addEventListener('click', function () {
-      st.clip = true;
-      copyBtn.textContent = 'Copied';
-      copyBtn.classList.add('done');
-      bubble.classList.add('copied');
-      var chip = document.createElement('span');
-      chip.textContent = bubble.textContent;
-      flyTo(chip, 'pg-chipfly', bubble, notes, function () {});
-      say(coarse ? 'It crossed to the Mac. Now tap Paste in Notes.' : 'It crossed to the Mac. Now press ⌘V, or click Paste in Notes.');
-    });
-    var paste = function () {
-      if (!st.clip) {
-        notes.classList.remove('shake'); void notes.offsetWidth; notes.classList.add('shake');
-        say('Copy the address on the phone first.');
-        return;
-      }
-      if (pasted.textContent) return;
-      var text = bubble.textContent, i = 0;
-      var type = function () { pasted.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(type, reduced ? 0 : 18); else complete('clip', 'Pasted on the Mac. That\'s the clipboard, shared.'); };
-      type();
     };
-    pasteBtn.addEventListener('click', paste);
-    var pgVisible = false;
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { pgVisible = en[0].isIntersecting; }, { threshold: .3 }).observe(pg);
-    document.addEventListener('keydown', function (e) {
-      if (!pgVisible || !(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'v') return;
-      var tag = (document.activeElement && document.activeElement.tagName) || '';
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-      paste();
-    });
-
-    plug.addEventListener('click', function () {
-      st.usb = !st.usb;
-      link.classList.toggle('usb', st.usb);
-      plug.setAttribute('aria-pressed', st.usb ? 'true' : 'false');
-      if (st.usb) complete('usb', st.tasks.photo ? 'Plugged in: about 4× faster. Send another photo and see.' : 'Plugged in: about 4× faster. Now send a photo.');
-      else say('Unplugged. It carries on over Wi-Fi.');
-    });
-
-    document.getElementById('pg-reset').addEventListener('click', function () {
-      st = { usb: false, clip: false, sent: 0, tasks: {} };
-      files.innerHTML = ''; drop.classList.remove('has'); count.textContent = 'Empty';
-      photos.forEach(function (b) { b.classList.remove('sent'); });
-      pasted.textContent = ''; copyBtn.textContent = 'Copy'; copyBtn.classList.remove('done'); bubble.classList.remove('copied');
-      link.classList.remove('usb'); plug.setAttribute('aria-pressed', 'false');
-      pg.querySelectorAll('.pg-tasks li').forEach(function (li) { li.classList.remove('done'); });
-      done.hidden = true; say(initialHint);
-    });
+    addEventListener('scroll', track, { passive: true });
+    addEventListener('resize', track);
+    track();
   }
 
   // ---- Waitlist, free licences and feature requests (Supabase; the key
@@ -425,40 +304,76 @@
     opts.headers = Object.assign({ apikey: KEY, 'Content-Type': 'application/json' }, opts.headers || {});
     return fetch(API + path, opts);
   }
-  function say(el, text, ok) { el.textContent = text; el.className = 'form-msg ' + (ok ? 'ok' : 'err'); }
+  // Named so no other part of this file can shadow it (v8's playground had its
+  // own `say`, which silently swallowed every form message on the home page).
+  function formSay(el, text) { el.textContent = text; el.className = 'form-msg err'; }
   var emailOK = function (v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v); };
+  // While a form is sending: the button says so and can't be pressed twice.
+  var busy = function (btn, on, label) {
+    if (on) { btn.dataset.label = btn.textContent; btn.textContent = label; } else if (btn.dataset.label) btn.textContent = btn.dataset.label;
+    btn.disabled = on;
+  };
+  // After a form goes through, it steps aside for a clear confirmation: a
+  // tick, one headline, what happens next, and a link to fill it in again.
+  // Each line is a list of parts; every second part is shown in bold.
+  var confirmed = function (form, title, lines, again) {
+    var box = document.createElement('div');
+    box.className = 'form-done';
+    box.tabIndex = -1;
+    box.setAttribute('role', 'status');
+    box.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M7 12.4l3.2 3.2 6.8-7" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><h3></h3></div>';
+    var body = box.lastChild;
+    body.firstChild.textContent = title;
+    lines.forEach(function (parts) {
+      var para = document.createElement('p');
+      parts.forEach(function (t, k) { var n = document.createElement(k % 2 ? 'b' : 'span'); n.textContent = t; para.appendChild(n); });
+      body.appendChild(para);
+    });
+    var more = document.createElement('button');
+    more.type = 'button'; more.className = 'link again'; more.textContent = again;
+    more.addEventListener('click', function () { box.remove(); form.hidden = false; form.querySelector('input').focus(); });
+    body.appendChild(more);
+    form.reset();
+    form.querySelector('.form-msg').textContent = '';
+    form.hidden = true;
+    form.parentNode.insertBefore(box, form.nextSibling);
+    box.focus({ preventScroll: true });
+    box.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });
+  };
 
   var wl = document.getElementById('wl');
   if (wl) wl.addEventListener('submit', function (e) {
     e.preventDefault();
-    var msg = document.getElementById('wl-msg'), email = document.getElementById('wl-email').value.trim();
-    if (!emailOK(email)) { say(msg, 'Enter an email address like you@example.com.'); return; }
+    var msg = document.getElementById('wl-msg'), input = document.getElementById('wl-email'), email = input.value.trim();
+    if (!emailOK(email)) { formSay(msg, 'Enter an email address like you@example.com.'); input.focus(); return; }
     var founder = document.getElementById('wl-founder').checked;
-    var btn = wl.querySelector('button'); btn.disabled = true;
+    var btn = wl.querySelector('button'); busy(btn, true, 'Joining…'); msg.textContent = '';
     api('/waitlist', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({
       email: email, phone: document.getElementById('wl-phone').value.trim() || null, reserve_founder: founder, source: 'website'
     }) }).then(function (r) {
-      if (r.status === 201) { say(msg, founder ? "You're on the list, with the $9 founder price held for you." : "You're on the list. See you at launch.", true); wl.reset(); }
-      else if (r.status === 409) say(msg, "You're already on the list with that email.", true);
-      else say(msg, "That didn't go through. Check the email and try again.");
-    }).catch(function () { say(msg, "Couldn't reach the waitlist. Check your connection and try again."); })
-      .then(function () { btn.disabled = false; });
+      busy(btn, false);
+      if (r.status === 201) confirmed(wl, "You're on the list!",
+        [["We'll email ", email, ' once, when TwoPort is out. Nothing else.']].concat(founder ? [['Your ', '$9 founder price', ' is held for you. You pay only at launch.']] : []),
+        'Add another email');
+      else if (r.status === 409) confirmed(wl, "You're already on the list.", [['', email, " is on it. We'll email you when TwoPort is out."]], 'Use a different email');
+      else formSay(msg, "That didn't go through. Check the email and try again.");
+    }).catch(function () { busy(btn, false); formSay(msg, "Couldn't reach the waitlist. Check your connection and try again."); });
   });
 
   var fl = document.getElementById('fl');
   if (fl) fl.addEventListener('submit', function (e) {
     e.preventDefault();
-    var msg = document.getElementById('fl-msg'), email = document.getElementById('fl-email').value.trim();
-    if (!emailOK(email)) { say(msg, 'Enter an email address like you@example.com.'); return; }
-    var btn = fl.querySelector('button'); btn.disabled = true;
+    var msg = document.getElementById('fl-msg'), input = document.getElementById('fl-email'), email = input.value.trim();
+    if (!emailOK(email)) { formSay(msg, 'Enter an email address like you@example.com.'); input.focus(); return; }
+    var btn = fl.querySelector('button'); busy(btn, true, 'Sending…'); msg.textContent = '';
     api('/licence_requests', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({
       email: email, note: document.getElementById('fl-note').value.trim() || null
     }) }).then(function (r) {
-      if (r.status === 201) { say(msg, "Got it. We'll email your free licence when TwoPort launches.", true); fl.reset(); }
-      else if (r.status === 409) say(msg, "We already have your request. Your licence comes at launch.", true);
-      else say(msg, "That didn't go through. Check the email and try again.");
-    }).catch(function () { say(msg, "Couldn't reach us just now. Check your connection and try again."); })
-      .then(function () { btn.disabled = false; });
+      busy(btn, false);
+      if (r.status === 201) confirmed(fl, 'Request received.', [["We'll email a free Pro licence to ", email, ' when TwoPort launches.']], 'Use a different email');
+      else if (r.status === 409) confirmed(fl, 'We already have your request.', [['Your free licence goes to ', email, ' at launch.']], 'Use a different email');
+      else formSay(msg, "That didn't go through. Check the email and try again.");
+    }).catch(function () { busy(btn, false); formSay(msg, "Couldn't reach us just now. Check your connection and try again."); });
   });
 
   var board = document.getElementById('board');
@@ -498,16 +413,16 @@
       e.preventDefault();
       var msg = document.getElementById('fr-msg'), title = document.getElementById('fr-title').value.trim();
       var email = document.getElementById('fr-email').value.trim();
-      if (title.length < 4) { say(msg, 'Describe the idea in a few words.'); return; }
-      if (email && !emailOK(email)) { say(msg, 'That email looks off. Leave it empty if you prefer.'); return; }
-      var btn = fr.querySelector('button'); btn.disabled = true;
+      if (title.length < 4) { formSay(msg, 'Describe the idea in a few words.'); document.getElementById('fr-title').focus(); return; }
+      if (email && !emailOK(email)) { formSay(msg, 'That email looks off. Leave it empty if you prefer.'); document.getElementById('fr-email').focus(); return; }
+      var btn = fr.querySelector('button'); busy(btn, true, 'Sending…'); msg.textContent = '';
       api('/feature_requests', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({
         title: title, details: document.getElementById('fr-details').value.trim() || null, email: email || null
       }) }).then(function (r) {
-        if (r.status === 201) { say(msg, 'Thanks! Your idea is on the board.', true); fr.reset(); load(); }
-        else say(msg, "That didn't go through. Try a shorter title.");
-      }).catch(function () { say(msg, "Couldn't reach the board. Check your connection and try again."); })
-        .then(function () { btn.disabled = false; });
+        busy(btn, false);
+        if (r.status === 201) { confirmed(fr, 'Thanks! Your idea is on the board.', [['', title, ' is listed now, and anyone can vote for it.']], 'Suggest another idea'); load(); }
+        else formSay(msg, "That didn't go through. Try a shorter title.");
+      }).catch(function () { busy(btn, false); formSay(msg, "Couldn't reach the board. Check your connection and try again."); });
     });
     load();
   }
