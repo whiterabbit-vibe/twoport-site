@@ -691,17 +691,12 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
    with its plan; opening a line only says how it works. Each line carries a
    little Mac (blue) + phone (green) glyph showing which way it goes. */
 .ftools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .9rem 1.4rem; margin-bottom: 1.1rem; }
-.seg { display: inline-flex; padding: 4px; gap: 2px; border-radius: 13px; background: var(--surface); border: 1px solid var(--line); }
-.seg-btn { font: inherit; font-size: .93rem; font-weight: 600; display: inline-flex; align-items: center; gap: .5rem; min-height: 38px; padding: 0 .95rem; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; transition: background-color .2s, color .2s; }
-.seg-btn span { font-family: var(--mono); font-size: .8rem; font-weight: 500; padding: .05rem .45rem; border-radius: 1rem; background: var(--line); color: var(--muted); }
-.seg-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.seg-btn[aria-pressed="true"] span { background: color-mix(in srgb, var(--bg) 18%, transparent); color: var(--bg); }
 .legend { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; color: var(--muted); font-size: .85rem; }
 .legend span { display: inline-flex; align-items: center; gap: .45rem; }
 .legend .dir { width: 2.2rem; }
 .open-all { font: inherit; font-size: .93rem; background: none; border: 0; padding: .4rem 0; cursor: pointer; }
-.seg, .open-all { display: none; }
-.js .seg { display: inline-flex; } .js .open-all { display: inline; }
+.open-all { display: none; }
+.js .open-all { display: inline; }
 
 .fgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: start; }
 .fgroup { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 1.15rem 1.2rem .35rem; }
@@ -721,12 +716,8 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 .fx p { padding: 0 0 .9rem 3.25rem; font-size: .93rem; line-height: 1.5; }
 .testing-note { display: block; margin-top: .3rem; color: var(--faint); font-size: .86rem; }
 .tier { flex: none; padding: .16rem .5rem; border-radius: 2rem; font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; line-height: 1.3; }
-.tier.free { background: var(--phone-soft); color: var(--phone); }
-.tier.pro { background: var(--mac-soft); color: var(--mac); }
 .tier.testing { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--faint) 70%, transparent); letter-spacing: .03em; }
 /* "What's free": Pro lines stay in place, faded, so you see what you'd give up. */
-.fgrid[data-show="free"] .fx[data-tier="pro"] { opacity: .3; }
-.fgrid[data-show="free"] .fx[data-tier="pro"] .fx-name { text-decoration: line-through; text-decoration-color: var(--faint); }
 @supports selector(::details-content) {
   .fx { interpolate-size: allow-keywords; }
   .fx::details-content { height: 0; overflow: clip; transition: height .3s var(--ease), content-visibility .3s allow-discrete; }
@@ -754,8 +745,6 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 .founder b { font-size: 1.9rem; font-weight: 600; letter-spacing: -.04em; color: var(--phone); line-height: 1; }
 .founder span { font-size: .9rem; line-height: 1.4; color: var(--ink); }
 .plan .list b { font-weight: 600; }
-.plan .see-free { justify-self: start; font-size: .95rem; margin-top: -.3rem; }
-.fgrid[data-show="free"] .fgroup:not(:has(.fx[data-tier="free"])) .fgroup-head { opacity: .4; }
 
 /* Demo scene 1: the real TwoPort Browser's layout (toolbar, phone header with
    the encryption badge and storage bar, Phones + Quick Access sidebar),

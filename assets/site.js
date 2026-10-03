@@ -225,20 +225,12 @@
     show(0);
   }
 
-  // ---- Everything TwoPort does: counts come from the list itself, "What's
-  // free" fades the Pro lines, and one button opens or closes every detail.
+  // ---- Everything TwoPort does: the count comes from the list itself, and
+  // one button opens or closes every detail.
   var fgrid = document.getElementById('fgrid');
   if (fgrid) {
     var fxs = Array.prototype.slice.call(fgrid.querySelectorAll('.fx'));
-    var counts = { all: fxs.length, free: fxs.filter(function (d) { return d.dataset.tier === 'free'; }).length };
-    document.querySelectorAll('[data-count]').forEach(function (el) { el.textContent = counts[el.dataset.count]; });
-    var segs = Array.prototype.slice.call(document.querySelectorAll('.seg-btn'));
-    var setShow = function (v) {
-      fgrid.dataset.show = v;
-      segs.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.show === v ? 'true' : 'false'); });
-    };
-    segs.forEach(function (b) { b.addEventListener('click', function () { setShow(b.dataset.show); }); });
-    document.querySelectorAll('a[data-show]').forEach(function (a) { a.addEventListener('click', function () { setShow(a.dataset.show); }); });
+    document.querySelectorAll('[data-count]').forEach(function (el) { el.textContent = fxs.length; });
     var openAll = document.querySelector('.open-all');
     var syncOpenAll = function () {
       var all = fxs.every(function (d) { return d.open; });
