@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex">
+<!-- The licence key is in this page's address: never send it on to another site. -->
+<meta name="referrer" content="no-referrer">
+<title>Thank you — TwoPort</title>
+<!-- Dodo's checkout comes back here (redirect_url in buy.html) with
+     ?payment_id=…&status=succeeded&email=…&license_key=… . The key is also
+     in Dodo's receipt email; this page just saves the copy and paste:
+     "Open TwoPort" hands it to the app (twoport://activate), which fills it
+     in and waits for a click on Activate. -->
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .thanks-body { max-width: 42em; padding-block: .5rem 3.5rem; color: var(--muted); }
+  .thanks-body p + p, .thanks-actions + p { margin-top: .9em; }
+  .thanks-body strong { color: var(--ink); font-weight: 600; }
+  .thanks-body a:not(.btn) { color: var(--mac); }
+  .keybox { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+  .keybox code { flex: 1 1 16rem; min-width: 0; font-family: var(--mono); font-size: 1rem; color: var(--ink); overflow-wrap: anywhere; }
+  .keybox .btn { min-height: 40px; }
+  .thanks-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.2rem; }
+  .thanks-state[hidden] { display: none; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="./"><img src="assets/app-icon.png" alt="" width="28" height="28">TwoPort</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="./#how">How it works</a>
+      <a href="./#pricing">Pricing</a>
+      <a href="./#faq">Questions</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Paid, key in the address. -->
+  <div class="thanks-state" data-state="key" hidden>
+    <section class="page-hero">
+      <div class="wrap">
+        <span class="kicker">Thank you</span>
+        <h1>TwoPort is yours.</h1>
+        <p class="lede">Here's your licence key. It works on up to 3 of your Macs, and every 1.x update is included.</p>
+      </div>
+    </section>
+    <section class="wrap"><div class="thanks-body">
+      <div class="keybox">
+        <code id="key"></code>
+        <button class="btn btn-quiet" type="button" id="copy">Copy</button>
+      </div>
+      <div class="thanks-actions">
+        <a class="btn btn-primary" id="open" href="#">Open TwoPort and activate</a>
+      </div>
+      <p>TwoPort opens with the key filled in; click <strong>Activate</strong>. If nothing opens, copy the key and paste it in TwoPort's <strong>Settings ▸ Licence ▸ Buy or Enter Key…</strong></p>
+      <p>Don't have TwoPort on this Mac yet? <a href="https://github.com/whiterabbit-vibe/twoport-site/releases/download/mac/TwoPort.dmg">Download it</a>, open it, then come back to this page.</p>
+      <p id="emailed">We've also emailed the key to you, from Dodo Payments.</p>
+    </div></section>
+  </div>
+
+  <!-- Paid, but no key in the address (shouldn't happen; the email has it). -->
+  <div class="thanks-state" data-state="paid" hidden>
+    <section class="page-hero">
+      <div class="wrap">
+        <span class="kicker">Thank you</span>
+        <h1>TwoPort is yours.</h1>
+        <p class="lede">Your licence key is on its way by email, from Dodo Payments.</p>
+      </div>
+    </section>
+    <section class="wrap"><div class="thanks-body">
+      <p>Paste it in TwoPort's <strong>Settings ▸ Licence ▸ Buy or Enter Key…</strong> No email after 10 minutes? Check spam, then write to <a href="mailto:contact@twoport.app">contact@twoport.app</a>.</p>
+    </div></section>
+  </div>
+
+  <div class="thanks-state" data-state="processing" hidden>
+    <section class="page-hero">
+      <div class="wrap">
+        <span class="kicker">Almost there</span>
+        <h1>Your payment is still going through.</h1>
+        <p class="lede">Some banks take a few minutes. Your licence key comes by email, from Dodo Payments, as soon as it's done.</p>
+      </div>
+    </section>
+    <section class="wrap"><div class="thanks-body">
+      <p>Nothing after an hour? Write to <a href="mailto:contact@twoport.app">contact@twoport.app</a> with the email you paid with.</p>
+    </div></section>
+  </div>
+
+  <div class="thanks-state" data-state="failed" hidden>
+    <section class="page-hero">
+      <div class="wrap">
+        <span class="kicker">Not paid</span>
+        <h1>The payment didn't go through.</h1>
+        <p class="lede">Your bank or card turned it down. You can try again, or with another card.</p>
+      </div>
+    </section>
+    <section class="wrap"><div class="thanks-body">
+      <div class="thanks-actions"><a class="btn btn-primary" href="buy">Try again</a></div>
+      <p>Charged anyway? Write to <a href="mailto:contact@twoport.app">contact@twoport.app</a> and we'll sort it out.</p>
+    </div></section>
+  </div>
+
+  <!-- Opened without a checkout behind it. -->
+  <div class="thanks-state" data-state="none">
+    <section class="page-hero">
+      <div class="wrap">
+        <span class="kicker">Licence</span>
+        <h1>Bought TwoPort?</h1>
+        <p class="lede">Your licence key is in the receipt email from Dodo Payments.</p>
+      </div>
+    </section>
+    <section class="wrap"><div class="thanks-body">
+      <p>Paste it in TwoPort's <strong>Settings ▸ Licence ▸ Buy or Enter Key…</strong> Can't find the email? Write to <a href="mailto:contact@twoport.app">contact@twoport.app</a>.</p>
+    </div></section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="./"><img src="assets/app-icon.png" alt="" width="24" height="24" style="width:24px;height:24px">TwoPort</a>
+    <nav aria-label="Footer"><a href="./#how">How it works</a><a href="./#pricing">Pricing</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refund.html">Refunds</a></nav>
+    <span>© 2026 TwoPort</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var status = q.get('status');
+  // One unit per checkout, so one key; Dodo separates several with commas.
+  var key = (q.get('license_key') || '').split(',')[0].trim();
+  var email = (q.get('email') || '').trim();
+
+  var state = 'none';
+  if (status === 'succeeded') state = key ? 'key' : 'paid';
+  else if (status === 'processing' || status === 'requires_customer_action') state = 'processing';
+  else if (status === 'failed' || status === 'cancelled') state = 'failed';
+
+  document.querySelectorAll('.thanks-state').forEach(function (el) {
+    el.hidden = el.getAttribute('data-state') !== state;
+  });
+  if (state !== 'key') return;
+
+  document.getElementById('key').textContent = key;
+  document.getElementById('open').href = 'twoport://activate?key=' + encodeURIComponent(key);
+  if (email) document.getElementById('emailed').textContent = "We've also emailed the key to " + email + ', from Dodo Payments.';
+
+  var copy = document.getElementById('copy');
+  copy.addEventListener('click', function () {
+    var done = function () { copy.textContent = 'Copied'; setTimeout(function () { copy.textContent = 'Copy'; }, 2000); };
+    if (navigator.clipboard) navigator.clipboard.writeText(key).then(done, function () { selectKey(); });
+    else selectKey();
+  });
+  function selectKey() {
+    var range = document.createRange();
+    range.selectNodeContents(document.getElementById('key'));
+    var sel = getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  }
+})();
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

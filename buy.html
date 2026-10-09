@@ -7,11 +7,30 @@
 <meta name="robots" content="noindex">
 <title>Buy TwoPort</title>
 <!-- The Mac app's Buy button opens twoport.app/buy, so the checkout link
-     lives here and can change without an app update. Paste the live Dodo
-     payment link into CHECKOUT below; until then the page says when. -->
+     lives here and can change without an app update. PRODUCT = the live
+     "TwoPort for Mac" pdt_… from Dodo; until it's set the page says when.
+     twoport.app/buy?test goes to Dodo's test checkout instead (test cards;
+     its keys only work in Debug builds). After paying, Dodo sends people to
+     twoport.app/thanks with the key. Anything else in the address (e.g.
+     ?email=… from a launch email) is passed on to the checkout. -->
 <script>
-  var CHECKOUT = "";
-  if (CHECKOUT) location.replace(CHECKOUT + location.search);
+  // Live: pdt_0NpNVgDzJ6oGmlAXGcAbG. Goes in PRODUCT on launch day, with the
+  // release DMG (whose app accepts live keys); until then /buy says "soon".
+  var PRODUCT = "";
+  var TEST_PRODUCT = "pdt_0NpNV3YjWl3tXCnGPa3Ub";
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var test = q.has('test');
+    q.delete('test');
+    var product = test ? TEST_PRODUCT : PRODUCT;
+    if (!product) return;
+    var u = new URL((test ? 'https://test.checkout.dodopayments.com/buy/' : 'https://checkout.dodopayments.com/buy/') + product);
+    q.forEach(function (v, k) { u.searchParams.set(k, v); });
+    // Last, so a crafted link can't send the buyer (and their key) elsewhere.
+    u.searchParams.set('quantity', '1');
+    u.searchParams.set('redirect_url', 'https://twoport.app/thanks');
+    location.replace(u.toString());
+  })();
 </script>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
