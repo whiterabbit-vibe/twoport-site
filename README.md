@@ -10,7 +10,7 @@ Live at **https://twoport.app**, served by GitHub Pages from the public repo `wh
 
 ## Before it goes live
 
-- **Download and checkout.** The pages only collect the waitlist for now. At launch, add the Mac download and the Pro checkout (the India ₹999 price is sold only through Indian payment methods), and set `Licensing.buyURL` in the Mac app to the checkout URL.
+- **Download and checkout.** The pages collect the waitlist until launch. The launch version (branch `launch-site`) has the Mac download and Google Play buttons and turns on the $29 checkout in `buy.html` (`PRODUCT`); the Mac app's Buy button opens twoport.app/buy, and Dodo returns buyers to `thanks.html` with their key.
 - **Social preview.** og: tags are in; `og:image` is the 512px app icon. A 1200×630 share image would look better.
 
 ## Design

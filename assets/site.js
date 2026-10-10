@@ -561,12 +561,3 @@
     });
   });
 })();
-
-// Visitors on Indian time see the ₹999 UPI price (buy.html offers it to them).
-(function () {
-  var el = document.getElementById('india-price');
-  if (!el) return;
-  var tz = '';
-  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
-  if (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta') el.hidden = false;
-})();
