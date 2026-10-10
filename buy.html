@@ -12,16 +12,21 @@
      twoport.app/buy?test goes to Dodo's test checkout instead (test cards;
      its keys only work in Debug builds). After paying, Dodo sends people to
      twoport.app/thanks with the key. Anything else in the address (e.g.
-     ?email=… from a launch email) is passed on to the checkout. -->
+     ?email=… from a launch email) is passed on to the checkout.
+     India: visitors whose clock is on Indian time choose between ₹999 with
+     UPI (supabase/functions/india-checkout: UPI only, so a VPN can't unlock
+     it) and $29 by card. ?card skips the choice. -->
 <script>
   // Live: pdt_0NpNVgDzJ6oGmlAXGcAbG. Goes in PRODUCT on launch day, with the
   // release DMG (whose app accepts live keys); until then /buy says "soon".
   var PRODUCT = "";
   var TEST_PRODUCT = "pdt_0NpNV3YjWl3tXCnGPa3Ub";
+  // The India UPI checkout; "" = no India choice.
+  var INDIA = "";
   (function () {
     var q = new URLSearchParams(location.search);
-    var test = q.has('test');
-    q.delete('test');
+    var test = q.has('test'), card = q.has('card');
+    q.delete('test'); q.delete('card');
     var product = test ? TEST_PRODUCT : PRODUCT;
     if (!product) return;
     var u = new URL((test ? 'https://test.checkout.dodopayments.com/buy/' : 'https://checkout.dodopayments.com/buy/') + product);
@@ -29,6 +34,13 @@
     // Last, so a crafted link can't send the buyer (and their key) elsewhere.
     u.searchParams.set('quantity', '1');
     u.searchParams.set('redirect_url', 'https://twoport.app/thanks');
+    var tz = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    if (INDIA && !card && (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta')) {
+      window.twoportBuy = { card: u.toString(), upi: INDIA + (test ? '?test' : '') };
+      document.documentElement.className += ' buy-india';
+      return;
+    }
     location.replace(u.toString());
   })();
 </script>
@@ -37,6 +49,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/site.css">
+<style>
+  .buy-choose { display: none; }
+  .buy-india .buy-choose { display: block; }
+  .buy-india .buy-soon { display: none; }
+  .buy-choose .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: clamp(3rem, 7vw, 5rem); }
+  @media (max-width: 820px) { .buy-choose .plans { grid-template-columns: minmax(0, 1fr); } }
+</style>
 </head>
 <body>
 
@@ -53,6 +72,35 @@
 </header>
 
 <main id="top">
+  <!-- Indian time zone + the India checkout on: pick how to pay. -->
+  <div class="buy-choose">
+    <section class="page-hero">
+      <div class="wrap">
+        <a class="back" href="./">← TwoPort home</a>
+        <span class="kicker">Buy</span>
+        <h1>Buy TwoPort</h1>
+        <p class="lede">Pay once, no subscription. One licence for up to 3 of your Macs, with free updates for all of TwoPort 1.</p>
+      </div>
+    </section>
+    <section class="wrap">
+      <div class="plans">
+        <article class="plan pro">
+          <h3>In India, with UPI</h3>
+          <div class="price"><b>₹999</b><span>one-time, GST included</span></div>
+          <p class="plan-sub">Scan a QR code with Google Pay, PhonePe, Paytm or any UPI app.</p>
+          <a class="btn btn-primary" id="buy-upi" href="#">Pay ₹999 with UPI</a>
+        </article>
+        <article class="plan free">
+          <h3>By card</h3>
+          <div class="price"><b>$29</b><span>one-time</span></div>
+          <p class="plan-sub">Any credit or debit card. You see the price in rupees before you pay.</p>
+          <a class="btn btn-quiet" id="buy-card" href="#">Pay $29 by card</a>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <div class="buy-soon">
   <section class="page-hero">
     <div class="wrap">
       <a class="back" href="./">← TwoPort home</a>
@@ -73,6 +121,7 @@
       <div class="cta-row"><a class="btn btn-primary" href="./#early-access">Tell me when it opens</a></div>
     </div>
   </section>
+  </div>
 </main>
 
 <footer>
@@ -83,6 +132,12 @@
   </div>
 </footer>
 
+<script>
+  if (window.twoportBuy) {
+    document.getElementById('buy-upi').href = twoportBuy.upi;
+    document.getElementById('buy-card').href = twoportBuy.card;
+  }
+</script>
 <script src="assets/site.js"></script>
 </body>
 </html>
