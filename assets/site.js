@@ -450,6 +450,17 @@
     box.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });
   };
 
+  // Where a visitor came from, for counting which posts bring signups:
+  // twoport.app/?ref=reddit saves "website:reddit" with their waitlist entry.
+  // Just a short word from the link, nothing about the visitor; kept for the
+  // visit so it survives going from one page to another before signing up.
+  var ref = (new URLSearchParams(location.search).get('ref') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 32);
+  try {
+    if (ref) sessionStorage.setItem('twoport.ref', ref);
+    else ref = sessionStorage.getItem('twoport.ref') || '';
+  } catch (e) {}
+  var source = ref ? 'website:' + ref : 'website';
+
   var wl = document.getElementById('wl');
   if (wl) wl.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -458,7 +469,7 @@
     var founder = document.getElementById('wl-founder').checked;
     var btn = wl.querySelector('button'); busy(btn, true, 'Joining…'); msg.textContent = '';
     api('/waitlist', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({
-      email: email, phone: document.getElementById('wl-phone').value.trim() || null, reserve_founder: founder, source: 'website'
+      email: email, phone: document.getElementById('wl-phone').value.trim() || null, reserve_founder: founder, source: source
     }) }).then(function (r) {
       busy(btn, false);
       if (r.status === 201) confirmed(wl, "You're on the list!",
