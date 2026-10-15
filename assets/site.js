@@ -502,12 +502,15 @@
     try { voter = localStorage.getItem('tp-voter'); if (!voter) { voter = 'v-' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); localStorage.setItem('tp-voter', voter); } } catch (err) { voter = 'v-' + Math.random().toString(36).slice(2, 14); }
     var voted = {};
     try { voted = JSON.parse(localStorage.getItem('tp-voted') || '{}'); } catch (err) {}
-    var esc = function (t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; };
+    // Text from the board goes into attributes as well as elements, so quotes
+    // are escaped too: textContent → innerHTML alone leaves " as it is, and a
+    // title could close aria-label="…" and add an onmouseover.
+    var esc = function (t) { return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); };
     var render = function (rows) {
       if (!rows.length) { board.innerHTML = '<li class="empty">No requests yet. Be the first.</li>'; return; }
       board.innerHTML = rows.map(function (r) {
         var on = !!voted[r.id];
-        return '<li><button class="vote" type="button" data-id="' + r.id + '" aria-pressed="' + on + '" aria-label="Vote for ' + esc(r.title) + ', ' + r.votes + ' votes"><b>' + r.votes + '</b><span>' + (on ? 'voted' : 'vote') + '</span></button>' +
+        return '<li><button class="vote" type="button" data-id="' + esc(r.id) + '" aria-pressed="' + on + '" aria-label="Vote for ' + esc(r.title) + ', ' + esc(r.votes) + ' votes"><b>' + esc(r.votes) + '</b><span>' + (on ? 'voted' : 'vote') + '</span></button>' +
           '<div><h4>' + esc(r.title) + '</h4>' + (r.details ? '<p>' + esc(r.details) + '</p>' : '') + '<span class="status ' + esc(r.status).replace(' ', '-') + '">' + esc(r.status) + '</span></div></li>';
       }).join('');
     };
@@ -540,7 +543,7 @@
         title: title, details: document.getElementById('fr-details').value.trim() || null, email: email || null
       }) }).then(function (r) {
         busy(btn, false);
-        if (r.status === 201) { confirmed(fr, 'Thanks! Your idea is on the board.', [['', title, ' is listed now, and anyone can vote for it.']], 'Suggest another idea'); load(); }
+        if (r.status === 201) confirmed(fr, 'Thanks! We have your idea.', [['', title, " goes on the board once we've had a look, usually within a day. Then anyone can vote for it."]], 'Suggest another idea');
         else formSay(msg, "That didn't go through. Try a shorter title.");
       }).catch(function () { busy(btn, false); formSay(msg, "Couldn't reach the board. Check your connection and try again."); });
     });

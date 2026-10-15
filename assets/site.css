@@ -753,7 +753,7 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 .b-tool b { font-weight: 700; font-size: .95em; }
 .b-search { margin-left: auto; display: flex; align-items: center; gap: .4em; height: 1.8em; padding: 0 .7em; min-width: 30%; border-radius: .5em; background: var(--window); border: 1px solid var(--line); color: var(--faint) !important; font-size: .8em; font-weight: 500; }
 .b-search svg { width: 1em; height: 1em; }
-.b-import { display: flex; align-items: center; gap: .35em; height: 1.8em; padding: 0 .75em; border-radius: 2em; background: var(--mac); color: #fff !important; font-size: .8em; font-weight: 600 !important; white-space: nowrap; }
+.b-import { display: flex; align-items: center; gap: .35em; height: 1.8em; padding: 0 .75em; border-radius: 2em; background: var(--phone); color: #fff !important; font-size: .8em; font-weight: 600 !important; white-space: nowrap; }
 .b-import svg { width: 1.1em; height: 1.1em; }
 .b-dev { display: flex; justify-content: space-between; align-items: center; padding: .55em 1em .35em; font-size: .85em; }
 .b-dev > div:first-child { display: grid; gap: .1em; }

@@ -11,7 +11,16 @@ Live at **https://twoport.app**, served by GitHub Pages from the public repo `wh
 ## Before it goes live
 
 - **Download and checkout.** The pages collect the waitlist until launch. The launch version (branch `launch-site`) has the Mac download and Google Play buttons and turns on the $29 checkout in `buy.html` (`PRODUCT`); the Mac app's Buy button opens twoport.app/buy, and Dodo returns buyers to `thanks.html` with their key.
-- **Social preview.** og: tags are in; `og:image` is the 512px app icon. A 1200×630 share image would look better.
+- **Google Play.** `android.html` (twoport.app/android) says "on its way" until `LIVE = true`; the Mac app's first-run pairing and `pair.html` link there. Switch it on the day the Play listing is public.
+- **Social preview.** The home page has a 1200×630 card (`assets/og.png`); the other pages use the app icon.
+
+## Pages the apps rely on
+
+- `pair.html`: where a phone's own camera lands when it scans the Mac's pairing code (`https://twoport.app/pair#…`). It never reads the part after `#` (the pairing secret) and drops it from the address bar.
+- `android.html`: the Android app (Google Play once live).
+- `buy.html`, `thanks.html`: checkout and the key after paying.
+- `revoked-keys.json`: `{"ids": [...]}`, ids of free/gifted `TP1-` keys that were passed around. The Mac app reads it about once a week and pauses a listed key. To cancel one: add its id (printed by `tools/license/issue-license.swift`, and in `~/.twoport/issued-licences.csv`), commit, deploy.
+- `appcast.xml`: Sparkle's update feed, written by `tools/release-mac.sh --publish`.
 
 ## Design
 
