@@ -21,7 +21,6 @@
   --chrome: #F3F5F8;
   --deep: #0A1533;
   --cable: #2B3240;
-  --alu: #CDD1D7; --alu-light: #E4E7EB; --alu-dark: #A9AFB8; --alu-edge: #8E949E; --key: #23272E;
   --display: "Geist", -apple-system, "SF Pro Display", "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --wrap: 1160px;
@@ -89,29 +88,66 @@ p { margin: 0; }
 
 /* ---------- Demo stage ---------- */
 .stage { font-size: clamp(5px, 1.3cqi, 11px); display: grid; grid-template-columns: minmax(0, 1fr) 7em 17.5em; align-items: center; padding: 2.6em; border-radius: 28px; background: var(--sunk); border: 1px solid var(--line); position: relative; }
-/* The Mac: a MacBook seen from the front and a little above — the lid with
-   its notch, then the keyboard deck in perspective and the front lip. */
+/* The Mac: a MacBook seen from the front (v12, 2026-10-20, from the Moments
+   prototype): a dark lid with its notch, an evening wallpaper (drawn by
+   site.js on the canvas; the gradient is the no-JS fallback), a dark menu
+   bar with TwoPort's own white icon, and the slim front of the base. */
 .mac { display: grid; justify-items: center; max-width: 100%; min-width: 0; }
-.lid { width: 100%; aspect-ratio: 16 / 10.4; border-radius: 1.5em 1.5em .5em .5em; padding: .75em .75em 1em; background: #0B0D12; box-shadow: 0 0 0 .14em var(--alu-edge), var(--shadow); position: relative; z-index: 2; }
-.notch { position: absolute; left: 50%; top: 0; width: 11%; height: 2.2em; transform: translateX(-50%); background: #0B0D12; border-radius: 0 0 .7em .7em; z-index: 8; }
+.lid { width: 100%; aspect-ratio: 16 / 10.4; border-radius: 1.6em 1.6em .5em .5em; padding: .85em .85em 1.15em; background: #16181D; box-shadow: inset 0 0 0 1px #2B2F37, var(--shadow); position: relative; z-index: 2; }
+.notch { position: absolute; left: 50%; top: 0; width: 11%; height: 2.2em; transform: translateX(-50%); background: #000; border-radius: 0 0 .7em .7em; z-index: 8; }
 .notch::after { content: ""; position: absolute; left: 50%; top: .75em; width: .55em; height: .55em; margin-left: -.275em; border-radius: 50%; background: #1E2433; box-shadow: inset 0 0 0 .12em #2B3448; }
-.deck { width: 104%; height: 13em; margin-bottom: -5.6em; transform: perspective(95em) rotateX(55deg); transform-origin: 50% 0; border-radius: .2em .2em 1.6em 1.6em; background: linear-gradient(180deg, var(--alu-dark), var(--alu) 18%, var(--alu-light)); padding: 1.1em 8% 0; display: grid; grid-template-rows: 6.6em auto; justify-items: center; gap: .9em; box-shadow: inset 0 .5em .6em -.4em rgba(0,0,0,.35); }
-/* Keys drawn as a grid: dark caps separated by the deck's own colour. */
-.kb { width: 100%; border-radius: .35em; background:
-  repeating-linear-gradient(90deg, transparent 0 calc(100% / 15 - .28em), var(--alu) calc(100% / 15 - .28em) calc(100% / 15)),
-  repeating-linear-gradient(180deg, transparent 0 calc(100% / 5 - .3em), var(--alu) calc(100% / 5 - .3em) calc(100% / 5)),
-  var(--key); box-shadow: 0 0 0 .25em color-mix(in srgb, var(--alu-dark) 60%, transparent); }
-.pad { width: 38%; height: 4.2em; border-radius: .6em; background: linear-gradient(180deg, var(--alu-dark), color-mix(in srgb, var(--alu) 70%, var(--alu-dark))); box-shadow: inset 0 0 0 .1em color-mix(in srgb, var(--alu-dark) 80%, #000); }
-.lip { width: 110%; height: 1em; border-radius: 0 0 2.2em 2.2em / 0 0 1em 1em; background: linear-gradient(180deg, var(--alu-light), var(--alu-dark)); position: relative; box-shadow: 0 1.4em 2em -1.2em rgba(11,18,32,.45); }
-.lip::after { content: ""; position: absolute; left: 50%; top: 0; width: 13%; height: .4em; margin-left: -6.5%; border-radius: 0 0 .6em .6em; background: var(--alu-dark); }
-.screen { position: relative; height: 100%; border-radius: .6em; overflow: hidden; background: linear-gradient(160deg, var(--screen), color-mix(in srgb, var(--screen) 70%, var(--mac))); }
-.menubar { position: absolute; inset: 0 0 auto; height: 2.2em; display: flex; align-items: center; gap: 1.4em; padding: 0 1.2em; font-size: 1em; font-weight: 500; color: var(--ink); background: color-mix(in srgb, var(--window) 70%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); z-index: 6; }
+.lip { width: 104%; height: 2.1em; border-radius: 0 0 1.5em 1.5em; background: linear-gradient(180deg, #D9DCE1, #AEB2B9 70%, #8E939B); position: relative; box-shadow: 0 1.4em 2em -1.2em rgba(11,18,32,.45); }
+.lip::after { content: ""; position: absolute; left: 50%; top: 0; width: 14%; height: 45%; transform: translateX(-50%); border-radius: 0 0 .7em .7em; background: #9EA3AB; }
+.screen { position: relative; height: 100%; border-radius: .6em; overflow: hidden; color: var(--ink); background: linear-gradient(180deg, #081C29, #174F5E 50%, #2D8590 78%, #3E9AA2); }
+.wall { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.menubar { position: absolute; inset: 0 0 auto; height: 2.2em; display: flex; align-items: center; gap: 1.4em; padding: 0 1.2em; font-size: 1em; font-weight: 500; color: #fff; background: rgba(8, 20, 28, .28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); z-index: 6; }
 .menubar b { font-weight: 700; }
 .menubar .right { margin-left: auto; display: flex; gap: 1.1em; align-items: center; }
-.menubar img { width: 1.4em; height: 1.4em; }
+.menubar .tp { display: inline-grid; place-items: center; width: 1.8em; height: 1.5em; border-radius: .35em; }
+.menubar .tp img { width: 1.5em; height: 1.5em; filter: invert(1); }
+.mb-wifi { width: 1.3em; height: 1.3em; color: #fff; }
+.batt { width: 1.9em; height: .95em; border: 1px solid rgba(255,255,255,.85); border-radius: .25em; padding: 1px; position: relative; display: block; }
+.batt::before { content: ""; display: block; height: 100%; width: 76%; background: #fff; border-radius: .12em; }
+.batt::after { content: ""; position: absolute; right: -.22em; top: 30%; height: 40%; width: .12em; background: rgba(255,255,255,.85); border-radius: 0 .1em .1em 0; }
 
-.phone { width: 100%; aspect-ratio: 9 / 19.3; max-width: 100%; border-radius: 2.8em; padding: .75em; background: #0E1117; box-shadow: var(--shadow); justify-self: center; }
-.pscreen { position: relative; height: 100%; border-radius: 2.1em; overflow: hidden; background: var(--window); }
+/* The phone: an Android with its punch-hole camera. */
+.phone { width: 100%; aspect-ratio: 9 / 19.3; max-width: 100%; border-radius: 2.4em; padding: .55em; background: #0D0F13; box-shadow: inset 0 0 0 1px #2A2E36, var(--shadow); justify-self: center; position: relative; }
+.pscreen { position: relative; height: 100%; border-radius: 1.9em; overflow: hidden; background: var(--window); }
+.punch { position: absolute; top: 1.25em; left: 50%; width: .8em; height: .8em; margin-left: -.4em; border-radius: 50%; background: #000; z-index: 8; }
+
+/* Moments (PLAN.md "Moments"): the light the apps play when a phone
+   connects. It blooms out of the TwoPort icon on the Mac, Mac blue then
+   phone green, while a ring runs round the phone's screen, blue from the
+   left and green from the right, meeting at the bottom. site.js plays it. */
+.mfx { position: absolute; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+.mfx > i { position: absolute; border-radius: 50%; mix-blend-mode: screen; opacity: 0; will-change: transform, opacity; }
+.mfx .bloom { background: radial-gradient(circle, rgba(255,255,255,.95) 0%, rgba(110,160,255,.9) 14%, rgba(110,160,255,.62) 30%, rgba(69,217,140,.5) 44%, rgba(69,217,140,.16) 58%, rgba(69,217,140,0) 70%); }
+.mfx .rim { border: 2px solid rgba(255,255,255,.75); box-shadow: 0 0 28px 6px rgba(69,217,140,.55), inset 0 0 28px 6px rgba(110,160,255,.5); }
+.mfx .halo { background: radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(69,217,140,.5) 30%, rgba(110,160,255,.25) 50%, rgba(110,160,255,0) 70%); }
+.mset { position: absolute; inset: 0; }
+.mtrails { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.mtrail, .mring { fill: none; stroke: #45D98C; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; filter: drop-shadow(0 0 4px #6EA0FF); }
+.mtrail { stroke-width: 3; }
+.mring { stroke-width: 2.5; }
+.mcard { position: absolute; left: 0; top: 0; padding: .45em; border-radius: .8em; background: #fff; box-shadow: 0 .6em 1.4em rgba(0,0,0,.4); opacity: 0; offset-rotate: 0deg; }
+.mcard .ph { border-radius: .4em; }
+.mcard .mdoc { display: block; width: 100%; height: 100%; }
+.mbadge { position: absolute; border-radius: 50%; background: #22B25E; box-shadow: 0 .2em .5em rgba(0,0,0,.35); display: grid; place-items: center; opacity: 0; }
+.mbadge svg { width: 70%; height: 70%; overflow: visible; }
+.mbadge path { fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.mspark { position: absolute; width: .45em; height: .45em; margin: -.225em 0 0 -.225em; border-radius: 50%; background: #45D98C; opacity: 0; }
+.mspark.b { background: #6EA0FF; }
+.mpill { position: absolute; white-space: nowrap; font-size: .95em; font-style: normal; font-weight: 600; color: #fff; background: rgba(20, 22, 26, .74); border: 1px solid rgba(255,255,255,.14); border-radius: 2em; padding: .35em .9em; opacity: 0; }
+.rings { position: absolute; inset: .55em; border-radius: 1.9em; pointer-events: none; z-index: 9; opacity: 0; --p: 0deg; }
+.edge-ring { position: absolute; inset: 0; border-radius: inherit; padding: .32em; opacity: .85;
+  background: conic-gradient(from 0deg, #fff 0deg, #8EF0C6 calc(var(--p) * .4), #45D98C var(--p), transparent var(--p), transparent calc(360deg - var(--p)), #6EA0FF calc(360deg - var(--p)), #7CC8FF calc(360deg - var(--p) * .4), #fff 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.edge-ring.glow { padding: 1.3em; filter: blur(1em); opacity: .6; }
+/* The Mac's edge light, as in the app: a soft, see-through band of
+   shimmering colour round the screen's edge (site.js turns --a). */
+.medge { position: absolute; inset: 0; border-radius: inherit; padding: 1.2em; opacity: 0; pointer-events: none; z-index: 7; --a: 0deg;
+  background: conic-gradient(from var(--a), #45D98C, #8EF0C6, #6EE7F2, #7CC8FF, #6EA0FF, #7CC8FF, #fff, #8EF0C6, #45D98C);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; filter: blur(.8em); }
 .pstatus { position: absolute; inset: 0 0 auto; height: 2.6em; display: flex; justify-content: space-between; align-items: center; padding: 0 1.6em; font-size: 1em; font-weight: 600; color: var(--ink); z-index: 3; }
 
 /* The link between the devices: wireless by default — a dotted line with
@@ -219,7 +255,7 @@ p { margin: 0; }
 .notif span { color: var(--muted); }
 .notif time { color: var(--faint); font-size: .85em; }
 .desk-files { position: absolute; left: 4%; top: 14%; display: grid; gap: 1.6em; }
-.desk-files > div { display: grid; justify-items: center; gap: .4em; font-size: .9em; width: 7em; text-align: center; }
+.desk-files > div { display: grid; justify-items: center; gap: .4em; font-size: .9em; width: 7em; text-align: center; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
 .desk-files .ph { width: 4.2em; height: 4.2em; }
 .fold { width: 4.6em; height: 3.8em; border-radius: .5em; background: linear-gradient(180deg, #7FB2FF, #4A8DF5); position: relative; margin-top: .5em; }
 .fold::before { content: ""; position: absolute; left: 0; top: -.5em; width: 45%; height: .8em; border-radius: .4em .4em 0 0; background: #7FB2FF; }
@@ -809,13 +845,14 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 
 .story-stage { position: relative; aspect-ratio: 16 / 8.6; font-size: 1.15cqi; color: var(--ink); }
 .st-mac { position: absolute; left: 0; top: 2%; width: 64%; }
-.st-lid { aspect-ratio: 16 / 10; background: #0B0D12; border-radius: 1.1em 1.1em .4em .4em; padding: .55em; box-shadow: 0 0 0 .12em var(--alu-edge), var(--shadow); }
-.st-screen { position: relative; height: 100%; border-radius: .45em; overflow: hidden; background: linear-gradient(160deg, var(--screen), color-mix(in srgb, var(--screen) 70%, var(--mac))); }
-.st-base { height: 1.2em; width: 110%; margin-left: -5%; border-radius: 0 0 1.4em 1.4em / 0 0 1em 1em; background: linear-gradient(180deg, var(--alu-light), var(--alu-dark)); box-shadow: 0 1.2em 2em -1em rgba(11,18,32,.4); }
-.st-menubar { position: absolute; inset: 0 0 auto; height: 1.9em; display: flex; align-items: center; gap: 1.1em; padding: 0 1em; font-size: .9em; font-weight: 500; background: color-mix(in srgb, var(--window) 70%, transparent); z-index: 4; }
+.st-lid { aspect-ratio: 16 / 10; background: #16181D; border-radius: 1.1em 1.1em .4em .4em; padding: .6em; box-shadow: inset 0 0 0 1px #2B2F37, var(--shadow); }
+.st-screen { position: relative; height: 100%; border-radius: .45em; overflow: hidden; background: linear-gradient(180deg, #081C29, #174F5E 50%, #2D8590 78%, #3E9AA2); }
+.st-base { position: relative; height: 1.5em; width: 104%; margin-left: -2%; border-radius: 0 0 1.1em 1.1em; background: linear-gradient(180deg, #D9DCE1, #AEB2B9 70%, #8E939B); box-shadow: 0 1.2em 2em -1em rgba(11,18,32,.4); }
+.st-base::after { content: ""; position: absolute; left: 50%; top: 0; width: 14%; height: 45%; transform: translateX(-50%); border-radius: 0 0 .5em .5em; background: #9EA3AB; }
+.st-menubar { position: absolute; inset: 0 0 auto; height: 1.9em; display: flex; align-items: center; gap: 1.1em; padding: 0 1em; font-size: .9em; font-weight: 500; color: #fff; background: rgba(8, 20, 28, .28); z-index: 4; }
 .st-menubar b { font-weight: 700; }
 .st-menubar em { margin-left: auto; font-style: normal; display: flex; gap: .6em; align-items: center; }
-.st-menubar img { width: 1.3em; height: 1.3em; }
+.st-menubar img { width: 1.4em; height: 1.4em; filter: invert(1); }
 .st-win { position: absolute; background: var(--window); border-radius: .8em; overflow: hidden; border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); box-shadow: 0 .2em .6em rgba(0,0,0,.08), 0 1.2em 2.6em -1em rgba(11,18,32,.3); }
 .st-finder { left: 5%; top: 14%; width: 50%; height: 74%; }
 .st-row { display: flex; align-items: center; gap: .8em; padding: .55em 1em; font-family: var(--mono); font-size: .95em; border-bottom: 1px solid var(--line); }
@@ -848,8 +885,9 @@ footer { border-top: 1px solid var(--line); padding-block: 2rem 2.6rem; color: v
 .st-cable { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 1; }
 .st-cable path { fill: none; stroke: var(--cable); stroke-width: .7; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: calc(1 - var(--cab, 0)); }
 
-.st-phone, .st-extra { position: absolute; right: 1%; top: 0; width: 19%; aspect-ratio: 9 / 19.3; border-radius: 2.2em; padding: .5em; background: #0E1117; box-shadow: var(--shadow); z-index: 3; }
-.st-pscreen { position: relative; height: 100%; border-radius: 1.8em; overflow: hidden; background: var(--window); }
+.st-phone, .st-extra { position: absolute; right: 1%; top: 0; width: 19%; aspect-ratio: 9 / 19.3; border-radius: 2em; padding: .45em; background: #0D0F13; box-shadow: inset 0 0 0 1px #2A2E36, var(--shadow); z-index: 3; }
+.st-pscreen { position: relative; height: 100%; border-radius: 1.6em; overflow: hidden; background: var(--window); }
+.st-phone .punch, .st-extra .punch { top: 1em; width: .7em; height: .7em; margin-left: -.35em; }
 .st-phone .pstatus { font-size: .85em; height: 2.4em; padding: 0 1.3em; }
 .st-gal { position: absolute; inset: 2.6em .7em auto; display: grid; gap: .5em; transition: opacity .35s; }
 .st-gal > b { font-size: 1.25em; padding-left: .2em; }

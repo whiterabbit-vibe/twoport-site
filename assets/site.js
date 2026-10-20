@@ -59,6 +59,223 @@
     }
   }
 
+  // ---- The Macs' wallpaper: an evening ridge under the stars, drawn to the
+  // canvas's own size (the CSS gradient behind it is the no-JS version).
+  var drawWall = function (c) {
+    var r = c.getBoundingClientRect();
+    if (!r.width) return;
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr);
+    var g = c.getContext('2d'), W = r.width, H = r.height;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var sky = g.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#081C29'); sky.addColorStop(.5, '#174F5E'); sky.addColorStop(.78, '#2D8590'); sky.addColorStop(1, '#3E9AA2');
+    g.fillStyle = sky; g.fillRect(0, 0, W, H);
+    var seed = 11, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    for (var i = 0; i < 90; i++) { g.fillStyle = 'rgba(255,255,255,' + (.2 + rnd() * .5) + ')'; g.fillRect(rnd() * W, rnd() * H * .5, 1, 1); }
+    [{ base: .66, amp: .2, col: '#2B6E78', snow: true, k: 1.3 }, { base: .76, amp: .1, col: '#163F49', k: 4.1 }, { base: .88, amp: .06, col: '#0A2129', k: 7.7 }].forEach(function (L) {
+      g.beginPath(); g.moveTo(0, H);
+      for (var x = 0; x <= W + 4; x += 3) {
+        var u = x / W;
+        var peak = Math.exp(-Math.abs((u - .38) / .085)) + Math.exp(-Math.abs((u - .72) / .07)) * .5;
+        var n = Math.sin(u * 23 + L.k) * .06 + Math.sin(u * 61 + L.k * 2) * .025;
+        g.lineTo(x, H * (L.base - L.amp * (L.snow ? peak + n : .5 + n * 3 + Math.sin(u * 7 + L.k) * .3)));
+      }
+      g.lineTo(W, H); g.closePath(); g.fillStyle = L.col; g.fill();
+      if (L.snow) {
+        g.save(); g.clip();
+        var cap = g.createLinearGradient(0, H * (L.base - L.amp * 1.05), 0, H * (L.base - L.amp * .55));
+        cap.addColorStop(0, 'rgba(235,245,248,.95)'); cap.addColorStop(1, 'rgba(235,245,248,0)');
+        g.fillStyle = cap; g.fillRect(0, 0, W, H);
+        g.restore();
+      }
+    });
+  };
+  document.querySelectorAll('canvas.wall').forEach(function (c) {
+    drawWall(c);
+    if ('ResizeObserver' in window) new ResizeObserver(function () { drawWall(c); }).observe(c);
+  });
+
+  // ---- Moments (PLAN.md "Moments"): the light the apps play at the moments
+  // that matter. Here: Connected the first time the demo comes into view,
+  // and a glow at the TwoPort icon each time a file crosses.
+  // Half speed, as in the apps: every duration below is written for normal speed.
+  var SLOW = 2;
+  var light = function (box) {
+    var mfx = box.querySelector('.mfx'), icon = box.querySelector('.menubar .tp'), rings = box.querySelector('.rings');
+    var screen = mfx && mfx.parentNode;
+    var spot = function (cls, scale) {
+      var s = screen.getBoundingClientRect(), r = icon.getBoundingClientRect();
+      var D = Math.max(s.width, s.height) * scale, el = document.createElement('i');
+      el.className = cls;
+      el.style.cssText = 'left:' + (r.left - s.left + r.width / 2 - D / 2) + 'px;top:' + (r.top - s.top + r.height / 2 - D / 2) + 'px;width:' + D + 'px;height:' + D + 'px';
+      mfx.appendChild(el);
+      return el;
+    };
+    var run = function (el, frames, ms, easing) {
+      var a = el.animate(frames, { duration: ms * SLOW, easing: easing || 'cubic-bezier(.2,.7,.2,1)', fill: 'both' });
+      a.onfinish = function () { el.remove(); };
+    };
+    var glow = function () {
+      var h = spot('halo', .45);
+      run(h, [{ transform: 'scale(.1)', opacity: 0 }, { transform: 'scale(.7)', opacity: .8, offset: .3 }, { transform: 'scale(1)', opacity: 0 }], 800);
+      icon.animate([{ background: 'rgba(69,217,140,0)', transform: 'scale(1)' }, { background: 'rgba(69,217,140,.35)', transform: 'scale(1.25)', offset: .35 }, { background: 'rgba(69,217,140,0)', transform: 'scale(1)' }], { duration: 650 * SLOW });
+    };
+    // All sent, as in the apps. `o.dir` 'in': the files fly out of the icon
+    // on trails into a stack below it; a set (`o.full`) gets a ring, a check
+    // with sparks and its line, one or two files just the check and the
+    // line. 'out': they fly into the icon, then the check and the line
+    // appear under it. `o.items`: photo symbols ('#p3') or 'pdf'.
+    var NS = 'http://www.w3.org/2000/svg';
+    var T = function (sec) { return sec * 1000 * SLOW; };
+    var allSent = function (o) {
+      var s = screen.getBoundingClientRect(), r = icon.getBoundingClientRect();
+      var W = s.width, H = s.height, side = W * .085, n = o.items.length;
+      var ic = { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 };
+      var cx = Math.max(side * 2, Math.min(W - side * 1.6, ic.x - side * 1.7)), cy = ic.y + H * .42;
+      var group = document.createElement('div');
+      group.className = 'mset';
+      group.style.transformOrigin = cx + 'px ' + cy + 'px';
+      mfx.appendChild(group);
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('class', 'mtrails');
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      group.appendChild(svg);
+      var go = function (el, frames, dur, delay, easing, fill) {
+        return el.animate(frames, { duration: T(dur), delay: T(delay || 0), easing: easing || 'cubic-bezier(.2,.7,.2,1)', fill: fill || 'both' });
+      };
+      var spots = o.items.map(function (_, i) {
+        if (o.full) { var f = [[-.16, .06, -11], [.13, -.04, 8], [-.05, -.12, -4], [.09, .1, 13]][i % 4]; return { x: cx + f[0] * side, y: cy + f[1] * side, tilt: f[2] }; }
+        if (n === 1) return { x: cx, y: cy, tilt: -4 };
+        return { x: cx + side * .62 * (i ? 1 : -1), y: cy, tilt: i ? 4 : -5 };
+      });
+      var curve = function (a, b, lane) {
+        return 'M' + a.x + ' ' + a.y + ' Q' + (Math.min(a.x, b.x) - 30 - lane * 10) + ' ' + (Math.min(a.y, b.y) + 12 - lane * 5) + ' ' + b.x + ' ' + b.y;
+      };
+      var trail = function (d, delay, dur, easing) {
+        var p = document.createElementNS(NS, 'path');
+        p.setAttribute('d', d); p.setAttribute('pathLength', '1'); p.setAttribute('class', 'mtrail');
+        svg.appendChild(p);
+        go(p, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], dur, delay, easing);
+        go(p, [{ opacity: 1 }, { opacity: 0 }], dur * .6, delay + dur * .7, 'linear');
+      };
+      var card = function (item, d) {
+        var c = document.createElement('i');
+        c.className = 'mcard';
+        c.style.width = c.style.height = side + 'px';
+        c.style.offsetPath = "path('" + d + "')";
+        c.innerHTML = item === 'pdf' ? '<svg class="mdoc"><use href="#pdf"/></svg>' : '<svg class="ph"><use href="' + item + '"/></svg>';
+        group.appendChild(c);
+        return c;
+      };
+      var badge = function (x, y, d, delay) {
+        var b = document.createElement('i');
+        b.className = 'mbadge';
+        b.style.cssText = 'left:' + (x - d / 2) + 'px;top:' + (y - d / 2) + 'px;width:' + d + 'px;height:' + d + 'px';
+        b.innerHTML = '<svg viewBox="0 0 24 24"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>';
+        group.appendChild(b);
+        go(b, [{ transform: 'scale(0)', opacity: 0 }, { transform: 'scale(1.18)', opacity: 1, offset: .6 }, { transform: 'scale(1)', opacity: 1 }], .32, delay, 'ease-out');
+        go(b.querySelector('path'), [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], .25, delay + .12, 'ease-out');
+      };
+      var sparks = function (x, y, delay) {
+        for (var i = 0; i < 10; i++) {
+          var a = i / 10 * 2 * Math.PI + .3, reach = side * (i % 2 ? .4 : .55), d = document.createElement('i');
+          d.className = 'mspark' + (i % 2 ? ' b' : '');
+          d.style.cssText = 'left:' + x + 'px;top:' + y + 'px';
+          group.appendChild(d);
+          go(d, [{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: 'translate(' + Math.cos(a) * reach + 'px,' + Math.sin(a) * reach + 'px) scale(.4)', opacity: 0 }], .6, delay, 'cubic-bezier(.1,.8,.3,1)');
+        }
+      };
+      var pill = function (x, y, base, delay) {
+        var p = document.createElement('i');
+        p.className = 'mpill';
+        p.textContent = o.line;
+        p.style.cssText = 'left:' + x + 'px;top:' + y + 'px';
+        group.appendChild(p);
+        go(p, [{ opacity: 0, transform: base + ' translateY(6px)' }, { opacity: 1, transform: base }], .3, delay);
+      };
+      var out;
+      if (o.dir === 'in') {
+        var flight = .65, glide = 'cubic-bezier(.3,.1,.2,1)';
+        o.items.forEach(function (item, i) {
+          var sp = spots[i], d = curve(ic, sp, i), delay = .05 + i * .09, c = card(item, d);
+          trail(d, delay, flight, glide);
+          go(c, [{ offsetDistance: '0%' }, { offsetDistance: '100%' }], flight, delay, glide);
+          go(c, [{ transform: 'scale(.15) rotate(0deg)', opacity: 0 }, { transform: 'scale(1.08) rotate(' + sp.tilt + 'deg)', opacity: 1, offset: .85 }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1 }], flight, delay, glide);
+        });
+        var landed = .05 + (n - 1) * .09 + flight;
+        if (o.full) {
+          var ring = document.createElementNS(NS, 'circle'), rad = side * .98;
+          ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', rad);
+          ring.setAttribute('pathLength', '1'); ring.setAttribute('class', 'mring');
+          ring.setAttribute('transform', 'rotate(-90 ' + cx + ' ' + cy + ')');
+          svg.appendChild(ring);
+          go(ring, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], .45, landed + .03, 'ease-in-out');
+          var bx = cx + rad * .7, by = cy - rad * .7;
+          badge(bx, by, side * .36, landed + .43);
+          sparks(bx, by, landed + .48);
+          pill(cx, cy + rad + side * .3, 'translate(-50%,-50%)', landed + .53);
+        } else {
+          var last = spots[n - 1];
+          badge(last.x + side * .45, last.y - side * .45, side * .32, landed);
+          pill(cx, cy + side * .5 + side * .32, 'translate(-50%,-50%)', landed + .1);
+        }
+        out = landed + (o.full ? 1.25 : .9);
+      } else {
+        var fly = .55, leave = 'cubic-bezier(.55,0,.75,.2)', takeOff = .45;
+        o.items.forEach(function (item, i) {
+          var sp = spots[i], d = curve(sp, ic, i), delay = takeOff + i * .08, c = card(item, d);
+          go(c, [{ transform: 'scale(.9) rotate(' + sp.tilt + 'deg)', opacity: 0 }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1 }], .25, i * .05);
+          trail(d, delay, fly, leave);
+          go(c, [{ offsetDistance: '0%' }, { offsetDistance: '100%' }], fly, delay, leave);
+          go(c, [{ transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1 }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1, offset: .8 }, { transform: 'scale(.15) rotate(' + sp.tilt + 'deg)', opacity: 0 }], fly, delay, leave, 'forwards');
+        });
+        var there = takeOff + (n - 1) * .08 + fly;
+        glow();
+        var gx = ic.x, gy = ic.y + side * .7;
+        badge(gx, gy, side * .32, there);
+        pill(gx - side * .35, gy, 'translate(-100%,-50%)', there + .1);
+        out = there + .9;
+      }
+      go(group, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(8px) scale(.96)' }], .45, out, 'ease-in');
+      setTimeout(function () { group.remove(); }, T(out + .5));
+    };
+    return {
+      allSent: function (o) { if (mfx && icon && mfx.animate) allSent(o); },
+      clear: function () { if (mfx) Array.prototype.slice.call(mfx.querySelectorAll('.mset')).forEach(function (g) { g.remove(); }); },
+      connected: function () {
+        if (!mfx || !icon || !mfx.animate) return;
+        run(spot('bloom', 1.6), [{ transform: 'scale(.03)', opacity: 0 }, { transform: 'scale(.35)', opacity: .5, offset: .2 }, { transform: 'scale(.8)', opacity: .28, offset: .6 }, { transform: 'scale(1)', opacity: 0 }], 1100);
+        run(spot('rim', 1.45), [{ transform: 'scale(.03)', opacity: 0 }, { transform: 'scale(.3)', opacity: .7, offset: .22 }, { transform: 'scale(.75)', opacity: 0 }], 1000);
+        // The edge light: fades in round the screen, its colours turning.
+        var edge = box.querySelector('.medge');
+        if (edge) {
+          edge.animate([{ opacity: 0 }, { opacity: .9, offset: .3 }, { opacity: .9, offset: .65 }, { opacity: 0 }], { duration: 1800 * SLOW });
+          var e0 = performance.now();
+          var turn = function (now) {
+            var k = (now - e0) / (1800 * SLOW);
+            edge.style.setProperty('--a', (-150 * k) + 'deg');
+            if (k < 1) requestAnimationFrame(turn);
+          };
+          requestAnimationFrame(turn);
+        }
+        glow();
+        if (!rings) return;
+        // The ring: blue in from the left, green from the right, meeting at the bottom.
+        var t0 = performance.now();
+        var step = function (now) {
+          var k = Math.min(1, (now - t0) / (700 * SLOW)), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+          rings.style.setProperty('--p', (180 * e) + 'deg');
+          rings.style.opacity = 1;
+          if (k < 1) requestAnimationFrame(step);
+          else rings.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450 * SLOW, delay: 250 * SLOW, fill: 'forwards' }).onfinish = function () { rings.style.opacity = 0; };
+        };
+        requestAnimationFrame(step);
+      },
+      glow: function () { if (mfx && icon && mfx.animate) glow(); }
+    };
+  };
+
   // ---- The demo: chips pick a moment, the stage plays it.
   var stage = document.getElementById('stage');
   if (stage) {
@@ -69,6 +286,9 @@
     var menuApp = document.getElementById('menu-app');
     var cap = { title: document.getElementById('cap-title'), desc: document.getElementById('cap-desc'), count: document.getElementById('cap-count') };
     var DUR = 8000, N = tabs.length, idx = 0, current = 1, timer = null, visible = true;
+    // The light: Connected once, the first time the stage is in view; All
+    // sent when a file lands or goes (see `sends` in show).
+    var lit = light(stage), glowTimer = null, greeted = reduced;
     // Plays on its own until the visitor picks a moment, then stays put.
     // Not on phones: there it waits for a swipe or the arrows.
     var auto = !reduced && !matchMedia('(max-width: 900px)').matches;
@@ -158,6 +378,17 @@
       stepName.appendChild(document.createTextNode(tabs[i].textContent.trim()));
       mCards.forEach(function (c, j) { c.classList.toggle('on', j === i); });
       var f = flights[n];
+      clearTimeout(glowTimer);
+      lit.clear();
+      // All sent, timed to each scene: the photo landing, the boarding
+      // pass going, the backup finishing. Anything else: a glow as the file crosses.
+      var sends = {
+        2: { at: 3.7, dir: 'in', items: ['#p3'], line: 'IMG_2058.jpg arrived · 3.1 MB' },
+        3: { at: 2.6, dir: 'out', items: ['pdf'], line: 'Boarding pass.pdf sent · 212 KB' },
+        6: { at: 3.3, dir: 'in', items: ['#p6', '#p2', '#p7', '#p1'], line: '38 photos arrived · 412 MB', full: true }
+      };
+      if (!reduced && sends[n]) glowTimer = setTimeout(function () { lit.allSent(sends[n]); }, sends[n].at * 1000);
+      else if (f && !reduced) glowTimer = setTimeout(lit.glow, (f.delay + (f.dir === 'toMac' ? 1.1 : 0)) * 1000);
       packet.style.animation = f ? f.dir + ' 1.1s cubic-bezier(.22,.8,.24,1) ' + f.delay + 's' : 'none';
       if (f) packet.querySelector('use').setAttribute('href', f.icon);
       void stage.offsetWidth; // with .play gone, every animation restarts on re-add
@@ -221,6 +452,11 @@
 
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }, { threshold: 0.25 }).observe(stage);
+      new IntersectionObserver(function (entries, seen) {
+        if (greeted || !entries[0].isIntersecting) return;
+        greeted = true; seen.disconnect();
+        setTimeout(lit.connected, 350);
+      }, { threshold: 0.6 }).observe(stage);
     }
     show(0);
   }
