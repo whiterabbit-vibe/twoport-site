@@ -97,94 +97,114 @@
   });
 
   // ---- Moments (PLAN.md "Moments"): the light the apps play at the moments
-  // that matter. Here: Connected the first time the demo comes into view,
-  // and a glow at the TwoPort icon each time a file crosses.
+  // that matter, in the apps' own look (2026-10-26): a milky disc of light
+  // opens at the TwoPort icon with a band of colour at its rim that carries
+  // on after it; the screen under it goes soft and comes back into focus
+  // last. Here: Connected the first time the demo comes into view, a glow at
+  // the icon each time a file crosses, and "All sent" for a scene's files.
   // Half speed, as in the apps: every duration below is written for normal speed.
   var SLOW = 2;
+  var SPREAD = 'cubic-bezier(.12,.6,.2,1)', CARRY = 'cubic-bezier(.3,.25,.45,1)';
   var light = function (box) {
     var mfx = box.querySelector('.mfx'), icon = box.querySelector('.menubar .tp'), rings = box.querySelector('.rings');
     var screen = mfx && mfx.parentNode;
-    var spot = function (cls, scale) {
+    var T = function (sec) { return sec * 1000 * SLOW; };
+    var geo = function () {
       var s = screen.getBoundingClientRect(), r = icon.getBoundingClientRect();
-      var D = Math.max(s.width, s.height) * scale, el = document.createElement('i');
+      return { W: s.width, H: s.height, x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 };
+    };
+    // A round piece of light `D` across, centred on the icon (or `at`).
+    var piece = function (cls, D, at, parent) {
+      var g = at || geo(), el = document.createElement('i');
       el.className = cls;
-      el.style.cssText = 'left:' + (r.left - s.left + r.width / 2 - D / 2) + 'px;top:' + (r.top - s.top + r.height / 2 - D / 2) + 'px;width:' + D + 'px;height:' + D + 'px';
-      mfx.appendChild(el);
+      el.style.cssText = 'left:' + (g.x - D / 2) + 'px;top:' + (g.y - D / 2) + 'px;width:' + D + 'px;height:' + D + 'px';
+      (parent || mfx).appendChild(el);
       return el;
     };
-    var run = function (el, frames, ms, easing) {
-      var a = el.animate(frames, { duration: ms * SLOW, easing: easing || 'cubic-bezier(.2,.7,.2,1)', fill: 'both' });
-      a.onfinish = function () { el.remove(); };
+    var go = function (el, frames, dur, delay, easing, fill) {
+      return el.animate(frames, { duration: T(dur), delay: T(delay || 0), easing: easing || 'cubic-bezier(.2,.7,.2,1)', fill: fill || 'both' });
+    };
+    var gone = function (el, after) { setTimeout(function () { el.remove(); }, T(after) + 60); };
+    var halo = function (D, peak, dur, delay, grows) {
+      var h = piece('halo', D);
+      go(h, grows === false ? [{ opacity: 0 }, { opacity: peak, offset: .3 }, { opacity: 0 }]
+        : [{ transform: 'scale(.15)', opacity: 0 }, { transform: 'scale(.8)', opacity: peak, offset: .3 }, { transform: 'scale(1)', opacity: 0 }], dur, delay);
+      gone(h, (delay || 0) + dur);
     };
     var glow = function () {
-      var h = spot('halo', .45);
-      run(h, [{ transform: 'scale(.1)', opacity: 0 }, { transform: 'scale(.7)', opacity: .8, offset: .3 }, { transform: 'scale(1)', opacity: 0 }], 800);
+      halo(geo().W * .4, .9, .8);
       icon.animate([{ background: 'rgba(69,217,140,0)', transform: 'scale(1)' }, { background: 'rgba(69,217,140,.35)', transform: 'scale(1.25)', offset: .35 }, { background: 'rgba(69,217,140,0)', transform: 'scale(1)' }], { duration: 650 * SLOW });
     };
-    // All sent, as in the apps. `o.dir` 'in': the files fly out of the icon
-    // on trails into a stack below it; a set (`o.full`) gets a ring, a check
-    // with sparks and its line, one or two files just the check and the
-    // line. 'out': they fly into the icon, then the check and the line
-    // appear under it. `o.items`: photo symbols ('#p3') or 'pdf'.
-    var NS = 'http://www.w3.org/2000/svg';
-    var T = function (sec) { return sec * 1000 * SLOW; };
+    // The light opening at the icon: disc `disc` across, its band of colour
+    // carried on to `reach`, the screen soft through a window `soft` across.
+    var open = function (disc, reach, soft, k, delay) {
+      delay = delay || 0;
+      var d = piece('disc', disc);
+      go(d, [{ transform: 'scale(.04)', opacity: 0, easing: SPREAD }, { transform: 'scale(.7)', opacity: .82 * k, offset: .18 }, { transform: 'scale(1)', opacity: .6 * k, offset: .42, easing: 'ease-out' }, { transform: 'scale(1.12)', opacity: 0 }], 1.45, delay, 'linear');
+      gone(d, delay + 1.45);
+      var w = piece('prism', reach), a = disc * 1.04 / reach;
+      go(w, [{ transform: 'scale(.02)', opacity: 0, easing: SPREAD }, { transform: 'scale(' + a * .4 + ')', opacity: 1, offset: .08, easing: SPREAD }, { transform: 'scale(' + a + ')', opacity: .95, offset: .3, easing: CARRY }, { transform: 'scale(' + Math.min(1, a + (1 - a) * .55) + ')', opacity: .9, offset: .6, easing: CARRY }, { transform: 'scale(1)', opacity: 0 }], 1.65, delay, 'linear');
+      gone(w, delay + 1.65);
+      var v = piece('veil', soft), b = disc * 1.2 / soft;
+      go(v, [{ transform: 'scale(.02)', easing: SPREAD }, { transform: 'scale(' + b + ')', offset: .3, easing: CARRY }, { transform: 'scale(1)' }], 1.65, delay, 'linear');
+      go(v, [{ opacity: 0 }, { opacity: 1, offset: .14 }, { opacity: 1, offset: .45 }, { opacity: 0 }], 2.1, delay, 'ease-in-out');
+      gone(v, delay + 2.1);
+    };
+    // All sent, as in the apps. `o.dir` 'in': the files come out of the
+    // light at the icon, out of focus, and sharpen as they land in a stack
+    // below it; a sheen crosses them, the check pops on, and the line. A set
+    // (`o.full`) is a fanned stack, one or two files land side by side.
+    // 'out': they're drawn up into the icon, turning to light on the way;
+    // a ring of colour goes out from the icon, then the check and the line
+    // under it. `o.items`: photo symbols ('#p3') or 'pdf'.
     var allSent = function (o) {
-      var s = screen.getBoundingClientRect(), r = icon.getBoundingClientRect();
-      var W = s.width, H = s.height, side = W * .085, n = o.items.length;
-      var ic = { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 };
-      var cx = Math.max(side * 2, Math.min(W - side * 1.6, ic.x - side * 1.7)), cy = ic.y + H * .42;
+      var g = geo(), W = g.W, H = g.H, n = o.items.length;
+      var side = W * (o.full ? .085 : .1);
+      var ic = { x: g.x, y: g.y };
+      var cx = Math.max(side * 2, Math.min(W - side * 1.6, ic.x - side * 1.6)), cy = ic.y + H * .42;
       var group = document.createElement('div');
       group.className = 'mset';
       group.style.transformOrigin = cx + 'px ' + cy + 'px';
       mfx.appendChild(group);
-      var svg = document.createElementNS(NS, 'svg');
-      svg.setAttribute('class', 'mtrails');
-      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-      group.appendChild(svg);
-      var go = function (el, frames, dur, delay, easing, fill) {
-        return el.animate(frames, { duration: T(dur), delay: T(delay || 0), easing: easing || 'cubic-bezier(.2,.7,.2,1)', fill: fill || 'both' });
-      };
       var spots = o.items.map(function (_, i) {
-        if (o.full) { var f = [[-.16, .06, -11], [.13, -.04, 8], [-.05, -.12, -4], [.09, .1, 13]][i % 4]; return { x: cx + f[0] * side, y: cy + f[1] * side, tilt: f[2] }; }
-        if (n === 1) return { x: cx, y: cy, tilt: -4 };
-        return { x: cx + side * .62 * (i ? 1 : -1), y: cy, tilt: i ? 4 : -5 };
+        if (o.full) { var f = [[-.17, .05, -10], [.14, -.04, 7], [-.05, -.12, -3], [.1, .1, 12]][i % 4]; return { x: cx + f[0] * side, y: cy + f[1] * side, tilt: f[2] }; }
+        if (n === 1) return { x: cx, y: cy, tilt: -3 };
+        return { x: cx + side * .6 * (i ? 1 : -1), y: cy, tilt: i ? 4 : -5 };
       });
       var curve = function (a, b, lane) {
-        return 'M' + a.x + ' ' + a.y + ' Q' + (Math.min(a.x, b.x) - 30 - lane * 10) + ' ' + (Math.min(a.y, b.y) + 12 - lane * 5) + ' ' + b.x + ' ' + b.y;
-      };
-      var trail = function (d, delay, dur, easing) {
-        var p = document.createElementNS(NS, 'path');
-        p.setAttribute('d', d); p.setAttribute('pathLength', '1'); p.setAttribute('class', 'mtrail');
-        svg.appendChild(p);
-        go(p, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], dur, delay, easing);
-        go(p, [{ opacity: 1 }, { opacity: 0 }], dur * .6, delay + dur * .7, 'linear');
+        return 'M' + a.x + ' ' + a.y + ' Q' + (Math.min(a.x, b.x) - 24 - lane * 10) + ' ' + (Math.min(a.y, b.y) + 24 - lane * 5) + ' ' + b.x + ' ' + b.y;
       };
       var card = function (item, d) {
         var c = document.createElement('i');
         c.className = 'mcard';
         c.style.width = c.style.height = side + 'px';
         c.style.offsetPath = "path('" + d + "')";
-        c.innerHTML = item === 'pdf' ? '<svg class="mdoc"><use href="#pdf"/></svg>' : '<svg class="ph"><use href="' + item + '"/></svg>';
+        c.innerHTML = (item === 'pdf' ? '<svg class="mdoc"><use href="#pdf"/></svg>' : '<svg class="ph"><use href="' + item + '"/></svg>') + '<i class="sheen"></i>';
         group.appendChild(c);
         return c;
       };
+      // The light a file travels in.
+      var carrier = function (d, delay, dur, easing, leaving) {
+        var c = piece('carrier', side * 2.6, { x: 0, y: 0 }, group);
+        c.style.left = c.style.top = '0px';
+        c.style.offsetPath = "path('" + d + "')";
+        go(c, [{ offsetDistance: '0%' }, { offsetDistance: '100%' }], dur, delay, easing);
+        go(c, leaving ? [{ opacity: 0, transform: 'scale(1.1)' }, { opacity: .3, transform: 'scale(.7)', offset: .55 }, { opacity: .85, transform: 'scale(.35)', offset: .9 }, { opacity: 0, transform: 'scale(.25)' }]
+          : [{ opacity: 0, transform: 'scale(.35)' }, { opacity: .85, transform: 'scale(.5)', offset: .06 }, { opacity: .35, transform: 'scale(.9)', offset: .45 }, { opacity: 0, transform: 'scale(1.1)' }], dur, delay, 'linear');
+      };
       var badge = function (x, y, d, delay) {
+        var r = document.createElement('i');
+        r.className = 'mripple';
+        r.style.cssText = 'left:' + (x - d / 2) + 'px;top:' + (y - d / 2) + 'px;width:' + d + 'px;height:' + d + 'px';
+        group.appendChild(r);
+        go(r, [{ transform: 'scale(1)', opacity: 0 }, { transform: 'scale(1.1)', opacity: .9, offset: .04 }, { transform: 'scale(2.8)', opacity: 0 }], .75, delay + .12, SPREAD);
         var b = document.createElement('i');
         b.className = 'mbadge';
         b.style.cssText = 'left:' + (x - d / 2) + 'px;top:' + (y - d / 2) + 'px;width:' + d + 'px;height:' + d + 'px';
         b.innerHTML = '<svg viewBox="0 0 24 24"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>';
         group.appendChild(b);
-        go(b, [{ transform: 'scale(0)', opacity: 0 }, { transform: 'scale(1.18)', opacity: 1, offset: .6 }, { transform: 'scale(1)', opacity: 1 }], .32, delay, 'ease-out');
-        go(b.querySelector('path'), [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], .25, delay + .12, 'ease-out');
-      };
-      var sparks = function (x, y, delay) {
-        for (var i = 0; i < 10; i++) {
-          var a = i / 10 * 2 * Math.PI + .3, reach = side * (i % 2 ? .4 : .55), d = document.createElement('i');
-          d.className = 'mspark' + (i % 2 ? ' b' : '');
-          d.style.cssText = 'left:' + x + 'px;top:' + y + 'px';
-          group.appendChild(d);
-          go(d, [{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: 'translate(' + Math.cos(a) * reach + 'px,' + Math.sin(a) * reach + 'px) scale(.4)', opacity: 0 }], .6, delay, 'cubic-bezier(.1,.8,.3,1)');
-        }
+        go(b, [{ transform: 'scale(.2)', opacity: 0 }, { transform: 'scale(1.12)', opacity: 1, offset: .45 }, { transform: 'scale(.97)', offset: .75 }, { transform: 'scale(1)', opacity: 1 }], .45, delay, 'ease-out');
+        go(b.querySelector('path'), [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], .28, delay + .12, 'ease-out');
       };
       var pill = function (x, y, base, delay) {
         var p = document.createElement('i');
@@ -192,68 +212,66 @@
         p.textContent = o.line;
         p.style.cssText = 'left:' + x + 'px;top:' + y + 'px';
         group.appendChild(p);
-        go(p, [{ opacity: 0, transform: base + ' translateY(6px)' }, { opacity: 1, transform: base }], .3, delay);
+        go(p, [{ opacity: 0, transform: base + ' translateY(-8px)' }, { opacity: 1, transform: base }], .45, delay, SPREAD);
       };
       var out;
       if (o.dir === 'in') {
-        var flight = .65, glide = 'cubic-bezier(.3,.1,.2,1)';
+        var k = o.full ? 1 : .8;
+        halo(W * .3, 1, .6);
+        open(Math.max(H * .8, side * 4) * k, H * 1.5 * k, H * 1.35 * k, .88);
+        var flight = .8, glide = 'cubic-bezier(.16,.7,.24,1)';
         o.items.forEach(function (item, i) {
-          var sp = spots[i], d = curve(ic, sp, i), delay = .05 + i * .09, c = card(item, d);
-          trail(d, delay, flight, glide);
+          var sp = spots[i], d = curve(ic, sp, i), delay = .1 + i * .09, c = card(item, d);
+          carrier(d, delay, flight, glide, false);
           go(c, [{ offsetDistance: '0%' }, { offsetDistance: '100%' }], flight, delay, glide);
-          go(c, [{ transform: 'scale(.15) rotate(0deg)', opacity: 0 }, { transform: 'scale(1.08) rotate(' + sp.tilt + 'deg)', opacity: 1, offset: .85 }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1 }], flight, delay, glide);
+          go(c, [{ transform: 'scale(.22) rotate(' + (-1.5 * sp.tilt) + 'deg)', opacity: 0, filter: 'blur(10px)' }, { opacity: 1, offset: .2 }, { transform: 'scale(1.04) rotate(' + sp.tilt + 'deg)', offset: .75, filter: 'blur(0px)' }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1, filter: 'blur(0px)' }], flight, delay, glide);
         });
-        var landed = .05 + (n - 1) * .09 + flight;
-        if (o.full) {
-          var ring = document.createElementNS(NS, 'circle'), rad = side * .98;
-          ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', rad);
-          ring.setAttribute('pathLength', '1'); ring.setAttribute('class', 'mring');
-          ring.setAttribute('transform', 'rotate(-90 ' + cx + ' ' + cy + ')');
-          svg.appendChild(ring);
-          go(ring, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], .45, landed + .03, 'ease-in-out');
-          var bx = cx + rad * .7, by = cy - rad * .7;
-          badge(bx, by, side * .36, landed + .43);
-          sparks(bx, by, landed + .48);
-          pill(cx, cy + rad + side * .3, 'translate(-50%,-50%)', landed + .53);
-        } else {
-          var last = spots[n - 1];
-          badge(last.x + side * .45, last.y - side * .45, side * .32, landed);
-          pill(cx, cy + side * .5 + side * .32, 'translate(-50%,-50%)', landed + .1);
-        }
-        out = landed + (o.full ? 1.25 : .9);
+        var landed = .1 + (n - 1) * .09 + flight;
+        Array.prototype.slice.call(group.querySelectorAll('.sheen')).forEach(function (sh, i) {
+          go(sh, [{ transform: 'translateX(0) rotate(25deg)', opacity: 0 }, { opacity: 1, offset: .15 }, { opacity: 1, offset: .8 }, { transform: 'translateX(' + side * 2.4 + 'px) rotate(25deg)', opacity: 0 }], .7, landed - .05 + i * .06, 'ease-in-out');
+        });
+        var corner = o.full ? { x: cx + side * .62, y: cy - side * .6 } : { x: spots[n - 1].x + side * .46, y: spots[n - 1].y - side * .46 };
+        badge(corner.x, corner.y, side * (o.full ? .36 : .3), landed + .05);
+        pill(cx, cy + side * (o.full ? .85 : .7) + side * .3, 'translate(-50%,-50%)', landed + .15);
+        out = landed + (o.full ? 1.25 : .95);
       } else {
-        var fly = .55, leave = 'cubic-bezier(.55,0,.75,.2)', takeOff = .45;
+        var fly = .62, pull = 'cubic-bezier(.5,0,.7,.25)', takeOff = o.full ? .75 : .55;
         o.items.forEach(function (item, i) {
-          var sp = spots[i], d = curve(sp, ic, i), delay = takeOff + i * .08, c = card(item, d);
-          go(c, [{ transform: 'scale(.9) rotate(' + sp.tilt + 'deg)', opacity: 0 }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1 }], .25, i * .05);
-          trail(d, delay, fly, leave);
-          go(c, [{ offsetDistance: '0%' }, { offsetDistance: '100%' }], fly, delay, leave);
-          go(c, [{ transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1 }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1, offset: .8 }, { transform: 'scale(.15) rotate(' + sp.tilt + 'deg)', opacity: 0 }], fly, delay, leave, 'forwards');
+          var sp = spots[i], d = curve(sp, ic, i), delay = takeOff + i * .1, c = card(item, d);
+          go(c, [{ transform: 'scale(.86) rotate(' + sp.tilt + 'deg)', opacity: 0, filter: 'blur(6px)' }, { transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1, filter: 'blur(0px) brightness(1)' }], .35, i * .05, 'cubic-bezier(.2,.9,.3,1.1)');
+          carrier(d, delay, fly, pull, true);
+          go(c, [{ offsetDistance: '0%' }, { offsetDistance: '100%' }], fly, delay, pull);
+          go(c, [{ transform: 'scale(1) rotate(' + sp.tilt + 'deg)', opacity: 1, filter: 'blur(0px) brightness(1)' }, { transform: 'scale(.55) rotate(' + sp.tilt + 'deg)', opacity: 1, filter: 'blur(4px) brightness(1.6)', offset: .75 }, { transform: 'scale(.1) rotate(' + sp.tilt + 'deg)', opacity: 0, filter: 'blur(10px) brightness(2.2)' }], fly, delay, pull, 'forwards');
+          halo(side * 1.4, .85, .4, delay + fly - .04, false);
         });
-        var there = takeOff + (n - 1) * .08 + fly;
-        glow();
+        halo(side * 2, .7, .9, .25);
+        var there = takeOff + (n - 1) * .1 + fly;
+        var ring = piece('prism', side * (o.full ? 7 : 5));
+        go(ring, [{ transform: 'scale(.03)', opacity: 0 }, { transform: 'scale(.15)', opacity: .95, offset: .12 }, { transform: 'scale(1)', opacity: 0 }], .9, there - .05, SPREAD);
+        gone(ring, there + .9);
         var gx = ic.x, gy = ic.y + side * .7;
-        badge(gx, gy, side * .32, there);
-        pill(gx - side * .35, gy, 'translate(-100%,-50%)', there + .1);
-        out = there + .9;
+        badge(gx, gy, side * .3, there + .05);
+        pill(gx - side * .35, gy, 'translate(-100%,-50%)', there + .15);
+        out = there + .95;
       }
-      go(group, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(8px) scale(.96)' }], .45, out, 'ease-in');
-      setTimeout(function () { group.remove(); }, T(out + .5));
+      go(group, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(10px) scale(.92)' }], .5, out, 'cubic-bezier(.4,0,.7,.4)');
+      setTimeout(function () { group.remove(); }, T(out + .55));
     };
     return {
       allSent: function (o) { if (mfx && icon && mfx.animate) allSent(o); },
       clear: function () { if (mfx) Array.prototype.slice.call(mfx.querySelectorAll('.mset')).forEach(function (g) { g.remove(); }); },
       connected: function () {
         if (!mfx || !icon || !mfx.animate) return;
-        run(spot('bloom', 1.6), [{ transform: 'scale(.03)', opacity: 0 }, { transform: 'scale(.35)', opacity: .5, offset: .2 }, { transform: 'scale(.8)', opacity: .28, offset: .6 }, { transform: 'scale(1)', opacity: 0 }], 1100);
-        run(spot('rim', 1.45), [{ transform: 'scale(.03)', opacity: 0 }, { transform: 'scale(.3)', opacity: .7, offset: .22 }, { transform: 'scale(.75)', opacity: 0 }], 1000);
+        var g = geo(), diag = Math.hypot(g.W, g.H);
+        halo(g.W * .2, 1, .55);
+        open(g.H * 1.3, diag * 2.3, diag * 2.5, 1);
         // The edge light: fades in round the screen, its colours turning.
         var edge = box.querySelector('.medge');
         if (edge) {
-          edge.animate([{ opacity: 0 }, { opacity: .9, offset: .3 }, { opacity: .9, offset: .65 }, { opacity: 0 }], { duration: 1800 * SLOW });
+          edge.animate([{ opacity: 0 }, { opacity: .8, offset: .3 }, { opacity: .8, offset: .65 }, { opacity: 0 }], { duration: 1800 * SLOW, delay: 250 * SLOW, fill: 'both' });
           var e0 = performance.now();
           var turn = function (now) {
-            var k = (now - e0) / (1800 * SLOW);
+            var k = (now - e0) / (2050 * SLOW);
             edge.style.setProperty('--a', (-150 * k) + 'deg');
             if (k < 1) requestAnimationFrame(turn);
           };
@@ -261,7 +279,7 @@
         }
         glow();
         if (!rings) return;
-        // The ring: blue in from the left, green from the right, meeting at the bottom.
+        // The phone's ring: blue in from the left, green from the right, meeting at the bottom.
         var t0 = performance.now();
         var step = function (now) {
           var k = Math.min(1, (now - t0) / (700 * SLOW)), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;

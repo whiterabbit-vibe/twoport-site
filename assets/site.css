@@ -115,29 +115,36 @@ p { margin: 0; }
 .pscreen { position: relative; height: 100%; border-radius: 1.9em; overflow: hidden; background: var(--window); }
 .punch { position: absolute; top: 1.25em; left: 50%; width: .8em; height: .8em; margin-left: -.4em; border-radius: 50%; background: #000; z-index: 8; }
 
-/* Moments (PLAN.md "Moments"): the light the apps play when a phone
-   connects. It blooms out of the TwoPort icon on the Mac, Mac blue then
-   phone green, while a ring runs round the phone's screen, blue from the
-   left and green from the right, meeting at the bottom. site.js plays it. */
+/* Moments (PLAN.md "Moments"): the light the apps play at the moments that
+   matter, as in the demo that started it (2026-10-26): a milky disc of light
+   opens at the TwoPort icon with a thin band of colour at its rim (Mac blue
+   and phone green, through sky, cyan and mint) that keeps travelling after
+   the disc fades; the screen under it goes soft, like a lens out of focus,
+   and comes back into focus last. Files come out of the light out of focus
+   and sharpen as they land. site.js plays it. */
 .mfx { position: absolute; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
-.mfx > i { position: absolute; border-radius: 50%; mix-blend-mode: screen; opacity: 0; will-change: transform, opacity; }
-.mfx .bloom { background: radial-gradient(circle, rgba(255,255,255,.95) 0%, rgba(110,160,255,.9) 14%, rgba(110,160,255,.62) 30%, rgba(69,217,140,.5) 44%, rgba(69,217,140,.16) 58%, rgba(69,217,140,0) 70%); }
-.mfx .rim { border: 2px solid rgba(255,255,255,.75); box-shadow: 0 0 28px 6px rgba(69,217,140,.55), inset 0 0 28px 6px rgba(110,160,255,.5); }
-.mfx .halo { background: radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(69,217,140,.5) 30%, rgba(110,160,255,.25) 50%, rgba(110,160,255,0) 70%); }
+.mfx > i { position: absolute; border-radius: 50%; opacity: 0; will-change: transform, opacity; }
+.mfx .disc { background: radial-gradient(circle closest-side, rgba(255,255,255,.95), rgba(255,255,255,.9) 50%, rgba(255,255,255,.72) 66%, rgba(124,200,255,.3) 80%, rgba(142,240,198,.08) 92%, rgba(142,240,198,0)); }
+.mfx .prism { background: radial-gradient(circle closest-side, rgba(255,255,255,0) 50%, rgba(255,255,255,.07) 72%, rgba(255,236,214,.2) 79%, rgba(255,255,255,.5) 83.5%, rgba(142,240,198,.42) 86%, rgba(69,217,140,.34) 88%, rgba(110,231,242,.36) 90%, rgba(124,200,255,.34) 92.2%, rgba(110,160,255,.3) 94.6%, rgba(150,140,255,.12) 97%, rgba(150,140,255,0)); }
+/* The soft focus: the screen seen through a round window of blur. */
+.mfx .veil { -webkit-backdrop-filter: blur(.7em) saturate(1.15) brightness(1.06); backdrop-filter: blur(.7em) saturate(1.15) brightness(1.06);
+  -webkit-mask: radial-gradient(circle closest-side, #000 45%, rgba(0,0,0,.55) 75%, transparent); mask: radial-gradient(circle closest-side, #000 45%, rgba(0,0,0,.55) 75%, transparent); }
+.mfx .halo { mix-blend-mode: screen; background: radial-gradient(circle closest-side, rgba(255,255,255,.9), rgba(255,255,255,.55) 30%, rgba(124,200,255,.3) 62%, rgba(124,200,255,0)); }
+.mfx .carrier { position: absolute; border-radius: 50%; opacity: 0; background: radial-gradient(circle closest-side, rgba(255,255,255,.75), rgba(255,255,255,.4) 25%, rgba(124,200,255,.18) 55%, rgba(142,240,198,0)); offset-rotate: 0deg; left: 0; top: 0; }
 .mset { position: absolute; inset: 0; }
-.mtrails { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.mtrail, .mring { fill: none; stroke: #45D98C; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; filter: drop-shadow(0 0 4px #6EA0FF); }
-.mtrail { stroke-width: 3; }
-.mring { stroke-width: 2.5; }
-.mcard { position: absolute; left: 0; top: 0; padding: .45em; border-radius: .8em; background: #fff; box-shadow: 0 .6em 1.4em rgba(0,0,0,.4); opacity: 0; offset-rotate: 0deg; }
+.mcard { position: absolute; left: 0; top: 0; padding: .45em; border-radius: .8em; background: #fff; box-shadow: 0 .6em 1.4em rgba(0,0,0,.4); opacity: 0; offset-rotate: 0deg; overflow: hidden; }
 .mcard .ph { border-radius: .4em; }
 .mcard .mdoc { display: block; width: 100%; height: 100%; }
-.mbadge { position: absolute; border-radius: 50%; background: #22B25E; box-shadow: 0 .2em .5em rgba(0,0,0,.35); display: grid; place-items: center; opacity: 0; }
+/* Light catching a print once it has landed. */
+.mcard .sheen { position: absolute; inset: -50% auto -50% -60%; width: 45%; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); transform: rotate(25deg); opacity: 0; }
+.mbadge { position: absolute; border-radius: 50%; background: #22B25E; border: 2px solid rgba(255,255,255,.9); box-shadow: 0 .2em .5em rgba(0,0,0,.35); display: grid; place-items: center; opacity: 0; }
 .mbadge svg { width: 70%; height: 70%; overflow: visible; }
 .mbadge path { fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; }
-.mspark { position: absolute; width: .45em; height: .45em; margin: -.225em 0 0 -.225em; border-radius: 50%; background: #45D98C; opacity: 0; }
-.mspark.b { background: #6EA0FF; }
-.mpill { position: absolute; white-space: nowrap; font-size: .95em; font-style: normal; font-weight: 600; color: #fff; background: rgba(20, 22, 26, .74); border: 1px solid rgba(255,255,255,.14); border-radius: 2em; padding: .35em .9em; opacity: 0; }
+.mripple { position: absolute; border-radius: 50%; border: 1.5px solid rgba(142,240,198,.9); box-shadow: 0 0 .5em rgba(69,217,140,.9); opacity: 0; }
+/* The line, on frosted glass like the system's own. */
+.mpill { position: absolute; white-space: nowrap; font-size: .95em; font-style: normal; font-weight: 600; color: #fff; background: rgba(28, 30, 36, .55);
+  -webkit-backdrop-filter: blur(1em) saturate(1.4); backdrop-filter: blur(1em) saturate(1.4);
+  border: 1px solid rgba(255,255,255,.22); border-radius: 2em; padding: .35em .9em; opacity: 0; }
 .rings { position: absolute; inset: .55em; border-radius: 1.9em; pointer-events: none; z-index: 9; opacity: 0; --p: 0deg; }
 .edge-ring { position: absolute; inset: 0; border-radius: inherit; padding: .32em; opacity: .85;
   background: conic-gradient(from 0deg, #fff 0deg, #8EF0C6 calc(var(--p) * .4), #45D98C var(--p), transparent var(--p), transparent calc(360deg - var(--p)), #6EA0FF calc(360deg - var(--p)), #7CC8FF calc(360deg - var(--p) * .4), #fff 360deg);
