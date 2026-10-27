@@ -263,12 +263,13 @@
       connected: function () {
         if (!mfx || !icon || !mfx.animate) return;
         var g = geo(), diag = Math.hypot(g.W, g.H);
-        halo(g.W * .2, 1, .55);
-        open(g.H * 1.3, diag * 2.3, diag * 2.5, 1);
+        halo(g.W * .2, .9, .55);
+        // Kept to the icon's corner, as in the apps.
+        open(Math.min(g.H * .75, g.W * .5), diag * 1.25, Math.min(g.H * .75, g.W * .5) * 1.6, .72);
         // The edge light: fades in round the screen, its colours turning.
         var edge = box.querySelector('.medge');
         if (edge) {
-          edge.animate([{ opacity: 0 }, { opacity: .8, offset: .3 }, { opacity: .8, offset: .65 }, { opacity: 0 }], { duration: 1800 * SLOW, delay: 250 * SLOW, fill: 'both' });
+          edge.animate([{ opacity: 0 }, { opacity: .45, offset: .3 }, { opacity: .45, offset: .65 }, { opacity: 0 }], { duration: 1800 * SLOW, delay: 250 * SLOW, fill: 'both' });
           var e0 = performance.now();
           var turn = function (now) {
             var k = (now - e0) / (2050 * SLOW);
