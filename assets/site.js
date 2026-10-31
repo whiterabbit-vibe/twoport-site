@@ -320,7 +320,7 @@
     };
     // The same for the recordings, timed to each clip (seconds from its start).
     var realFlights = {
-      copy: { dir: 'toPhone', delay: 2.4, icon: '#text' },
+      copy: { dir: 'toPhone', delay: 2.0, icon: '#text' },
       tomac: { dir: 'toMac', delay: 3.6, icon: '#img' },
       tophone: { dir: 'toPhone', delay: 3.4, icon: '#pdf' },
       usb: { dir: 'toMac', delay: 4.2, icon: '#img' },
@@ -562,6 +562,11 @@
     }, { threshold: 0.45 });
     fclips.forEach(function (v) { fcSeen.observe(v); });
   }
+
+  // ---- The last chip under the demo: "+19 more features", every recorded
+  // feature card the demo's moments don't already show.
+  var moreN = document.querySelector('[data-more]');
+  if (moreN) moreN.textContent = Math.max(0, document.querySelectorAll('.fclip').length - document.querySelectorAll('.tabs .tab').length);
 
   // ---- Everything TwoPort does: the count comes from the list itself, and
   // one button opens or closes every detail.

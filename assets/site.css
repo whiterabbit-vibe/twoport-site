@@ -1173,3 +1173,9 @@ html:not(.js) .drum b:not(.on) { display: none; }
   .tab-ico { width: 1.85rem; height: 1.85rem; }
 }
 @media (min-width: 901px) and (max-width: 1180px) { .tabs { flex-wrap: wrap; } }
+/* After the moments: a quiet link chip to every other recorded feature. */
+.tab-more { flex: none; display: inline-flex; align-items: center; gap: .4rem; min-height: 2.7rem; padding: .36rem .95rem; border-radius: 2rem; border: 1px dashed color-mix(in srgb, var(--mac) 40%, var(--line)); color: var(--mac); font-size: .9rem; font-weight: 600; text-decoration: none; background: transparent; white-space: nowrap; }
+.tab-more b { font-weight: 700; }
+.tab-more:hover { background: var(--mac-soft); border-style: solid; }
+@media (min-width: 901px) { .tabs { gap: .35rem; } .tab { padding-right: .75rem; font-size: .88rem; } }
+@media (min-width: 901px) and (max-width: 1320px) { .tabs { flex-wrap: wrap; } }
