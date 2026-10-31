@@ -372,6 +372,26 @@
     // runs (`data-dur`). A clip that can't play drops that moment back to
     // the drawing; reduced motion shows the clips' posters, still.
     var mDur = function (i) { return +tabs[i].dataset.dur || DUR; };
+    // Copy and paste, made visible (v12): a thin light runs round the Mac's
+    // screen the moment ⌘C is pressed in the recording, and round the
+    // phone's when the paste lands. Times are seconds into each clip.
+    var cueAt = { copy: [['mac', 1.8], ['phone', 4.35]] };
+    var cueEls = {
+      mac: stage.querySelector('.screen').appendChild(document.createElement('i')),
+      phone: stage.querySelector('.pscreen').appendChild(document.createElement('i'))
+    };
+    cueEls.mac.className = 'cue cue-mac'; cueEls.phone.className = 'cue cue-phone';
+    var cueTimers = [];
+    var cuePlay = function (clip) {
+      cueTimers.forEach(clearTimeout); cueTimers = [];
+      Object.keys(cueEls).forEach(function (k) { cueEls[k].classList.remove('go'); });
+      if (reduced || !cueAt[clip]) return;
+      cueAt[clip].forEach(function (c) {
+        cueTimers.push(setTimeout(function () {
+          var el = cueEls[c[0]]; el.classList.remove('go'); void el.offsetWidth; el.classList.add('go');
+        }, c[1] * 1000));
+      });
+    };
     var mRecs = Array.prototype.slice.call(stage.querySelectorAll('.rec'));
     var mDead = {};
     var mPlay = function (clip) {
@@ -472,6 +492,7 @@
       if (real || clip) {}
       else if (!reduced && sends[n]) glowTimer = setTimeout(function () { lit.allSent(sends[n]); }, sends[n].at * 1000);
       else if (f && !reduced) glowTimer = setTimeout(lit.glow, (f.delay + (f.dir === 'toMac' ? 1.1 : 0)) * 1000);
+      cuePlay(real ? clip : null);
       packet.style.animation = f ? f.dir + ' 1.1s cubic-bezier(.22,.8,.24,1) ' + f.delay + 's' : 'none';
       if (f) packet.querySelector('use').setAttribute('href', f.icon);
       void stage.offsetWidth; // with .play gone, every animation restarts on re-add
