@@ -1179,3 +1179,7 @@ html:not(.js) .drum b:not(.on) { display: none; }
 .tab-more:hover { background: var(--mac-soft); border-style: solid; }
 @media (min-width: 901px) { .tabs { gap: .35rem; } .tab { padding-right: .75rem; font-size: .88rem; } }
 @media (min-width: 901px) and (max-width: 1320px) { .tabs { flex-wrap: wrap; } }
+/* The phone recordings are a touch taller than the drawn phone's screen:
+   show all of each (the message field and Paste live at the very bottom)
+   rather than filling the width and cutting the bottom off. */
+.pscreen > .rec { object-fit: contain; object-position: 50% 100%; background: #F8F7FC; }
