@@ -318,6 +318,14 @@
       4: { dir: 'toPhone', delay: 1.8, icon: '#text' },
       6: { dir: 'toMac', delay: 1.2, icon: '#img' }
     };
+    // The same for the recordings, timed to each clip (seconds from its start).
+    var realFlights = {
+      copy: { dir: 'toPhone', delay: 2.4, icon: '#text' },
+      tomac: { dir: 'toMac', delay: 3.6, icon: '#img' },
+      tophone: { dir: 'toPhone', delay: 3.4, icon: '#pdf' },
+      usb: { dir: 'toMac', delay: 4.2, icon: '#img' },
+      backup: { dir: 'toMac', delay: 3.6, icon: '#img' }
+    };
     // Which way the dots on the link flow: phone → Mac unless the Mac sends.
     var toPhone = { 3: 1, 4: 1 };
 
@@ -359,11 +367,60 @@
       scrollTo({ top: scrollY + mCards[i].getBoundingClientRect().top - pinned - 24, behavior: reduced ? 'auto' : 'smooth' });
     };
 
+    // Real screen recordings (v12): a moment with `data-clip` plays its Mac
+    // and phone videos instead of the drawn scene, for as long as the clip
+    // runs (`data-dur`). A clip that can't play drops that moment back to
+    // the drawing; reduced motion shows the clips' posters, still.
+    var mDur = function (i) { return +tabs[i].dataset.dur || DUR; };
+    var mRecs = Array.prototype.slice.call(stage.querySelectorAll('.rec'));
+    var mDead = {};
+    var mPlay = function (clip) {
+      var real = !!clip && !mDead[clip];
+      stage.classList.toggle('real', real);
+      // The link between the two says how they're joined in this clip.
+      var airLabel = stage.querySelector('.air-wifi');
+      if (airLabel) airLabel.textContent = real && clip === 'usb' ? 'USB cable' : 'Wi-Fi';
+      stage.classList.toggle('cable', real && clip === 'usb');
+      mRecs.forEach(function (r) {
+        var on = real && r.dataset.clip === clip;
+        r.classList.toggle('on', on);
+        if (r.tagName !== 'VIDEO') return;
+        if (!on) { r.pause(); return; }
+        if (reduced) return;
+        try { r.currentTime = 0; } catch (e) {}
+        // A rejected play() is not a broken clip: switching moments while a
+        // clip is still loading aborts it (AbortError), and that used to mark
+        // the clip dead and bring back the drawn scene and its light on top
+        // of the next recording. Only a media error counts (below).
+        var p = r.play();
+        if (p && p.catch) p.catch(function () {});
+      });
+    };
+    // A clip that can't load at all falls back to the drawing — only if it's
+    // the one playing now.
+    var mFail = function (r) {
+      mDead[r.dataset.clip] = true;
+      if (r.classList.contains('on')) { stage.classList.remove('real', 'cable'); show(idx); }
+    };
+    mRecs.forEach(function (r) {
+      if (r.tagName !== 'VIDEO') return;
+      var src = r.querySelector('source');
+      (src || r).addEventListener('error', function () { mFail(r); });
+      // Stalled mid-clip (slow disk or network): nudge it on rather than
+      // leaving a frozen frame for the rest of the moment.
+      r.addEventListener('waiting', function () {
+        if (!r.classList.contains('on')) return;
+        clearTimeout(r._nudge);
+        r._nudge = setTimeout(function () { if (r.classList.contains('on') && r.paused === false && r.readyState < 3) { r.load(); r.play().catch(function () {}); } }, 2500);
+      });
+    });
+
     var schedule = function () {
       clearTimeout(timer);
-      if (auto) timer = setTimeout(function () { if (visible) show((idx + 1) % N); else schedule(); }, DUR);
-      // Phones: the moment in view plays again while you stay on it.
-      else if (scrolly.matches && !reduced) timer = setTimeout(function () { if (visible) show(idx); else schedule(); }, DUR);
+      if (auto) timer = setTimeout(function () { if (visible) show((idx + 1) % N); else schedule(); }, mDur(idx));
+      // A moment the visitor picked (and, on phones, the one in view) plays
+      // again while they stay on it, instead of freezing on its last frame.
+      else if (!reduced) timer = setTimeout(function () { if (visible) show(idx); else schedule(); }, mDur(idx));
     };
 
     // i is the chip's position; n is the scene it plays.
@@ -391,12 +448,16 @@
         s.dataset.s = j < i ? 'past' : j === i ? 'on' : '';
         if (j === i) s.setAttribute('aria-current', 'step'); else s.removeAttribute('aria-current');
       });
-      stepBar.style.setProperty('--dur', DUR + 'ms');
+      stepBar.style.setProperty('--dur', mDur(i) + 'ms');
       stepName.innerHTML = '<em></em>';
       stepName.firstChild.textContent = (i + 1) + ' of ' + N;
       stepName.appendChild(document.createTextNode(tabs[i].textContent.trim()));
       mCards.forEach(function (c, j) { c.classList.toggle('on', j === i); });
-      var f = flights[n];
+      var clip = tabs[i].dataset.clip;
+      mPlay(clip);
+      var real = stage.classList.contains('real');
+      // In a recording the packet crosses when the real one does.
+      var f = real ? realFlights[clip] : flights[n];
       clearTimeout(glowTimer);
       lit.clear();
       // All sent, timed to each scene: the photo landing, the boarding
@@ -406,7 +467,10 @@
         3: { at: 2.6, dir: 'out', items: ['pdf'], line: 'Boarding pass.pdf sent · 212 KB' },
         6: { at: 3.3, dir: 'in', items: ['#p6', '#p2', '#p7', '#p1'], line: '38 photos arrived · 412 MB', full: true }
       };
-      if (!reduced && sends[n]) glowTimer = setTimeout(function () { lit.allSent(sends[n]); }, sends[n].at * 1000);
+      // A recording already shows the apps' real light; never draw ours on
+      // a moment that has one, even while it's falling back.
+      if (real || clip) {}
+      else if (!reduced && sends[n]) glowTimer = setTimeout(function () { lit.allSent(sends[n]); }, sends[n].at * 1000);
       else if (f && !reduced) glowTimer = setTimeout(lit.glow, (f.delay + (f.dir === 'toMac' ? 1.1 : 0)) * 1000);
       packet.style.animation = f ? f.dir + ' 1.1s cubic-bezier(.22,.8,.24,1) ' + f.delay + 's' : 'none';
       if (f) packet.querySelector('use').setAttribute('href', f.icon);
@@ -420,7 +484,7 @@
       }
       if (auto) {
         var bar = tabs[i].querySelector('.prog');
-        bar.style.setProperty('--dur', DUR + 'ms');
+        bar.style.setProperty('--dur', mDur(i) + 'ms');
         void bar.offsetWidth;
         bar.classList.add('run');
       }
@@ -474,10 +538,29 @@
       new IntersectionObserver(function (entries, seen) {
         if (greeted || !entries[0].isIntersecting) return;
         greeted = true; seen.disconnect();
-        setTimeout(lit.connected, 350);
+        // Only the all-drawn demo greets with the light; the recordings
+        // already show the apps' real one.
+        if (!mRecs.length) setTimeout(lit.connected, 350);
       }, { threshold: 0.6 }).observe(stage);
     }
     show(0);
+  }
+
+  // ---- Every feature, recorded (v12): each card's clip loads the first time
+  // it comes into view and plays only while it's on screen. Reduced motion:
+  // posters only.
+  var fclips = Array.prototype.slice.call(document.querySelectorAll('.fclip video[data-src]'));
+  if (fclips.length && 'IntersectionObserver' in window && !reduced) {
+    var fcSeen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) {
+          if (!v.src) { v.src = v.dataset.src; v.load(); }
+          var p = v.play(); if (p && p.catch) p.catch(function () {});
+        } else if (!v.paused) v.pause();
+      });
+    }, { threshold: 0.45 });
+    fclips.forEach(function (v) { fcSeen.observe(v); });
   }
 
   // ---- Everything TwoPort does: the count comes from the list itself, and

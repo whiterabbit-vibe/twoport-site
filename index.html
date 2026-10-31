@@ -42,17 +42,6 @@
     <symbol id="backup" viewBox="0 0 24 24"><path d="M12 3.5v10M8 9.8l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 14.5v3.5A2 2 0 006 20h12a2 2 0 002-2v-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
     <symbol id="stack" viewBox="0 0 24 24"><rect x="3" y="7" width="12" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="9" y="3" width="12" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
     <symbol id="bolt" viewBox="0 0 24 24"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
-    <!-- The hero's crown: gold, with a Mac-blue and a phone-green jewel joined by a blue-to-green gem. -->
-    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A3"/><stop offset=".5" stop-color="#FBBF24"/><stop offset="1" stop-color="#E08600"/></linearGradient>
-    <linearGradient id="gem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#22C55E"/></linearGradient>
-    <symbol id="crown" viewBox="0 0 48 36"><g stroke="#A86200" stroke-width="1.4" stroke-linejoin="round"><path d="M5.5 27L3.5 10.5l10.5 8L24 5.5l10 13 10.5-8-2 16.5z" fill="url(#gold)"/><rect x="4.5" y="25.5" width="39" height="8" rx="2.4" fill="url(#gold)"/><circle cx="3.5" cy="9.5" r="2.8" fill="url(#gold)"/><circle cx="24" cy="4.2" r="3.1" fill="url(#gold)"/><circle cx="44.5" cy="9.5" r="2.8" fill="url(#gold)"/></g><circle cx="13.5" cy="29.5" r="2.3" fill="#2563EB"/><path d="M24 26.1l3.4 3.4-3.4 3.4-3.4-3.4z" fill="url(#gem)"/><circle cx="34.5" cy="29.5" r="2.3" fill="#22C55E"/><path d="M9.5 21.5l-.9-6.2" stroke="#FFF6D6" stroke-width="1.6" stroke-linecap="round"/></symbol>
-    <symbol id="glint" viewBox="-10 -10 20 20"><path d="M0-10C1-2 2-1 10 0 2 1 1 2 0 10-1 2-2 1-10 0-2-1-1-2 0-10z" fill="#FFD75E"/></symbol>
-    <!-- Direction glyphs for the feature list: the Mac (blue) on the left, the phone (green) on the right, as on the demo stage. -->
-    <symbol id="d-mac" viewBox="0 0 44 16"><rect x="1.5" y="2.5" width="13" height="9" rx="1.6" fill="none" style="stroke: var(--mac)" stroke-width="1.6"/><path d="M.5 14h15" style="stroke: var(--mac)" stroke-width="1.6" stroke-linecap="round"/><rect x="34.5" y="1.5" width="8" height="13" rx="2" fill="none" style="stroke: var(--phone-fill)" stroke-width="1.6"/></symbol>
-    <symbol id="d-tomac" viewBox="0 0 44 16"><use href="#d-mac"/><path d="M31 8H19M22 5l-3 3 3 3" fill="none" style="stroke: var(--mac)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="d-tophone" viewBox="0 0 44 16"><use href="#d-mac"/><path d="M19 8h12M28 5l3 3-3 3" fill="none" style="stroke: var(--phone)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="d-both" viewBox="0 0 44 16"><use href="#d-mac"/><path d="M19.5 8h11M22 5.5L19.5 8 22 10.5M28 5.5l2.5 2.5-2.5 2.5" fill="none" style="stroke: var(--muted)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="d-lock" viewBox="0 0 44 16"><use href="#d-mac"/><rect x="21" y="7" width="8" height="6" rx="1.2" fill="none" style="stroke: var(--muted)" stroke-width="1.5"/><path d="M22.8 7V5.3a2.2 2.2 0 014.4 0V7" fill="none" style="stroke: var(--muted)" stroke-width="1.5"/></symbol>
     <!-- Photo stand-ins: flat drawn scenes, no stock imagery. -->
     <symbol id="p1" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#F6B26B"/><rect width="100" height="55" fill="#FBD38D"/><circle cx="70" cy="42" r="12" fill="#FFF3D6"/><path d="M0 70 L30 45 L55 68 L75 52 L100 72 V100 H0Z" fill="#C0564B"/><path d="M0 85 L40 66 L100 88 V100 H0Z" fill="#7A2E3B"/></symbol>
     <symbol id="p2" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#9FD3F2"/><path d="M0 60 L25 35 L45 55 L65 30 L100 62 V100 H0Z" fill="#5B8C7A"/><path d="M58 33 L65 30 L72 37 L64 35Z" fill="#fff"/><rect y="75" width="100" height="25" fill="#3D6B58"/></symbol>
@@ -68,12 +57,8 @@
 <header class="nav">
   <div class="wrap nav-in">
     <a class="brand" href="#top"><img src="assets/app-icon.png" alt="" width="28" height="28"><span class="brand-name">TwoPort</span></a>
-    <div class="guide" id="guide" hidden>
-      <button class="guide-btn" type="button" aria-expanded="false" aria-controls="guide-list"><span class="guide-now"><b></b><span></span></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <ol class="guide-list" id="guide-list" hidden></ol>
-    </div>
     <nav class="nav-links" aria-label="Sections">
-      <a href="#story">What it does</a>
+      <a href="#demo">What it does</a>
       <a href="#features">Features</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">Questions</a>
@@ -86,14 +71,10 @@
 <main id="top">
   <section class="hero">
     <div class="wrap hero-in">
-      <h1 class="crowned">
-        <span class="sr-only">See, send, search, open and back up your Android phone's photos and files on your Mac.</span>
-        <span class="hl" aria-hidden="true"><span class="drum" id="rot"><span class="crown"><svg><use href="#crown"/></svg><svg class="glint"><use href="#glint"/></svg></span><b class="on">See</b><b data-prep="to">Send</b><b>Search</b><b>Open</b><b>Back up</b></span><span class="rest">your <span class="phone-word">Android phone's</span><br> photos and files<br class="br-m"> <span class="mac-mark"><span id="prep">on</span> your Mac</span>.</span></span>
-      </h1>
-      <p class="lede"><b class="hero-sub">Copy on one, paste on the other.</b> Over your own Wi-Fi, with no cloud and no account.</p>
+      <h1><span class="phone-word">Android</span> and <span class="mac-word">Mac</span>, finally working together.</h1>
+      <p class="lede">Your phone's photos and files, open on your Mac. Copy on one, paste on the other. Over your own Wi-Fi, with no cloud and no account.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#early-access">Get early access, free</a>
-        <a class="btn btn-quiet" href="#features">See every feature</a>
       </div>
       <p class="fine">Coming soon for Mac (macOS 14 or later) and Android 8 or later.</p>
     </div>
@@ -102,13 +83,14 @@
   <section id="demo" class="stage-wrap" aria-label="See TwoPort work">
     <div class="wrap demo">
       <div class="tabs" role="tablist" aria-label="What TwoPort does">
-        <button class="tab" role="tab" aria-selected="true" data-scene="1" data-app="TwoPort" data-caption="Your phone's photos open in a window on your Mac. Drag out the ones you want."><i class="tab-ico blue"><svg><use href="#grid4"/></svg></i>Photos on your Mac<i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="2" data-app="Finder" data-caption="On your phone, tap Share, then TwoPort. It lands on your Mac a second later."><i class="tab-ico green"><svg><use href="#to-mac"/></svg></i>Phone to Mac<i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="3" data-app="Finder" data-caption="On your Mac, right-click a file and send it to your phone."><i class="tab-ico blue"><svg><use href="#to-phone"/></svg></i>Mac to phone<i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="4" data-app="Notes" data-caption="Copy on your Mac, paste on your phone. It works the other way too."><i class="tab-ico blue"><svg><use href="#clip"/></svg></i>Copy and paste<i class="prog"></i></button>
-        <button class="tab" role="tab" aria-selected="false" data-scene="6" data-app="TwoPort" data-caption="One click copies your new photos to your Mac, sorted into folders by month."><i class="tab-ico green"><svg><use href="#backup"/></svg></i>Back up photos<i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="true" data-scene="1" data-clip="browse" data-dur="12500" data-app="TwoPort" data-caption="Your whole phone opens in a window on your Mac. Drag out the photos you want, play videos straight from the phone."><i class="tab-ico blue"><svg><use href="#grid4"/></svg></i>Browse your phone<i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="6" data-clip="backup" data-dur="11500" data-app="TwoPort" data-caption="One click copies every new photo to your Mac, sorted into folders by month. Nothing is copied twice."><i class="tab-ico green"><svg><use href="#backup"/></svg></i>One-click backup<i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="4" data-clip="copy" data-dur="10000" data-app="Notes" data-caption="Copy on your Mac, paste on your phone. It works the other way too."><i class="tab-ico blue"><svg><use href="#clip"/></svg></i>Copy and paste<i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="2" data-clip="tomac" data-dur="11500" data-app="Finder" data-caption="On your phone, tap Share, then TwoPort. It lands on your Mac a second later."><i class="tab-ico green"><svg><use href="#to-mac"/></svg></i>Phone to Mac<i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="3" data-clip="tophone" data-dur="10500" data-app="Finder" data-caption="On your Mac, right-click a file and send it to your phone."><i class="tab-ico blue"><svg><use href="#to-phone"/></svg></i>Mac to phone<i class="prog"></i></button>
+        <button class="tab" role="tab" aria-selected="false" data-scene="1" data-clip="usb" data-dur="10500" data-app="TwoPort" data-caption="Plug in a cable and it's about 4× faster: a 218 MB video in six seconds."><i class="tab-ico green"><svg><use href="#bolt"/></svg></i>Faster with a cable<i class="prog"></i></button>
       </div>
-      <p class="caption" id="caption">Your phone's photos open in a window on your Mac. Drag out the ones you want.</p>
+      <p class="caption" id="caption">Your whole phone opens in a window on your Mac. Drag out the photos you want, play videos straight from the phone.</p>
       <div class="stage-col">
         <div class="stage" id="stage">
           <div class="mac" aria-hidden="true">
@@ -119,6 +101,13 @@
               <div class="menubar"><b id="menu-app">TwoPort</b><span>File</span><span>Edit</span><span>View</span><div class="right"><span class="tp"><img src="assets/menubar-icon.png" alt=""></span><svg class="mb-wifi"><use href="#wifi"/></svg><i class="batt"></i><span>Sun 9:41</span></div></div>
               <div class="mfx"></div>
               <i class="medge"></i>
+              <!-- Real screen recordings (2026-10-31): stand-in photos and files, the user's Mac and Fold7. -->
+              <video class="rec" data-clip="browse" muted playsinline preload="auto" poster="assets/clips/browse-mac.jpg"><source src="assets/clips/browse-mac.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="backup" muted playsinline preload="none" poster="assets/clips/backup-mac.jpg"><source src="assets/clips/backup-mac.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="copy" muted playsinline preload="none" poster="assets/clips/copy-mac.jpg"><source src="assets/clips/copy-mac.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="tomac" muted playsinline preload="none" poster="assets/clips/tomac-mac.jpg"><source src="assets/clips/tomac-mac.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="tophone" muted playsinline preload="none" poster="assets/clips/tophone-mac.jpg"><source src="assets/clips/tophone-mac.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="usb" muted playsinline preload="none" poster="assets/clips/usb-mac.jpg"><source src="assets/clips/usb-mac.mp4" type="video/mp4"></video>
 
               <div class="scene s1 on">
                 <div class="win b-win">
@@ -226,6 +215,7 @@
 
           <div class="wire" aria-hidden="true">
             <span class="air"><svg class="air-ico"><use href="#wifi"/></svg><b class="air-wifi">Wi-Fi</b></span>
+            <svg class="usb-lead" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path class="lead" d="M0 5 C 22 5, 26 96, 52 96 L 86 96 C 96 96, 100 84, 100 40"/><path class="flow" d="M0 5 C 22 5, 26 96, 52 96 L 86 96 C 96 96, 100 84, 100 40" pathLength="100"/></svg>
             <span class="packet a" id="packet"><svg><use href="#img"/></svg></span>
           </div>
 
@@ -234,6 +224,12 @@
             <div class="rings"><i class="edge-ring glow"></i><i class="edge-ring"></i></div>
             <div class="pscreen">
               <div class="pstatus"><span>9:41</span><span>5G</span></div>
+              <img class="rec" data-clip="browse" src="assets/clips/browse-phone.jpg" alt="">
+              <img class="rec" data-clip="backup" src="assets/clips/browse-phone.jpg" alt="">
+              <video class="rec" data-clip="copy" muted playsinline preload="none" poster="assets/clips/copy-phone.jpg"><source src="assets/clips/copy-phone.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="tomac" muted playsinline preload="none" poster="assets/clips/tomac-phone.jpg"><source src="assets/clips/tomac-phone.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="tophone" muted playsinline preload="none" poster="assets/clips/tophone-phone.jpg"><source src="assets/clips/tophone-phone.mp4" type="video/mp4"></video>
+              <video class="rec" data-clip="usb" muted playsinline preload="none" poster="assets/clips/usb-phone.jpg"><source src="assets/clips/usb-phone.mp4" type="video/mp4"></video>
 
               <div class="pscene p1 on">
                 <div class="gal">
@@ -303,208 +299,83 @@
     </div>
   </section>
 
-  <section id="story" class="story chapter ch-white" aria-label="What TwoPort does, step by step">
-    <div class="ch-tab" aria-hidden="true"><b>01</b>What it does</div>
-    <div class="wrap story-in">
-        <!-- Wide screens: the steps scroll by and the picture beside them plays the one in the middle of the screen. Phones and tablets: plain cards (the icons and speed bars are only for the cards). -->
-        <ol class="story-steps">
-          <li class="on"><span class="kicker">Made for Android and Mac</span><h2>The <span class="nw">iPhone-and-Mac</span> tricks, now with your <span class="phone-word">Android</span>.</h2><p class="lede">Pair once over your own Wi-Fi. No cloud, no account.</p></li>
-          <li><span class="st-ico ico green" aria-hidden="true"><svg><use href="#img"/></svg></span><span class="kicker">Photos</span><h2>Your phone's photos, on your Mac in a second.</h2><p class="lede">Drag them out of TwoPort into any folder.</p></li>
-          <li><span class="st-ico ico blue" aria-hidden="true"><svg><use href="#clip"/></svg></span><span class="kicker">Clipboard</span><h2>Copy on your Mac. Paste on your phone.</h2><p class="lede">And the other way round.</p></li>
-          <li><span class="st-ico ico green" aria-hidden="true"><svg><use href="#bolt"/></svg></span><span class="kicker">Cable</span><h2>Plug in a cable, and it's about 4× faster.</h2><p class="lede">Unplug any time. It carries on over Wi-Fi.</p>
-            <span class="st-speed"><span><em>Wi-Fi</em><i style="--w:26%"></i><b>8 MB/s</b></span><span><em>Cable</em><i style="--w:100%"></i><b>31 MB/s</b></span></span></li>
-          <li><span class="st-ico ico blue" aria-hidden="true"><svg><use href="#stack"/></svg></span><span class="kicker">Always connected</span><h2>Several phones. One Mac. Always connected.</h2><p class="lede">Yours, a work phone, the family's.</p></li>
-        </ol>
-        <div class="story-side"><div class="story-sticky"><div class="story-box">
-          <div class="story-stage" aria-hidden="true">
-            <div class="st-mac">
-              <div class="st-lid"><div class="st-screen">
-                <canvas class="wall"></canvas>
-                <div class="st-menubar"><b>TwoPort</b><span>File</span><span>Edit</span><span>View</span><em><img src="assets/menubar-icon.png" alt="">9:41</em></div>
-                <div class="st-win st-finder">
-                  <div class="win-bar"><div class="lights"><i></i><i></i><i></i></div>Trip</div>
-                  <div class="st-row"><svg class="th ph"><use href="#p6"/></svg><span>IMG_2033.jpg</span></div>
-                  <div class="st-row"><svg class="th ph"><use href="#p1"/></svg><span>IMG_2037.jpg</span></div>
-                  <div class="st-row new"><svg class="th ph"><use href="#p3"/></svg><span>IMG_2058.jpg</span></div>
-                </div>
-                <div class="st-win st-notes">
-                  <div class="win-bar"><div class="lights"><i></i><i></i><i></i></div>Notes</div>
-                  <div class="st-notes-body"><b>Dinner Saturday</b><span>Table for four at 8.</span><span class="hl">14 Linking Road, Bandra West</span><span class="st-keys"><kbd>⌘</kbd><kbd>C</kbd></span></div>
-                </div>
-                <div class="st-pop">
-                  <div class="st-pop-head"><img src="assets/app-icon.png" alt="">TwoPort<small>3 phones</small></div>
-                  <div class="st-dev">Galaxy S24<span class="chip green"><i></i>USB</span></div>
-                  <div class="st-dev">Riya's Pixel<span class="chip blue"><i></i>Wi-Fi</span></div>
-                  <div class="st-dev">Work phone<span class="chip blue"><i></i>Wi-Fi</span></div>
-                </div>
-              </div></div>
-              <div class="st-base"></div>
-            </div>
-            <div class="st-wire"></div>
-            <span class="st-chip"><svg class="wifi-i"><use href="#wifi"/></svg><svg class="usb-i"><use href="#bolt"/></svg><b class="w">Wi-Fi · 8 MB/s</b><b class="u">Cable · 31 MB/s</b></span>
-            <svg class="st-cable" viewBox="0 0 100 54" preserveAspectRatio="none"><path d="M66.6 41.9 C 71 42.4, 70.5 52.6, 78.5 52.6 C 86.5 52.6, 89.5 49, 89.5 41.2" pathLength="1"/></svg>
-            <div class="st-extra e1"><i class="punch"></i><div class="st-pscreen st-hello"><img src="assets/app-icon.png" alt=""><b>Connected</b><span>Riya's Pixel</span></div></div>
-            <div class="st-extra e2"><i class="punch"></i><div class="st-pscreen st-hello"><img src="assets/app-icon.png" alt=""><b>Connected</b><span>Work phone</span></div></div>
-            <div class="st-phone"><i class="punch"></i><div class="st-pscreen">
-              <div class="pstatus"><span>9:41</span><span>5G</span></div>
-              <div class="st-gal"><b>Camera</b><div>
-                <svg class="ph"><use href="#p1"/></svg><svg class="ph"><use href="#p2"/></svg><svg class="ph lift"><use href="#p3"/></svg>
-                <svg class="ph"><use href="#p4"/></svg><svg class="ph"><use href="#p5"/></svg><svg class="ph"><use href="#p6"/></svg>
-                <svg class="ph"><use href="#p7"/></svg><svg class="ph"><use href="#p8"/></svg><svg class="ph"><use href="#p2"/></svg>
-              </div></div>
-              <div class="st-chat"><b>Riya</b><span class="bub">Where are we eating?</span><span class="st-input"><em>14 Linking Road, Bandra West</em></span><span class="st-pastetag">Paste</span></div>
-            </div></div>
-            <svg class="st-fly f1 ph"><use href="#p3"/></svg>
-            <span class="st-fly f2">14 Linking Road, Bandra West</span>
-          </div>
-        </div></div></div>
-    </div>
-  </section>
-
-  <section id="how" class="section chapter ch-green">
-    <div class="ch-tab" aria-hidden="true"><b>02</b>How it works</div>
+  <section id="features" class="section band-surface">
     <div class="wrap">
-      <div class="head center"><h2>Set up once. Then it's just there.</h2></div>
-      <ol class="steps">
-        <li class="step"><div class="step-art" aria-hidden="true"><svg class="m"><use href="#laptop"/></svg><svg class="p"><use href="#phone"/></svg></div><h3><span class="num">1</span>Get the app on both</h3><p>Install TwoPort on your Mac and on your Android phone.</p></li>
-        <li class="step"><div class="step-art" aria-hidden="true"><div class="qr"><canvas class="qr-draw" width="25" height="25"></canvas></div></div><h3><span class="num">2</span>Scan once to pair</h3><p>Open TwoPort on your phone and scan the code your Mac shows.</p></li>
-        <li class="step"><div class="step-art" aria-hidden="true"><div class="done"><svg><use href="#check"/></svg><span class="chip green"><i></i>Connected</span></div></div><h3><span class="num">3</span>That's it</h3><p>Send, drag or copy whenever both are on the same Wi-Fi.</p></li>
-      </ol>
-    </div>
-  </section>
-
-  <section id="features" class="section chapter ch-white">
-    <div class="ch-tab" aria-hidden="true"><b>03</b>Features</div>
-    <div class="wrap">
-      <div class="head center"><h2>All <span data-count="all">26</span> features, before you pay.</h2><p class="lede">Every download starts with a 7-day free trial, so you can try all of them. Tap any line to see how it works.</p></div>
-      <div class="ftools">
-        <div class="legend" aria-hidden="true">
-          <span><svg class="dir"><use href="#d-tomac"/></svg>Phone to Mac</span>
-          <span><svg class="dir"><use href="#d-tophone"/></svg>Mac to phone</span>
-          <span><svg class="dir"><use href="#d-both"/></svg>Both ways</span>
-        </div>
-        <button type="button" class="link open-all" aria-pressed="false">Open every detail</button>
-      </div>
-      <div class="fgrid" id="fgrid">
-        <article class="fgroup">
-          <header class="fgroup-head"><span class="ico blue"><svg><use href="#grid4"/></svg></span><h3>Your phone on your Mac</h3><span class="fgroup-n">6</span></header>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Browse every folder</span></summary><p>Your phone opens in a TwoPort window on your Mac: Camera, Downloads, WhatsApp, every folder.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Search the whole phone</span></summary><p>Type a name, or ask for every video on the phone, newest first.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Watch videos without downloading</span></summary><p>Double-click a video and it plays straight from the phone. Save a copy only if you want one.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Flip through photos</span></summary><p>A gallery view you page through with the arrow keys.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Mac to phone"><use href="#d-tophone"/></svg><span class="fx-name">Rename, delete, new folder</span></summary><p>Tidy up the phone from your Mac&#x27;s keyboard.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Both ways"><use href="#d-both"/></svg><span class="fx-name">Several phones at once</span></summary><p>Yours, a work phone, the family&#x27;s. Each one shows up by name.</p></details>
-        </article>
-        <article class="fgroup">
-          <header class="fgroup-head"><span class="ico green"><svg><use href="#to-mac"/></svg></span><h3>Moving files</h3><span class="fgroup-n">4</span></header>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Share from phone to Mac</span></summary><p>In any app, tap Share, then TwoPort. It lands in your Mac&#x27;s Downloads a second later.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Mac to phone"><use href="#d-tophone"/></svg><span class="fx-name">Send from Mac to phone</span></summary><p>Right-click files in Finder, or drop them on TwoPort in the menu bar.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Drag from phone to Mac</span></summary><p>Drag photos and files out of the TwoPort window into any folder on your Mac.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Copy on phone, paste in Finder</span><span class="tier testing">Testing</span></summary><p>Press ⌘C in the TwoPort window and ⌘V in any Finder folder. Nothing downloads until you paste. <span class="testing-note">We're still testing this one on more phones.</span></p></details>
-        </article>
-        <article class="fgroup">
-          <header class="fgroup-head"><span class="ico green"><svg><use href="#backup"/></svg></span><h3>Photos</h3><span class="fgroup-n">3</span></header>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Back up only new photos</span></summary><p>One click brings over what&#x27;s new since last time. Nothing is copied twice.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Original dates kept</span></summary><p>Photos keep the day they were taken, not the day they were copied.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Sorted by month</span></summary><p>Into Pictures › TwoPort, one folder per month. Or pick your own folder.</p></details>
-        </article>
-        <article class="fgroup">
-          <header class="fgroup-head"><span class="ico blue"><svg><use href="#clip"/></svg></span><h3>Copy and paste</h3><span class="fgroup-n">6</span></header>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Mac to phone"><use href="#d-tophone"/></svg><span class="fx-name">Mac to phone, automatic</span></summary><p>Turn it on once on your Mac, then copy as usual. It&#x27;s already on your phone&#x27;s clipboard. Off by default, so your phone only gets what you choose to share.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Phone to Mac, automatic</span><span class="tier testing">Testing</span></summary><p>Turn it on once in the phone app, then copy as usual and press ⌘V on your Mac. <span class="testing-note">We're still testing this one on more phones.</span></p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Send clipboard button</span></summary><p>A button in your phone&#x27;s quick settings sends whatever you just copied.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Both ways"><use href="#d-both"/></svg><span class="fx-name">Photos and files too</span><span class="tier testing">Testing</span></summary><p>Copy a screenshot on your Mac and paste it into a chat on your phone, and back. <span class="testing-note">We're still testing this one on more phones.</span></p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Both ways"><use href="#d-both"/></svg><span class="fx-name">Clipboard history</span></summary><p>Everything you copied on either side, a click away on your Mac.</p></details>
-          <details class="fx"><summary><svg class="dir" aria-hidden="true"><use href="#d-lock"/></svg><span class="fx-name">Passwords never cross</span></summary><p>Anything your phone or Mac marks as sensitive, like a password, stays where it is.</p></details>
-        </article>
-        <article class="fgroup">
-          <header class="fgroup-head"><span class="ico blue"><svg><use href="#wifi"/></svg></span><h3>Always connected</h3><span class="fgroup-n">4</span></header>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Both ways"><use href="#d-both"/></svg><span class="fx-name">Pair once</span></summary><p>Scan a code once. After that, TwoPort finds your phone by itself.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Both ways"><use href="#d-both"/></svg><span class="fx-name">Reconnects by itself</span></summary><p>Whenever your phone and Mac are on the same Wi-Fi. Nothing to tap.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Both ways"><use href="#d-both"/></svg><span class="fx-name">Keeps going when screens lock</span></summary><p>Lock your phone or your Mac. A transfer carries on.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Both ways"><use href="#d-both"/></svg><span class="fx-name">USB cable, about 4× faster</span></summary><p>Plug in and click Use USB once. Unplug any time and it carries on over Wi-Fi.</p></details>
-        </article>
-        <article class="fgroup">
-          <header class="fgroup-head"><span class="ico green"><svg><use href="#qr"/></svg></span><h3>Friends and other phones</h3><span class="fgroup-n">3</span></header>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Quick Send, no app needed</span></summary><p>A friend scans a code with their phone&#x27;s camera and sends you photos from the web browser.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Works from iPhones too</span><span class="tier testing">Testing</span></summary><p>From Safari. Big batches from an iPhone are still being tested.</p></details>
-          <details class="fx"><summary><svg class="dir" role="img" aria-label="Phone to Mac"><use href="#d-tomac"/></svg><span class="fx-name">Picks up after a break</span></summary><p>If the Wi-Fi drops mid-way, a big batch carries on from where it stopped.</p></details>
-        </article>
-      </div>
-      <div class="fbase">
-        <div class="fcard">
-          <h3><span class="ico green"><svg><use href="#lock"/></svg></span>On every plan</h3>
-          <ul class="list">
-            <li>Nothing goes online: no cloud, no account</li>
-            <li>Encrypted between your phone and your Mac</li>
-            <li>No tracking in the apps</li>
-            <li>Any Android phone with Android 8 or later, any Mac with macOS 14 or later</li>
-          </ul>
+      <div class="head center"><h2>Every feature, recorded.</h2><p class="lede">Filmed on a real MacBook and a real Android phone, with nothing staged. Each clip plays when you scroll to it.</p></div>
+      <div class="fclip-group">
+        <h3 class="fclip-head"><span class="ico blue"><svg><use href="#grid4"/></svg></span>Your phone on your Mac</h3>
+        <div class="fclip-grid">
+          <figure class="fclip" data-clip="browse-folders"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/browse-folders.mp4" poster="assets/clips/f/browse-folders.jpg"></video></div><figcaption><span class="fnum">01</span><b>Browse every folder</b><span>Your phone opens in a TwoPort window on your Mac: Camera, Downloads, WhatsApp, every folder.</span></figcaption></figure>
+          <figure class="fclip" data-clip="search"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/search.mp4" poster="assets/clips/f/search.jpg"></video></div><figcaption><span class="fnum">02</span><b>Search the whole phone</b><span>Type a name, or ask for every video on the phone, newest first.</span></figcaption></figure>
+          <figure class="fclip" data-clip="watch-video"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/watch-video.mp4" poster="assets/clips/f/watch-video.jpg"></video></div><figcaption><span class="fnum">03</span><b>Watch videos without downloading</b><span>Double-click a video and it plays straight from the phone. Save a copy only if you want one.</span></figcaption></figure>
+          <figure class="fclip" data-clip="flip-photos"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/flip-photos.mp4" poster="assets/clips/f/flip-photos.jpg"></video></div><figcaption><span class="fnum">04</span><b>Flip through photos</b><span>A gallery view you page through with the arrow keys.</span></figcaption></figure>
+          <figure class="fclip" data-clip="tidy-up"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/tidy-up.mp4" poster="assets/clips/f/tidy-up.jpg"></video></div><figcaption><span class="fnum">05</span><b>Rename, delete, new folder</b><span>Tidy up the phone from your Mac&#x27;s keyboard.</span></figcaption></figure>
+          <figure class="fclip" data-clip="several-phones"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/several-phones.mp4" poster="assets/clips/f/several-phones.jpg"></video></div><figcaption><span class="fnum">06</span><b>Several phones at once</b><span>Yours, a work phone, the family&#x27;s. Each one shows up by name.</span></figcaption></figure>
         </div>
       </div>
-      <p class="center-link"><a class="link" href="compare.html">How TwoPort compares with AirDrop and other apps →</a></p>
+      <div class="fclip-group">
+        <h3 class="fclip-head"><span class="ico green"><svg><use href="#to-mac"/></svg></span>Moving files</h3>
+        <div class="fclip-grid">
+          <figure class="fclip" data-clip="share-to-mac"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/share-to-mac.mp4" poster="assets/clips/f/share-to-mac.jpg"></video></div><figcaption><span class="fnum">07</span><b>Share from phone to Mac</b><span>In any app, tap Share, then TwoPort. It lands in your Mac&#x27;s Downloads a second later.</span></figcaption></figure>
+          <figure class="fclip" data-clip="send-to-phone"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/send-to-phone.mp4" poster="assets/clips/f/send-to-phone.jpg"></video></div><figcaption><span class="fnum">08</span><b>Send from Mac to phone</b><span>Right-click files in Finder, or drop them on TwoPort in the menu bar.</span></figcaption></figure>
+          <figure class="fclip" data-clip="drag-to-mac"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/drag-to-mac.mp4" poster="assets/clips/f/drag-to-mac.jpg"></video></div><figcaption><span class="fnum">09</span><b>Drag from phone to Mac</b><span>Drag photos and files out of the TwoPort window into any folder on your Mac.</span></figcaption></figure>
+          <figure class="fclip" data-clip="paste-in-finder"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/paste-in-finder.mp4" poster="assets/clips/f/paste-in-finder.jpg"></video></div><figcaption><span class="fnum">10</span><b>Copy on phone, paste in Finder</b><span>Press ⌘C in the TwoPort window and ⌘V in any Finder folder. Nothing downloads until you paste.</span></figcaption></figure>
+        </div>
+      </div>
+      <div class="fclip-group">
+        <h3 class="fclip-head"><span class="ico green"><svg><use href="#backup"/></svg></span>Photos</h3>
+        <div class="fclip-grid">
+          <figure class="fclip" data-clip="backup-new"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/backup-new.mp4" poster="assets/clips/f/backup-new.jpg"></video></div><figcaption><span class="fnum">11</span><b>Back up only new photos</b><span>One click brings over what&#x27;s new since last time. Nothing is copied twice.</span></figcaption></figure>
+          <figure class="fclip" data-clip="original-dates"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/original-dates.mp4" poster="assets/clips/f/original-dates.jpg"></video></div><figcaption><span class="fnum">12</span><b>Original dates kept</b><span>Photos keep the day they were taken, not the day they were copied.</span></figcaption></figure>
+          <figure class="fclip" data-clip="by-month"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/by-month.mp4" poster="assets/clips/f/by-month.jpg"></video></div><figcaption><span class="fnum">13</span><b>Sorted by month</b><span>Into Pictures › TwoPort, one folder per month. Or pick your own folder.</span></figcaption></figure>
+        </div>
+      </div>
+      <div class="fclip-group">
+        <h3 class="fclip-head"><span class="ico blue"><svg><use href="#clip"/></svg></span>Copy and paste</h3>
+        <div class="fclip-grid">
+          <figure class="fclip" data-clip="clip-to-phone"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/clip-to-phone.mp4" poster="assets/clips/f/clip-to-phone.jpg"></video></div><figcaption><span class="fnum">14</span><b>Mac to phone, automatic</b><span>Turn it on once on your Mac, then copy as usual. It&#x27;s already on your phone&#x27;s clipboard. Off by default, so your phone only gets what you choose to share.</span></figcaption></figure>
+          <figure class="fclip" data-clip="clip-to-mac"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/clip-to-mac.mp4" poster="assets/clips/f/clip-to-mac.jpg"></video></div><figcaption><span class="fnum">15</span><b>Phone to Mac, automatic</b><span>Turn it on once in the phone app, then copy as usual and press ⌘V on your Mac.</span></figcaption></figure>
+          <figure class="fclip" data-clip="clip-button"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/clip-button.mp4" poster="assets/clips/f/clip-button.jpg"></video></div><figcaption><span class="fnum">16</span><b>Send clipboard button</b><span>A button in your phone&#x27;s quick settings sends whatever you just copied.</span></figcaption></figure>
+          <figure class="fclip" data-clip="clip-files"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/clip-files.mp4" poster="assets/clips/f/clip-files.jpg"></video></div><figcaption><span class="fnum">17</span><b>Photos and files too</b><span>Copy a screenshot on your Mac and paste it into a chat on your phone, and back.</span></figcaption></figure>
+          <figure class="fclip" data-clip="clip-history"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/clip-history.mp4" poster="assets/clips/f/clip-history.jpg"></video></div><figcaption><span class="fnum">18</span><b>Clipboard history</b><span>Everything you copied on either side, a click away on your Mac.</span></figcaption></figure>
+          <figure class="fclip" data-clip="passwords"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/passwords.mp4" poster="assets/clips/f/passwords.jpg"></video></div><figcaption><span class="fnum">19</span><b>Passwords never cross</b><span>Anything your phone or Mac marks as sensitive, like a password, stays where it is.</span></figcaption></figure>
+        </div>
+      </div>
+      <div class="fclip-group">
+        <h3 class="fclip-head"><span class="ico blue"><svg><use href="#wifi"/></svg></span>Always connected</h3>
+        <div class="fclip-grid">
+          <figure class="fclip" data-clip="pair-once"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/pair-once.mp4" poster="assets/clips/f/pair-once.jpg"></video></div><figcaption><span class="fnum">20</span><b>Pair once</b><span>Scan a code once. After that, TwoPort finds your phone by itself.</span></figcaption></figure>
+          <figure class="fclip" data-clip="reconnects"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/reconnects.mp4" poster="assets/clips/f/reconnects.jpg"></video></div><figcaption><span class="fnum">21</span><b>Reconnects by itself</b><span>Whenever your phone and Mac are on the same Wi-Fi. Nothing to tap.</span></figcaption></figure>
+          <figure class="fclip" data-clip="screen-lock"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/screen-lock.mp4" poster="assets/clips/f/screen-lock.jpg"></video></div><figcaption><span class="fnum">22</span><b>Keeps going when screens lock</b><span>Lock your phone or your Mac. A transfer carries on.</span></figcaption></figure>
+          <figure class="fclip" data-clip="cable"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/cable.mp4" poster="assets/clips/f/cable.jpg"></video></div><figcaption><span class="fnum">23</span><b>USB cable, about 4× faster</b><span>Plug in and click Use USB once. Unplug any time and it carries on over Wi-Fi.</span></figcaption></figure>
+        </div>
+      </div>
+      <div class="fclip-group">
+        <h3 class="fclip-head"><span class="ico green"><svg><use href="#qr"/></svg></span>Friends and other phones</h3>
+        <div class="fclip-grid">
+          <figure class="fclip" data-clip="quick-send"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/quick-send.mp4" poster="assets/clips/f/quick-send.jpg"></video></div><figcaption><span class="fnum">24</span><b>Quick Send, no app needed</b><span>A friend scans a code with their phone&#x27;s camera and sends you photos from the web browser.</span></figcaption></figure>
+          <figure class="fclip" data-clip="picks-up"><div class="fclip-media"><video muted playsinline loop preload="none" data-src="assets/clips/f/picks-up.mp4" poster="assets/clips/f/picks-up.jpg"></video></div><figcaption><span class="fnum">25</span><b>Picks up after a break</b><span>If the Wi-Fi drops mid-way, a big batch carries on from where it stopped.</span></figcaption></figure>
+        </div>
+      </div>
+      <p class="center-link"><a class="link" href="features.html">Read how each one works →</a></p>
     </div>
   </section>
 
-  <section id="pricing" class="section chapter ch-tint">
-    <div class="ch-tab" aria-hidden="true"><b>04</b>Pricing</div>
+  <section id="pricing" class="section band-tint">
     <div class="wrap">
-      <div class="head center"><h2>Try it free. Pay once.</h2><p class="lede">No subscription. Every download starts with 7 days of everything.</p></div>
-      <div class="plans">
-        <article class="plan free">
-          <h3>Free trial</h3>
-          <div class="price"><b>$0</b><span>for 7 days</span></div>
-          <ul class="list">
-            <li>Every feature, nothing held back</li>
-            <li>No card, no account</li>
-            <li>Pair your phone in a minute</li>
-            <li>Enter a key any time to keep going</li>
-          </ul>
-          <a class="btn btn-quiet" href="#early-access">Get notified at launch</a>
-        </article>
-        <article class="plan pro">
-          <h3>TwoPort</h3>
-          <div class="price"><b>$29</b><span>one-time</span></div>
+      <div class="head center"><h2>Try it free. Pay once.</h2><p class="lede">7 days of everything, then $29. No subscription.</p></div>
+      <div class="early buy" id="early-access">
+        <div class="buy-info">
+          <div class="price"><b>$29</b><span>one-time, after a 7-day free trial</span></div>
           <p class="founder"><b>$9</b><span>Founding price for the first 100 people on the waitlist. We email you a code at launch.</span></p>
           <ul class="list">
-            <li><span><b>All <span data-count="all">26</span> features</b>, including:</span></li>
-            <li>Your whole phone on your Mac: browse, search, play videos</li>
-            <li>One-click photo backup, sorted by month</li>
-            <li>About 4× faster with a cable</li>
-            <li>Clipboard history, photos and files too</li>
-            <li>Several phones at once</li>
+            <li>Every feature in the trial, no card needed</li>
+            <li>One licence for up to 3 of your Macs</li>
+            <li>Free updates for all of TwoPort 1</li>
           </ul>
-          <a class="btn btn-primary" href="#early-access">Hold the $9 price</a>
-        </article>
-      </div>
-      <div class="after-plans">
-        <p class="fine">One licence works on up to 3 of your Macs, with free updates for all of TwoPort 1.</p>
-        <a class="link" href="compare.html#prices">What other apps charge →</a>
-      </div>
-      <details class="afford">
-        <summary>Can't afford TwoPort? Ask for a free licence</summary>
-        <p class="muted">Students, anyone between jobs, anyone for whom $29 is real money. You don't have to explain.</p>
-        <form id="fl" class="form" novalidate>
-          <label for="fl-email">Email</label>
-          <input id="fl-email" type="email" autocomplete="email" required placeholder="you@example.com">
-          <label for="fl-note">Anything you'd like to tell us <span class="opt">(optional)</span></label>
-          <input id="fl-note" type="text" maxlength="500" placeholder="Optional">
-          <button class="btn btn-quiet" type="submit">Ask for a free licence</button>
-          <p class="form-msg" id="fl-msg" role="status" aria-live="polite"></p>
-        </form>
-      </details>
-    </div>
-  </section>
-
-  <section id="early-access" class="section chapter ch-deep">
-    <div class="ch-tab" aria-hidden="true"><b>05</b>Early access</div>
-    <div class="wrap">
-      <div class="early">
-        <div class="head" style="margin:0">
-          <h2>Be first on your Mac.</h2>
-          <p class="lede">Get one email when TwoPort is out. Tick the box to hold the $9 founder price. You pay only at launch.</p>
         </div>
         <form id="wl" class="form" novalidate>
+          <h3>Get one email at launch</h3>
           <label for="wl-email">Email</label>
           <input id="wl-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
           <label for="wl-phone">Your phone <span class="opt">(optional)</span></label>
@@ -515,31 +386,35 @@
           <p class="fine">One email at launch, nothing else. We never share your address.</p>
         </form>
       </div>
-    </div>
-  </section>
-
-  <section id="faq" class="section chapter ch-grey">
-    <div class="ch-tab" aria-hidden="true"><b>06</b>Questions</div>
-    <div class="wrap faq">
-      <div class="head" style="margin:0"><h2>Good to know.</h2></div>
-      <div class="faq-list">
-        <details open><summary>Do I need a cable?</summary><p>No. Your phone and Mac just need to be on the same Wi-Fi. A USB cable is optional: it's faster, and it works where the Wi-Fi keeps devices apart, like some offices.</p></details>
-        <details><summary>Does it show my phone's screen on the Mac?</summary><p>No. TwoPort moves things between the two: photos, videos, files and what you copy. Your phone's screen and apps stay on the phone.</p></details>
-        <details><summary>Is it private?</summary><p>Yes. Files go straight from your phone to your Mac, encrypted. Nothing is uploaded and there's no account.</p></details>
-        <details><summary>Which phones and Macs?</summary><p>Any phone with Android 8 or later, and a Mac with macOS 14 Sonoma or later.</p></details>
-        <details><summary>Can one phone work with two Macs?</summary><p>One at a time. A phone pairs with one Mac; scan another Mac's code and the first one stops reaching it. A Mac can have several phones, and one licence covers up to three of your Macs.</p></details>
-        <details><summary>Does it work with iPhone?</summary><p>The app is for Android. An iPhone can still send photos and text to your Mac with Quick Send, from its web browser.</p></details>
-        <details><summary>Can a friend send me photos without the app?</summary><p>Yes. Your Mac shows a code, they scan it with their phone's camera, and they pick photos in the web browser. It works on Android phones and iPhones.</p></details>
-        <details><summary>Is it a subscription?</summary><p>No. You try it free for 7 days, then pay $29 once. That covers up to three of your Macs, with free updates for all of TwoPort 1.</p></details>
-        <details><summary>Is there a free version?</summary><p>No, but every download starts with a 7-day trial with every feature. If you don't buy, TwoPort pauses and nothing leaves your phone or Mac.</p></details>
+      <div class="after-plans">
+        <details class="afford">
+          <summary>Can't afford TwoPort? Ask for a free licence</summary>
+          <p class="muted">Students, anyone between jobs, anyone for whom $29 is real money. You don't have to explain.</p>
+          <form id="fl" class="form" novalidate>
+            <label for="fl-email">Email</label>
+            <input id="fl-email" type="email" autocomplete="email" required placeholder="you@example.com">
+            <label for="fl-note">Anything you'd like to tell us <span class="opt">(optional)</span></label>
+            <input id="fl-note" type="text" maxlength="500" placeholder="Optional">
+            <button class="btn btn-quiet" type="submit">Ask for a free licence</button>
+            <p class="form-msg" id="fl-msg" role="status" aria-live="polite"></p>
+          </form>
+        </details>
+        <a class="link" href="compare.html#prices">What other apps charge →</a>
       </div>
     </div>
   </section>
 
-  <section class="wrap">
-    <div class="closing">
-      <h2>From your <span class="phone-word">phone</span> to your <span class="mac-word">Mac</span>, and back.</h2>
-      <div class="cta-row"><a class="btn btn-primary" href="#early-access">Get early access</a></div>
+  <section id="faq" class="section">
+    <div class="wrap faq">
+      <div class="head" style="margin:0"><h2>Good to know.</h2></div>
+      <div class="faq-list">
+        <details open><summary>How do I set it up?</summary><p>Install TwoPort on your Mac and your phone, then scan the code your Mac shows. That's it: from then on they find each other whenever they're on the same Wi-Fi.</p></details>
+        <details><summary>Do I need a cable?</summary><p>No. Your phone and Mac just need to be on the same Wi-Fi. A USB cable is optional: it's faster, and it works where the Wi-Fi keeps devices apart, like some offices.</p></details>
+        <details><summary>Does it show my phone's screen on the Mac?</summary><p>No. TwoPort moves things between the two: photos, videos, files and what you copy. Your phone's screen and apps stay on the phone.</p></details>
+        <details><summary>Is it private?</summary><p>Yes. Files go straight from your phone to your Mac, encrypted. Nothing is uploaded and there's no account.</p></details>
+        <details><summary>Which phones and Macs?</summary><p>Any phone with Android 8 or later, and a Mac with macOS 14 Sonoma or later.</p></details>
+        <details><summary>Does it work with iPhone?</summary><p>The app is for Android. An iPhone can still send photos and text to your Mac with Quick Send, from its web browser.</p></details>
+      </div>
     </div>
   </section>
 </main>
@@ -547,8 +422,8 @@
 <footer>
   <div class="wrap foot">
     <a class="brand" href="#top"><img src="assets/app-icon.png" alt="" width="24" height="24" style="width:24px;height:24px">TwoPort</a>
-    <nav aria-label="Footer"><a href="#how">How it works</a><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="compare.html">Compare apps</a><a href="requests.html">Feature requests</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refund.html">Refunds</a></nav>
-    <span>© 2026 TwoPort</span>
+    <nav aria-label="Footer"><a href="features.html">Features</a><a href="#pricing">Pricing</a><a href="compare.html">Compare apps</a><a href="requests.html">Feature requests</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refund.html">Refunds</a></nav>
+    <span>© 2026 TwoPort · Demo photos from <a href="https://unsplash.com">Unsplash</a></span>
   </div>
 </footer>
 
