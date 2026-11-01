@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>TwoPort</title>
+        <item>
+            <title>1.0</title>
+            <pubDate>Sat, 31 Oct 2026 16:59:47 +0530</pubDate>
+            <link>https://twoport.app</link>
+            <sparkle:version>10</sparkle:version>
+            <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/whiterabbit-vibe/twoport-site/releases/download/mac/TwoPort-1.0.dmg" length="5095453" type="application/octet-stream" sparkle:edSignature="YnyCdzEqHr8MGaFvWejR0Tp5etKsKlj1L+fHUSx1znzxsU4bv0rurCt1M3x1wJDmk6TZr58fSJ1zrbz8DcK4Cg=="/>
+        </item>
+    </channel>
+</rss>
