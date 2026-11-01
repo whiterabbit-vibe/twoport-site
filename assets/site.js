@@ -309,8 +309,8 @@
     // sent when a file lands or goes (see `sends` in show).
     var lit = light(stage), glowTimer = null, greeted = reduced;
     // Plays on its own until the visitor picks a moment, then stays put.
-    // Not on phones: there it waits for a swipe or the arrows.
-    var auto = !reduced && !matchMedia('(max-width: 900px)').matches;
+    // Phones too (v13): they get the same chips as a laptop.
+    var auto = !reduced;
     // The packet on the wire: which way, when, and what it carries.
     var flights = {
       2: { dir: 'toMac', delay: 2.6, icon: '#img' },
@@ -329,43 +329,7 @@
     // Which way the dots on the link flow: phone → Mac unless the Mac sends.
     var toPhone = { 3: 1, 4: 1 };
 
-    // Phones and tablets: the moments play as you scroll (see site.css). The
-    // stage stays under the nav; a card per moment scrolls up below it, and
-    // the card that has crossed the middle of the space left plays. A bar of
-    // five under the stage says where you are.
-    var scrolly = matchMedia('(max-width: 900px)');
-    var stageCol = stage.parentNode, steps = document.createElement('div'), moments = document.createElement('ol');
-    steps.className = 'm-steps';
-    moments.className = 'moments';
-    var stepBar = steps.appendChild(document.createElement('div')), stepName = steps.appendChild(document.createElement('span'));
-    stepBar.className = 'm-bar';
-    stepName.className = 'm-name';
-    var mSegs = [], mCards = tabs.map(function (t, i) {
-      var name = t.textContent.trim();
-      var seg = stepBar.appendChild(document.createElement('button'));
-      seg.type = 'button';
-      seg.setAttribute('aria-label', name);
-      seg.appendChild(document.createElement('i'));
-      seg.addEventListener('click', function () { go(i); });
-      mSegs.push(seg);
-      var li = moments.appendChild(document.createElement('li'));
-      li.className = 'moment';
-      li.appendChild(t.querySelector('.tab-ico').cloneNode(true));
-      li.appendChild(document.createElement('span')).className = 'm-k';
-      li.lastChild.textContent = (i + 1) + ' of ' + N;
-      li.appendChild(document.createElement('h3')).textContent = name;
-      li.appendChild(document.createElement('p')).textContent = t.dataset.caption;
-      li.addEventListener('click', function () { go(i); });
-      return li;
-    });
-    stageCol.appendChild(steps);
-    stageCol.parentNode.appendChild(moments);
-    // Jump to a moment: on phones by scrolling its card into play.
-    var go = function (i) {
-      if (!scrolly.matches) { pick(i); return; }
-      var pinned = parseFloat(getComputedStyle(stageCol).top) + stageCol.offsetHeight;
-      scrollTo({ top: scrollY + mCards[i].getBoundingClientRect().top - pinned - 24, behavior: reduced ? 'auto' : 'smooth' });
-    };
+    var go = function (i) { pick(i); };
 
     // Real screen recordings (v12): a moment with `data-clip` plays its Mac
     // and phone videos instead of the drawn scene, for as long as the clip
@@ -464,15 +428,6 @@
       cap.title.textContent = tabs[i].textContent.trim();
       cap.desc.textContent = text;
       cap.count.textContent = (i + 1) + ' of ' + N;
-      mSegs.forEach(function (s, j) {
-        s.dataset.s = j < i ? 'past' : j === i ? 'on' : '';
-        if (j === i) s.setAttribute('aria-current', 'step'); else s.removeAttribute('aria-current');
-      });
-      stepBar.style.setProperty('--dur', mDur(i) + 'ms');
-      stepName.innerHTML = '<em></em>';
-      stepName.firstChild.textContent = (i + 1) + ' of ' + N;
-      stepName.appendChild(document.createTextNode(tabs[i].textContent.trim()));
-      mCards.forEach(function (c, j) { c.classList.toggle('on', j === i); });
       var clip = tabs[i].dataset.clip;
       mPlay(clip);
       var real = stage.classList.contains('real');
@@ -540,20 +495,6 @@
       if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) go(Math.max(0, Math.min(N - 1, idx + (dx < 0 ? 1 : -1))));
     }, { passive: true });
 
-    var dTick = false;
-    var follow = function () {
-      if (dTick || !scrolly.matches) return;
-      dTick = true;
-      requestAnimationFrame(function () {
-        dTick = false;
-        var below = stageCol.getBoundingClientRect().bottom, line = below + (innerHeight - below) * .5, now = 0;
-        mCards.forEach(function (c, j) { if (c.getBoundingClientRect().top < line) now = j; });
-        if (now !== idx) show(now);
-      });
-    };
-    addEventListener('scroll', follow, { passive: true });
-    addEventListener('resize', follow);
-
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }, { threshold: 0.25 }).observe(stage);
       new IntersectionObserver(function (entries, seen) {
@@ -588,6 +529,15 @@
   // feature card the demo's moments don't already show.
   var moreN = document.querySelector('[data-more]');
   if (moreN) moreN.textContent = Math.max(0, document.querySelectorAll('.fclip').length - document.querySelectorAll('.tabs .tab').length);
+  // The hero's "and 23 other unique features": every recorded feature but
+  // the two the line already names (browsing the phone, copy and paste).
+  var othersN = document.querySelector('[data-others]');
+  if (othersN) othersN.textContent = Math.max(0, document.querySelectorAll('.fclip').length - 2);
+  // On phones each group is a row you swipe (site.css): its head says how many.
+  document.querySelectorAll('.fclip-group').forEach(function (g) {
+    var n = g.querySelectorAll('.fclip').length, head = g.querySelector('.fclip-head');
+    if (n > 1 && head) head.appendChild(document.createElement('small')).textContent = n + ' features →';
+  });
 
   // ---- Everything TwoPort does: the count comes from the list itself, and
   // one button opens or closes every detail.

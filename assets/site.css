@@ -369,51 +369,6 @@ p { margin: 0; }
    (phones scroll through the moments instead), kept for no-JS pages. */
 .cap { display: none; }
 
-/* ---------- Phones and tablets (v11): the moments play as you scroll.
-   v10 left them to swipes and arrows, and people scrolled past four of the
-   five. Now the stage (Mac and phone side by side, as on a laptop, smaller)
-   stays just under the nav, a card for each moment scrolls up below it, and
-   the card in view plays. The cards keep moving, so the page never feels
-   stuck (v8's fully pinned story did). A bar of five under the stage says
-   where you are; tap a step to jump to it. ---------- */
-.m-steps, .moments { display: none; }
-@media (max-width: 900px) {
-  .js .tabs, .caption { display: none; }
-  .demo { display: block; justify-items: normal; }
-  .stage-col { position: sticky; top: calc(62px + env(safe-area-inset-top, 0px)); z-index: 5; width: 100%; max-width: 36rem; margin-inline: auto; padding-block: .6rem .5rem; background: var(--bg); }
-  /* Cards fade out as they slide under the stage. */
-  .stage-col::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 1.6rem; background: linear-gradient(var(--bg), transparent); pointer-events: none; }
-  .stage { font-size: calc(100cqi / 62); grid-template-columns: minmax(0, 1fr) 3em 17.5em; padding: 1.2em; border-radius: 18px; touch-action: pan-y; }
-  /* The link between them is too short here for the badge and the flying file. */
-  .packet, .air { display: none; }
-  .js .m-steps { display: flex; align-items: center; gap: .75rem; margin-top: .6rem; }
-  .m-bar { display: flex; gap: 4px; flex: none; }
-  .m-bar button { width: 1.6rem; height: 1.5rem; padding: 0; border: 0; background: none; cursor: pointer; display: grid; align-items: center; }
-  .m-bar i { position: relative; display: block; height: 5px; border-radius: 5px; background: var(--line); overflow: hidden; }
-  .m-bar i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--mac); transform-origin: 0 50%; transform: scaleX(0); }
-  .m-bar [data-s="past"] i::after { transform: none; }
-  .m-bar [data-s="on"] i::after { animation: segFill var(--dur, 8s) linear forwards; }
-  @keyframes segFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-  .m-name { min-width: 0; font-size: .9rem; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .m-name em { font-style: normal; font-weight: 500; color: var(--muted); margin-right: .45rem; font-variant-numeric: tabular-nums; }
-  .js .moments { position: relative; list-style: none; display: grid; gap: 30svh; max-width: 36rem; margin: 1.4rem auto 0; padding: 0 0 2rem; }
-  /* The gaps between cards are a path: a dotted line joins their icons. */
-  .moments::before { content: ""; position: absolute; left: calc(1.15rem + 1.3rem - 2px); top: 2rem; bottom: 6rem; width: 4px; background: linear-gradient(180deg, var(--mac), var(--phone-fill));
-    -webkit-mask: radial-gradient(circle closest-side, #000 85%, transparent) 50% 0 / 4px 11px repeat-y; mask: radial-gradient(circle closest-side, #000 85%, transparent) 50% 0 / 4px 11px repeat-y; opacity: .6; }
-  .moment { position: relative; }
-  .moment { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); column-gap: .95rem; row-gap: .2rem; padding: 1.05rem 1.15rem 1.15rem; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); cursor: pointer; transform: scale(.97); transition: transform .45s var(--ease), border-color .35s, box-shadow .35s; }
-  /* Waiting cards fade their words, not the card, so the path stays behind them. */
-  .moment > * { opacity: .42; transition: opacity .35s; }
-  .moment.on > * { opacity: 1; }
-  .moment.on { transform: none; border-color: color-mix(in srgb, var(--mac) 40%, var(--line)); box-shadow: var(--shadow); }
-  .moment .tab-ico { grid-row: 1 / span 3; align-self: start; width: 2.6rem; height: 2.6rem; }
-  .moment .tab-ico svg { width: 1.3rem; height: 1.3rem; }
-  .moment .m-k { font-family: var(--mono); font-size: .74rem; color: var(--muted); }
-  .moment h3 { font-size: 1.2rem; }
-  .moment p { color: var(--muted); font-size: .98rem; line-height: 1.45; }
-}
-@media (prefers-reduced-motion: reduce) { .moment, .moment > * { transition: none; } .m-bar [data-s="on"] i::after { animation: none; transform: none; } }
-
 /* How it works: three steps, one line each. */
 .head.center { justify-items: center; text-align: center; margin-inline: auto; }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
@@ -1194,3 +1149,47 @@ html:not(.js) .drum b:not(.on) { display: none; }
 .pscreen > .cue { z-index: 6; }
 .stage .cue.go { animation: cue 1.3s cubic-bezier(.22, .8, .24, 1) both; }
 @keyframes cue { 0% { opacity: 0; } 18% { opacity: 1; } 55% { opacity: .9; } 100% { opacity: 0; } }
+/* ---------- Phones and tablets (v13, 2026-11-01): the same demo as the
+   desktop. v11's scroll-through cards ("1 of 6") hid the chips and the
+   "+19 more features" link; now the stage comes first (the recording is in
+   view right under the hero), the chips wrap under it, smaller, and the
+   caption under them. The moments play on their own, as on a laptop. ---------- */
+@media (max-width: 900px) {
+  .demo { gap: .85rem; }
+  .stage-col { order: -1; width: 100%; max-width: 36rem; }
+  .stage { font-size: calc(100cqi / 62); grid-template-columns: minmax(0, 1fr) 3em 17.5em; padding: 1.2em 1.2em 4.4em; border-radius: 18px; touch-action: pan-y; }
+  /* The link between them is too short here for the badge and the flying file. */
+  .packet, .air { display: none; }
+  .tabs { gap: .4rem; max-width: 34rem; }
+  .tab { gap: .4rem; min-height: 2.55rem; padding: .3rem .8rem .3rem .3rem; font-size: .87rem; }
+  .tab-ico { width: 1.8rem; height: 1.8rem; }
+  .tab-ico svg { width: .95rem; height: .95rem; }
+  .tab .prog { left: 1.1rem; }
+  .tab-more { min-height: 2.55rem; padding: .3rem .85rem; font-size: .87rem; }
+  .caption { max-width: 26em; min-height: 4.4em; font-size: 1rem; }
+}
+/* Phones: each group of recorded features is a row you swipe, the next card
+   peeking in, rather than 25 full-width cards one under another. Only the
+   cards on screen load and play (see site.js). */
+@media (max-width: 700px) {
+  .fclip-grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 84%; gap: .75rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) .3rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .fclip-grid::-webkit-scrollbar { display: none; }
+  .fclip { scroll-snap-align: start; }
+  .fclip-head { font-size: 1.1rem; gap: .6rem; }
+  .fclip-head .ico { flex: none; width: 2.3rem; height: 2.3rem; }
+  .fclip-head small { margin-left: auto; flex: none; white-space: nowrap; font-family: var(--mono); font-size: .72rem; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+}
+.fclip-head small { display: none; }
+@media (max-width: 700px) { .fclip-head small { display: inline; } }
+/* The hero's "and 23 other unique features" goes to the list. */
+.lede a { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--mac) 45%, transparent); text-underline-offset: .2em; text-decoration-thickness: 2px; }
+.lede a:hover { text-decoration-color: var(--mac); }
+/* Cards in a row share a height: keep each caption's words together at the top. */
+.fclip figcaption { align-content: start; }
+/* Phones: the six chips in two even columns, "+19 more features" across
+   the bottom, so the row stays four lines tall even on a 360px screen. */
+@media (max-width: 560px) {
+  .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  .tab { min-width: 0; white-space: normal; text-align: left; line-height: 1.2; font-size: .84rem; }
+  .tab-more { grid-column: 1 / -1; justify-self: center; }
+}
