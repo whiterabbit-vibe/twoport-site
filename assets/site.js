@@ -529,10 +529,6 @@
   // feature card the demo's moments don't already show.
   var moreN = document.querySelector('[data-more]');
   if (moreN) moreN.textContent = Math.max(0, document.querySelectorAll('.fclip').length - document.querySelectorAll('.tabs .tab').length);
-  // The hero's "and 23 other unique features": every recorded feature but
-  // the two the line already names (browsing the phone, copy and paste).
-  var othersN = document.querySelector('[data-others]');
-  if (othersN) othersN.textContent = Math.max(0, document.querySelectorAll('.fclip').length - 2);
   // On phones each group is a row you swipe (site.css): its head says how many.
   document.querySelectorAll('.fclip-group').forEach(function (g) {
     var n = g.querySelectorAll('.fclip').length, head = g.querySelector('.fclip-head');

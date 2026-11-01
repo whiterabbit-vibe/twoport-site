@@ -1193,3 +1193,6 @@ html:not(.js) .drum b:not(.on) { display: none; }
   .tab { min-width: 0; white-space: normal; text-align: left; line-height: 1.2; font-size: .84rem; }
   .tab-more { grid-column: 1 / -1; justify-self: center; }
 }
+/* The hero's promise, highlighted: a soft blue-to-green marker under the words. */
+.lede .promise { color: var(--ink); font-weight: 600; padding: .05em .2em; margin: 0 -.05em; border-radius: .3em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--mac) 16%, transparent), color-mix(in srgb, var(--phone-fill) 22%, transparent)); }
