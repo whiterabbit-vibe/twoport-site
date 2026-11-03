@@ -3,6 +3,15 @@
     <channel>
         <title>TwoPort</title>
         <item>
+            <title>1.0.5</title>
+            <pubDate>Tue, 03 Nov 2026 09:35:28 +0530</pubDate>
+            <link>https://twoport.app</link>
+            <sparkle:version>17</sparkle:version>
+            <sparkle:shortVersionString>1.0.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/whiterabbit-vibe/twoport-site/releases/download/mac/TwoPort-1.0.5.dmg" length="5103979" type="application/octet-stream" sparkle:edSignature="DxC/F4GqM+AHJnPIs56DylHMQkVysUmgRq33ksot2F8cSCcv8PyPK7qmiT1tFkl9m8div7XI8pzRIvzJuTYxAw=="/>
+        </item>
+        <item>
             <title>1.0.4</title>
             <pubDate>Tue, 03 Nov 2026 09:24:29 +0530</pubDate>
             <link>https://twoport.app</link>
@@ -19,15 +28,6 @@
             <sparkle:shortVersionString>1.0.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/whiterabbit-vibe/twoport-site/releases/download/mac/TwoPort-1.0.3.dmg" length="5103572" type="application/octet-stream" sparkle:edSignature="rPE9rxzv8nmqj4RYVJnjPGmzgYw0chqRxGrsIJimGErC9iHeJ/n1zMBvGgpZgxgkSVj3LAFQsriQ+U/Ae/RtBQ=="/>
-        </item>
-        <item>
-            <title>1.0.1</title>
-            <pubDate>Sun, 01 Nov 2026 18:28:36 +0530</pubDate>
-            <link>https://twoport.app</link>
-            <sparkle:version>12</sparkle:version>
-            <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/whiterabbit-vibe/twoport-site/releases/download/mac/TwoPort-1.0.1.dmg" length="5071594" type="application/octet-stream" sparkle:edSignature="bew3uqSeD8fZIBDeFjtlTKR4CH7rZUmjLWJukS6EdowFfESziGkbG7ECqokZltj8JbToeYTkKZLOvuvtgdLzAw=="/>
         </item>
     </channel>
 </rss>
