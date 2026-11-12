@@ -1,0 +1,252 @@
+[
+ {
+  "id": "browse-folders",
+  "title": "Browse every folder",
+  "line": "Your phone opens in a TwoPort window on your Mac: Camera, Downloads, WhatsApp, every folder.",
+  "voice": "Your whole phone opens in a window on your Mac. Camera, Downloads, WhatsApp, every folder.",
+  "group": "Your phone on your Mac",
+  "duration": 7.2,
+  "mp4": "/assets/guide/browse-folders.mp4",
+  "poster": "/assets/guide/browse-folders.jpg"
+ },
+ {
+  "id": "search",
+  "title": "Search the whole phone",
+  "line": "Type a name, or ask for every video on the phone, newest first.",
+  "voice": "Looking for something? Type a name, or ask for every video on the phone, newest first.",
+  "group": "Your phone on your Mac",
+  "duration": 6.8,
+  "mp4": "/assets/guide/search.mp4",
+  "poster": "/assets/guide/search.jpg"
+ },
+ {
+  "id": "watch-video",
+  "title": "Watch videos without downloading",
+  "line": "Double-click a video and it plays straight from the phone. Save a copy only if you want one.",
+  "voice": "Double-click a video, and it plays straight from the phone. Save a copy only if you want one.",
+  "group": "Your phone on your Mac",
+  "duration": 7.1,
+  "mp4": "/assets/guide/watch-video.mp4",
+  "poster": "/assets/guide/watch-video.jpg"
+ },
+ {
+  "id": "flip-photos",
+  "title": "Flip through photos",
+  "line": "A gallery view you page through with the arrow keys.",
+  "voice": "Flip through your photos in a gallery, with the arrow keys.",
+  "group": "Your phone on your Mac",
+  "duration": 5.8,
+  "mp4": "/assets/guide/flip-photos.mp4",
+  "poster": "/assets/guide/flip-photos.jpg"
+ },
+ {
+  "id": "tidy-up",
+  "title": "Rename, delete, new folder",
+  "line": "Tidy up the phone from your Mac's keyboard.",
+  "voice": "Rename, delete, or make a new folder, right from your Mac's keyboard.",
+  "group": "Your phone on your Mac",
+  "duration": 7.3,
+  "mp4": "/assets/guide/tidy-up.mp4",
+  "poster": "/assets/guide/tidy-up.jpg"
+ },
+ {
+  "id": "several-phones",
+  "title": "Several phones at once",
+  "line": "Yours, a work phone, the family's. Each one shows up by name.",
+  "voice": "More than one phone? Yours, a work phone, the family's. Each one shows up by name.",
+  "group": "Your phone on your Mac",
+  "duration": 6.7,
+  "mp4": "/assets/guide/several-phones.mp4",
+  "poster": "/assets/guide/several-phones.jpg"
+ },
+ {
+  "id": "share-to-mac",
+  "title": "Share from phone to Mac",
+  "line": "In any app, tap Share, then TwoPort. It lands in your Mac's Downloads a second later.",
+  "voice": "On your phone, tap Share, then TwoPort. A moment later, it's in your Mac's Downloads.",
+  "group": "Moving files",
+  "duration": 8.8,
+  "mp4": "/assets/guide/share-to-mac.mp4",
+  "poster": "/assets/guide/share-to-mac.jpg"
+ },
+ {
+  "id": "send-to-phone",
+  "title": "Send from Mac to phone",
+  "line": "Right-click files in Finder, or drop them on TwoPort in the menu bar.",
+  "voice": "Going the other way? Right-click files in Finder, or drop them on TwoPort in the menu bar.",
+  "group": "Moving files",
+  "duration": 8.6,
+  "mp4": "/assets/guide/send-to-phone.mp4",
+  "poster": "/assets/guide/send-to-phone.jpg"
+ },
+ {
+  "id": "drag-to-mac",
+  "title": "Drag from phone to Mac",
+  "line": "Drag photos and files out of the TwoPort window into any folder on your Mac.",
+  "voice": "Drag photos and files out of the TwoPort window, into any folder on your Mac.",
+  "group": "Moving files",
+  "duration": 6.3,
+  "mp4": "/assets/guide/drag-to-mac.mp4",
+  "poster": "/assets/guide/drag-to-mac.jpg"
+ },
+ {
+  "id": "paste-in-finder",
+  "title": "Copy on phone, paste in Finder",
+  "line": "Press ⌘C in the TwoPort window and ⌘V in any Finder folder. Nothing downloads until you paste.",
+  "voice": "Copy on your phone, and paste in Finder. Nothing downloads until you paste.",
+  "group": "Moving files",
+  "duration": 6.4,
+  "mp4": "/assets/guide/paste-in-finder.mp4",
+  "poster": "/assets/guide/paste-in-finder.jpg"
+ },
+ {
+  "id": "backup-new",
+  "title": "Back up only what's new",
+  "line": "Photos, videos, documents, music, apps, any file: you pick the kinds and folders. One click brings over what's new.",
+  "voice": "Back up in one click. Pick the kinds of files and the folders you want, and only what's new comes over.",
+  "group": "Backup",
+  "duration": 7.6,
+  "mp4": "/assets/guide/backup-new.mp4",
+  "poster": "/assets/guide/backup-new.jpg"
+ },
+ {
+  "id": "original-dates",
+  "title": "Original dates kept",
+  "line": "Photos and files keep the day they were made, not the day they were copied.",
+  "voice": "Your photos keep the day they were taken, not the day they were copied.",
+  "group": "Backup",
+  "duration": 5.8,
+  "mp4": "/assets/guide/original-dates.mp4",
+  "poster": "/assets/guide/original-dates.jpg"
+ },
+ {
+  "id": "by-month",
+  "title": "Sorted by month",
+  "line": "Photos and videos in one folder per month; other files keep the phone's folders.",
+  "voice": "Photos and videos land in one folder per month. Everything else keeps the phone's folders.",
+  "group": "Backup",
+  "duration": 7,
+  "mp4": "/assets/guide/by-month.mp4",
+  "poster": "/assets/guide/by-month.jpg"
+ },
+ {
+  "id": "clip-to-phone",
+  "title": "Mac to phone, automatic",
+  "line": "Turn it on once on your Mac, then copy as usual. It's already on your phone's clipboard.",
+  "voice": "Turn it on once, then copy on your Mac as usual. It's already on your phone's clipboard.",
+  "group": "Copy and paste",
+  "duration": 7.1,
+  "mp4": "/assets/guide/clip-to-phone.mp4",
+  "poster": "/assets/guide/clip-to-phone.jpg"
+ },
+ {
+  "id": "clip-to-mac",
+  "title": "Phone to Mac, automatic",
+  "line": "Turn it on once in the phone app, then copy as usual and press ⌘V on your Mac.",
+  "voice": "It works the other way too. Copy on your phone, then press Command V on your Mac.",
+  "group": "Copy and paste",
+  "duration": 6.3,
+  "mp4": "/assets/guide/clip-to-mac.mp4",
+  "poster": "/assets/guide/clip-to-mac.jpg"
+ },
+ {
+  "id": "clip-button",
+  "title": "Send clipboard button",
+  "line": "A button in your phone's quick settings sends whatever you just copied.",
+  "voice": "Or tap Send clipboard, right in your phone's quick settings.",
+  "group": "Copy and paste",
+  "duration": 5.8,
+  "mp4": "/assets/guide/clip-button.mp4",
+  "poster": "/assets/guide/clip-button.jpg"
+ },
+ {
+  "id": "clip-files",
+  "title": "Photos and files too",
+  "line": "Copy a screenshot on your Mac and paste it into a chat on your phone, and back.",
+  "voice": "Photos and files copy too. Grab a screenshot on your Mac, and paste it straight into a chat.",
+  "group": "Copy and paste",
+  "duration": 7.6,
+  "mp4": "/assets/guide/clip-files.mp4",
+  "poster": "/assets/guide/clip-files.jpg"
+ },
+ {
+  "id": "clip-history",
+  "title": "Clipboard history",
+  "line": "Everything you copied on either side, a click away on your Mac.",
+  "voice": "Everything you copied, on either side, is a click away on your Mac.",
+  "group": "Copy and paste",
+  "duration": 5.8,
+  "mp4": "/assets/guide/clip-history.mp4",
+  "poster": "/assets/guide/clip-history.jpg"
+ },
+ {
+  "id": "passwords",
+  "title": "Passwords never cross",
+  "line": "Anything your phone or Mac marks as sensitive, like a password, stays where it is.",
+  "voice": "And passwords never cross. Anything marked as sensitive stays right where it is.",
+  "group": "Copy and paste",
+  "duration": 6.5,
+  "mp4": "/assets/guide/passwords.mp4",
+  "poster": "/assets/guide/passwords.jpg"
+ },
+ {
+  "id": "pair-once",
+  "title": "Pair once",
+  "line": "Scan a code once. After that, TwoPort finds your phone by itself.",
+  "voice": "Setting up takes one scan. After that, TwoPort finds your phone by itself.",
+  "group": "Always connected",
+  "duration": 6.4,
+  "mp4": "/assets/guide/pair-once.mp4",
+  "poster": "/assets/guide/pair-once.jpg"
+ },
+ {
+  "id": "reconnects",
+  "title": "Reconnects by itself",
+  "line": "Whenever your phone and Mac are on the same Wi-Fi. Nothing to tap.",
+  "voice": "Whenever your phone and Mac are on the same Wi-Fi, they connect again. Nothing to tap.",
+  "group": "Always connected",
+  "duration": 6.9,
+  "mp4": "/assets/guide/reconnects.mp4",
+  "poster": "/assets/guide/reconnects.jpg"
+ },
+ {
+  "id": "screen-lock",
+  "title": "Keeps going when screens lock",
+  "line": "Lock your phone or your Mac. A transfer carries on.",
+  "voice": "Lock your phone, or your Mac. A transfer carries on.",
+  "group": "Always connected",
+  "duration": 5.8,
+  "mp4": "/assets/guide/screen-lock.mp4",
+  "poster": "/assets/guide/screen-lock.jpg"
+ },
+ {
+  "id": "cable",
+  "title": "USB cable, about 4× faster",
+  "line": "Plug in and click Use USB once. Unplug any time and it carries on over Wi-Fi.",
+  "voice": "In a hurry? Plug in a USB cable for about four times the speed. Unplug any time, and it carries on over Wi-Fi.",
+  "group": "Always connected",
+  "duration": 9.3,
+  "mp4": "/assets/guide/cable.mp4",
+  "poster": "/assets/guide/cable.jpg"
+ },
+ {
+  "id": "quick-send",
+  "title": "Quick Send, no app needed",
+  "line": "A friend scans a code with their phone's camera and sends you photos from the web browser.",
+  "voice": "Friends don't need the app. They scan a code with their camera, and send you photos from the browser.",
+  "group": "Friends and other phones",
+  "duration": 7,
+  "mp4": "/assets/guide/quick-send.mp4",
+  "poster": "/assets/guide/quick-send.jpg"
+ },
+ {
+  "id": "picks-up",
+  "title": "Picks up after a break",
+  "line": "If the Wi-Fi drops mid-way, a big batch carries on from where it stopped.",
+  "voice": "And if the Wi-Fi drops halfway, a big batch picks up right where it stopped.",
+  "group": "Friends and other phones",
+  "duration": 6,
+  "mp4": "/assets/guide/picks-up.mp4",
+  "poster": "/assets/guide/picks-up.jpg"
+ }
+]
