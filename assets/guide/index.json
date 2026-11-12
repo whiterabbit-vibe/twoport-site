@@ -221,11 +221,11 @@
  },
  {
   "id": "cable",
-  "title": "USB cable, about 4× faster",
+  "title": "USB cable, much faster",
   "line": "Plug in and click Use USB once. Unplug any time and it carries on over Wi-Fi.",
-  "voice": "In a hurry? Plug in a USB cable for about four times the speed. Unplug any time, and it carries on over Wi-Fi.",
+  "voice": "In a hurry? Plug in a USB cable, and big copies go much faster. Unplug any time, and it carries on over Wi-Fi.",
   "group": "Always connected",
-  "duration": 9.3,
+  "duration": 9.2,
   "mp4": "/assets/guide/cable.mp4",
   "poster": "/assets/guide/cable.jpg"
  },
